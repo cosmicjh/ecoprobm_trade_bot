@@ -26,6 +26,7 @@ from typing import Optional
 
 import pandas as pd
 import numpy as np
+import requests
 
 # ── 외부 라이브러리 (GitHub Actions 환경에서 설치 필요) ─────────
 try:
@@ -207,8 +208,22 @@ def fetch_investor_trading(
     }
 
     try:
-        resp = broker.fetch(path, **params, headers=headers)
-        # 응답 파싱은 한투 API 응답 구조에 따라 조정 필요
+        # 한투 실전/모의 서버 URL 설정
+        base_url = "https://openapi.koreainvestment.com:9443" if not broker.mock else "https://openapivts.koreainvestment.com:29443"
+        
+        # 직접 API 요청을 위한 헤더 세팅
+        req_headers = {
+            "content-type": "application/json; charset=utf-8",
+            "authorization": f"Bearer {broker.access_token}",
+            "appkey": broker.api_key,
+            "appsecret": broker.api_secret,
+            "tr_id": headers["tr_id"]
+        }
+        
+        # requests로 직접 호출
+        res = requests.get(base_url + path, headers=req_headers, params=params)
+        resp = res.json()
+        
         records = _parse_investor_response(resp)
     except Exception as e:
         log.warning(f"[INVESTOR] API 호출 실패: {e}")
@@ -306,7 +321,17 @@ def fetch_short_selling(
     }
 
     try:
-        resp = broker.fetch(path, **params, headers=headers)
+        base_url = "https://openapi.koreainvestment.com:9443" if not broker.mock else "https://openapivts.koreainvestment.com:29443"
+        req_headers = {
+            "content-type": "application/json; charset=utf-8",
+            "authorization": f"Bearer {broker.access_token}",
+            "appkey": broker.api_key,
+            "appsecret": broker.api_secret,
+            "tr_id": headers["tr_id"]
+        }
+        res = requests.get(base_url + path, headers=req_headers, params=params)
+        resp = res.json()
+        
         records = _parse_short_response(resp)
     except Exception as e:
         log.warning(f"[SHORT] API 호출 실패: {e}")
