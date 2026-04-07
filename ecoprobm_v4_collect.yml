@@ -1,0 +1,88 @@
+# .github/workflows/ecoprobm_v4_collect.yml
+# ──────────────────────────────────────────────
+# 에코프로비엠 (247540) v4 — Phase 1-1 데이터 수집
+# cron-job.org에서 workflow_dispatch로 트리거
+# ──────────────────────────────────────────────
+
+name: EcoProBM v4 Data Collection
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "수집 모드"
+        required: false
+        default: "incremental"
+        type: choice
+        options:
+          - incremental
+          - full
+
+# schedule 블록은 사용하지 않음
+# cron-job.org에서 아래 시간에 workflow_dispatch 호출:
+#   09:05 KST — 장 시작 직후 (전일 확정 데이터 수집)
+#   15:10 KST — 장 마감 직후 (당일 확정 데이터 수집)
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install FinanceDataReader mojito2 pandas numpy requests
+
+      - name: Restore state files
+        uses: actions/cache@v4
+        with:
+          path: |
+            state/ohlcv_247540.json
+            state/supply_data_247540.json
+            state/pipeline_state_247540.json
+          key: ecoprobm-v4-state-${{ github.run_number }}
+          restore-keys: |
+            ecoprobm-v4-state-
+
+      - name: Create state directory
+        run: mkdir -p state
+
+      - name: Run data collection
+        env:
+          KIS_API_KEY: ${{ secrets.KIS_API_KEY }}
+          KIS_API_SECRET: ${{ secrets.KIS_API_SECRET }}
+          KIS_ACC_NO: ${{ secrets.KIS_ACC_NO }}
+          KIS_MOCK: "Y"
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          STATE_DIR: "state"
+        run: |
+          python data_collector.py \
+            --mode ${{ github.event.inputs.mode || 'incremental' }} \
+            --state-dir state
+
+      - name: Upload state as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecoprobm-v4-state-${{ github.run_number }}
+          path: state/
+          retention-days: 30
+
+      - name: Commit state files
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add state/
+          git diff --staged --quiet || git commit -m "chore: update ecoprobm v4 state $(date +%Y-%m-%d)"
+          git push
