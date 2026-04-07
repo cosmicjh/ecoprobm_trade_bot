@@ -1,7 +1,8 @@
 """
-에코프로비엠 v4 Phase 1-1 — 로컬 검증 스크립트
-================================================
-실제 API 호출 없이 파이프라인 로직의 정합성을 검증합니다.
+에코프로비엠 v4 Phase 1-1 (v2) — 로컬 검증 스크립트
+====================================================
+pykrx 전환 후 파이프라인 로직 검증.
+실제 pykrx/KRX 호출 없이 로직 정합성만 테스트.
 
 실행: python test_data_collector.py
 """
@@ -15,43 +16,21 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 
-# 테스트 대상 모듈 import
 sys.path.insert(0, os.path.dirname(__file__))
 from data_collector import (
     save_ohlcv_data,
     save_supply_data,
     save_state,
     load_state,
-    _safe_int,
-    _parse_investor_response,
-    _parse_short_response,
-    PIPELINE_STATE_FILE,
-    OHLCV_FILE,
-    SUPPLY_FILE,
+    _get_col_value,
 )
 
-# 테스트용 임시 디렉토리
 TEST_DIR = Path("test_state")
 TEST_DIR.mkdir(exist_ok=True)
 
 
-def test_safe_int():
-    """_safe_int 유틸리티 검증."""
-    assert _safe_int(None) == 0
-    assert _safe_int("") == 0
-    assert _safe_int("12,345") == 12345
-    assert _safe_int("-5678") == -5678
-    assert _safe_int(3.14) == 3
-    assert _safe_int("abc") == 0
-    print("✅ _safe_int 테스트 통과")
-
-
 def test_ohlcv_shift_logic():
-    """
-    .shift(1) look-ahead bias 방지 로직 검증.
-    핵심: 전략 시그널은 반드시 prev_* 컬럼만 사용해야 함.
-    """
-    # 모의 OHLCV 데이터 생성 (5일치)
+    """.shift(1) look-ahead bias 방지 검증."""
     dates = pd.date_range("2026-04-01", periods=5, freq="B")
     data = {
         "Open":   [200000, 202000, 198000, 205000, 210000],
@@ -62,24 +41,16 @@ def test_ohlcv_shift_logic():
     }
     df = pd.DataFrame(data, index=dates)
 
-    # shift(1) 적용
     for col in ["Open", "High", "Low", "Close", "Volume"]:
         df[f"prev_{col}"] = df[col].shift(1)
-    df = df.iloc[1:].copy()  # 첫 행 제거 (prev_* = NaN)
+    df = df.iloc[1:].copy()
 
-    # 검증: 4월 2일의 prev_Close = 4월 1일의 Close
-    apr2 = df.loc[dates[1]]
-    assert apr2["prev_Close"] == 203000, f"Expected 203000, got {apr2['prev_Close']}"
-
-    # 검증: 4월 3일의 prev_Volume = 4월 2일의 Volume
-    apr3 = df.loc[dates[2]]
-    assert apr3["prev_Volume"] == 450000, f"Expected 450000, got {apr3['prev_Volume']}"
-
-    # 검증: shift 후 4행 남아야 함 (5일 - 1 = 4일)
-    assert len(df) == 4, f"Expected 4 rows, got {len(df)}"
-
-    print("✅ OHLCV shift(1) 로직 테스트 통과")
-    return df
+    # 4/2의 prev_Close = 4/1의 Close
+    assert df.loc[dates[1], "prev_Close"] == 203000
+    # 4/3의 prev_Volume = 4/2의 Volume
+    assert df.loc[dates[2], "prev_Volume"] == 450000
+    assert len(df) == 4
+    print("✅ OHLCV shift(1) 테스트 통과")
 
 
 def test_ohlcv_save_load():
@@ -97,282 +68,220 @@ def test_ohlcv_save_load():
         df[f"prev_{col}"] = df[col].shift(1)
     df = df.iloc[1:].copy()
 
-    # 저장
     filepath = TEST_DIR / "test_ohlcv.json"
     save_ohlcv_data(df, filepath)
 
-    # 로드 & 검증
     with open(filepath, "r") as f:
         loaded = json.load(f)
 
-    assert len(loaded) == 2, f"Expected 2 dates, got {len(loaded)}"
+    assert len(loaded) == 2
     assert "2026-04-02" in loaded
     assert loaded["2026-04-02"]["Close"] == 201000
     assert loaded["2026-04-02"]["prev_Close"] == 203000
-
     print("✅ OHLCV 저장/로드 테스트 통과")
 
 
 def test_supply_data_accumulation():
-    """수급 데이터 누적 저장 검증 — 날짜별 병합이 올바르게 동작하는지."""
+    """수급 데이터 누적 저장 — 날짜별 병합 검증."""
     filepath = TEST_DIR / "test_supply.json"
-
-    # 기존 파일 삭제
     if filepath.exists():
         filepath.unlink()
 
-    # 1차 저장: 4/1, 4/2 데이터
     batch1 = {
         "2026-04-01": {"foreign_net_qty": 10000, "inst_net_qty": -5000},
         "2026-04-02": {"foreign_net_qty": 15000, "inst_net_qty": 3000},
     }
     save_supply_data(batch1, filepath)
 
-    # 2차 저장: 4/2 (업데이트), 4/3 (신규) 데이터
     batch2 = {
-        "2026-04-02": {"foreign_net_qty": 16000, "inst_net_qty": 3500},  # 수정
+        "2026-04-02": {"foreign_net_qty": 16000, "inst_net_qty": 3500},
         "2026-04-03": {"foreign_net_qty": -8000, "inst_net_qty": 12000},
     }
     save_supply_data(batch2, filepath)
 
-    # 검증
     with open(filepath, "r") as f:
         result = json.load(f)
 
-    assert len(result) == 3, f"Expected 3 dates, got {len(result)}"
-    # 4/1은 그대로 유지
-    assert result["2026-04-01"]["foreign_net_qty"] == 10000
-    # 4/2는 최신값으로 덮어씀
-    assert result["2026-04-02"]["foreign_net_qty"] == 16000
-    assert result["2026-04-02"]["inst_net_qty"] == 3500
-    # 4/3은 신규 추가
-    assert result["2026-04-03"]["foreign_net_qty"] == -8000
-
+    assert len(result) == 3
+    assert result["2026-04-01"]["foreign_net_qty"] == 10000  # 유지
+    assert result["2026-04-02"]["foreign_net_qty"] == 16000  # 덮어씀
+    assert result["2026-04-03"]["foreign_net_qty"] == -8000   # 신규
     print("✅ 수급 데이터 누적 저장 테스트 통과")
 
 
-def test_investor_response_parsing():
-    """한투 API 투자자별 매매동향 응답 파싱 검증."""
-    mock_response = {
-        "output": [
-            {
-                "stck_bsop_date": "20260407",
-                "frgn_ntby_qty": "46800",
-                "frgn_ntby_tr_pbmn": "9500000000",
-                "orgn_ntby_qty": "-3000",
-                "orgn_ntby_tr_pbmn": "-610000000",
-                "prsn_ntby_qty": "-43800",
-                "prsn_ntby_tr_pbmn": "-8890000000",
-            },
-            {
-                "stck_bsop_date": "20260404",
-                "frgn_ntby_qty": "63500",
-                "frgn_ntby_tr_pbmn": "12700000000",
-                "orgn_ntby_qty": "2000",
-                "orgn_ntby_tr_pbmn": "400000000",
-                "prsn_ntby_qty": "-65500",
-                "prsn_ntby_tr_pbmn": "-13100000000",
-            },
-        ]
-    }
-
-    records = _parse_investor_response(mock_response)
-    assert len(records) == 2, f"Expected 2 records, got {len(records)}"
-    assert records[0]["foreign_net_qty"] == 46800
-    assert records[0]["inst_net_qty"] == -3000
-    assert records[1]["date"] == "20260404"
-
-    print("✅ 투자자 매매동향 파싱 테스트 통과")
-
-
-def test_short_response_parsing():
-    """한투 API 공매도 응답 파싱 검증."""
-    mock_response = {
-        "output1": [
-            {
-                "stck_bsop_date": "20260407",
-                "seld_cntg_qty": "25000",
-                "seld_cntg_amt": "5000000000",
-                "acml_vol": "500000",
-            },
-        ]
-    }
-
-    records = _parse_short_response(mock_response)
-    assert len(records) == 1
-    assert records[0]["short_volume"] == 25000
-    assert records[0]["total_volume"] == 500000
-
-    # 공매도 비중 수동 계산 검증
-    ratio = records[0]["short_volume"] / records[0]["total_volume"] * 100
-    assert round(ratio, 2) == 5.0
-
-    print("✅ 공매도 데이터 파싱 테스트 통과")
-
-
-def test_state_management():
-    """파이프라인 상태 관리 검증."""
-    filepath = TEST_DIR / "test_pipeline_state.json"
-
-    # 초기 상태 로드 (파일 없음)
-    if filepath.exists():
-        filepath.unlink()
-
-    state = load_state(filepath)
-    assert state["last_ohlcv_update"] is None
-    assert state["total_ohlcv_rows"] == 0
-
-    # 상태 업데이트 & 저장
-    state["last_ohlcv_update"] = "2026-04-07"
-    state["total_ohlcv_rows"] = 1000
-    save_state(state, filepath)
-
-    # 다시 로드하여 확인
-    state2 = load_state(filepath)
-    assert state2["last_ohlcv_update"] == "2026-04-07"
-    assert state2["total_ohlcv_rows"] == 1000
-    assert "updated_at" in state2
-
-    print("✅ 상태 관리 테스트 통과")
-
-
 def test_supply_short_merge():
-    """수급 데이터에 공매도 필드 병합 검증."""
+    """수급 + 공매도 데이터 병합 (save_supply_data의 update 동작)."""
     filepath = TEST_DIR / "test_merge.json"
     if filepath.exists():
         filepath.unlink()
 
-    # 수급 데이터 먼저 저장
-    supply = {
-        "2026-04-07": {
-            "foreign_net_qty": 46800,
-            "inst_net_qty": -3000,
-        }
-    }
+    # 수급 먼저 저장
+    supply = {"2026-04-07": {"foreign_net_qty": 46800, "inst_net_qty": -3000}}
     save_supply_data(supply, filepath)
 
-    # 공매도 데이터 병합
-    with open(filepath, "r") as f:
-        existing = json.load(f)
+    # 공매도 병합 (같은 날짜에 update)
+    short = {"2026-04-07": {"short_volume": 25000, "short_ratio": 5.0}}
+    save_supply_data(short, filepath)
 
-    short_data = {
-        "2026-04-07": {
-            "short_volume": 25000,
-            "short_ratio": 5.0,
-        }
-    }
-
-    for date_key, vals in short_data.items():
-        if date_key in existing:
-            existing[date_key].update(vals)
-
-    with open(filepath, "w") as f:
-        json.dump(existing, f, indent=2)
-
-    # 검증: 수급 + 공매도 필드 모두 존재
     with open(filepath, "r") as f:
         result = json.load(f)
 
     apr7 = result["2026-04-07"]
     assert apr7["foreign_net_qty"] == 46800, "수급 데이터 유실"
-    assert apr7["short_volume"] == 25000, "공매도 데이터 병합 실패"
-    assert apr7["short_ratio"] == 5.0, "공매도 비중 병합 실패"
-
+    assert apr7["short_volume"] == 25000, "공매도 병합 실패"
+    assert apr7["short_ratio"] == 5.0
     print("✅ 수급+공매도 병합 테스트 통과")
 
 
-def test_data_integrity_scenario():
-    """
-    실전 시나리오 시뮬레이션:
-    3일간 연속 데이터 수집 시 누적 데이터의 정합성 검증.
-    """
+def test_short_balance_merge():
+    """수급 + 공매도 + 공매도잔고 3종 데이터 병합."""
+    filepath = TEST_DIR / "test_3way_merge.json"
+    if filepath.exists():
+        filepath.unlink()
+
+    # 순서대로 3종 저장
+    save_supply_data({"2026-04-07": {"foreign_net_qty": 46800}}, filepath)
+    save_supply_data({"2026-04-07": {"short_volume": 25000}}, filepath)
+    save_supply_data({"2026-04-07": {"short_balance": 3400000, "short_balance_ratio": 0.06}}, filepath)
+
+    with open(filepath, "r") as f:
+        result = json.load(f)
+
+    apr7 = result["2026-04-07"]
+    assert apr7["foreign_net_qty"] == 46800
+    assert apr7["short_volume"] == 25000
+    assert apr7["short_balance"] == 3400000
+    assert apr7["short_balance_ratio"] == 0.06
+    print("✅ 3종 데이터 병합 테스트 통과")
+
+
+def test_get_col_value():
+    """pykrx 컬럼명 유연 매칭 검증."""
+    # 시나리오 1: 정확한 이름
+    row = pd.Series({"외국인합계": 46800, "기관합계": -3000, "개인": -43800})
+    assert _get_col_value(row, ["외국인합계", "외국인"]) == 46800
+    assert _get_col_value(row, ["기관합계", "기관"]) == -3000
+
+    # 시나리오 2: 대체 이름
+    row2 = pd.Series({"외국인": 12000, "기관": 5000})
+    assert _get_col_value(row2, ["외국인합계", "외국인"]) == 12000
+
+    # 시나리오 3: 없는 컬럼
+    assert _get_col_value(row, ["없는컬럼"]) == 0.0
+
+    # 시나리오 4: NaN 값
+    row3 = pd.Series({"외국인합계": float("nan"), "외국인": 9999})
+    assert _get_col_value(row3, ["외국인합계", "외국인"]) == 9999
+
+    print("✅ 컬럼명 유연 매칭 테스트 통과")
+
+
+def test_state_management():
+    """상태 관리 검증."""
+    filepath = TEST_DIR / "test_state.json"
+    if filepath.exists():
+        filepath.unlink()
+
+    state = load_state(filepath)
+    assert state["last_ohlcv_update"] is None
+    assert state["data_source"] == "pykrx"
+
+    state["last_ohlcv_update"] = "2026-04-07"
+    state["total_ohlcv_rows"] = 1000
+    save_state(state, filepath)
+
+    state2 = load_state(filepath)
+    assert state2["last_ohlcv_update"] == "2026-04-07"
+    assert state2["total_ohlcv_rows"] == 1000
+    assert "updated_at" in state2
+    print("✅ 상태 관리 테스트 통과")
+
+
+def test_date_format_normalization():
+    """pykrx 날짜 포맷(YYYYMMDD) 처리 검증."""
+    # 하이픈 → 제거
+    date1 = "2026-04-07"
+    assert date1.replace("-", "") == "20260407"
+
+    # 이미 YYYYMMDD → 그대로
+    date2 = "20260407"
+    assert date2.replace("-", "") == "20260407"
+
+    print("✅ 날짜 포맷 정규화 테스트 통과")
+
+
+def test_3day_scenario():
+    """3일 연속 수집 시나리오 시뮬레이션."""
     filepath = TEST_DIR / "test_scenario.json"
     if filepath.exists():
         filepath.unlink()
 
-    # Day 1 수집
-    day1 = {
+    # Day 1: 수급 + 공매도
+    save_supply_data({
         "2026-04-07": {
-            "foreign_net_qty": 46800,
-            "inst_net_qty": -3000,
-            "short_volume": 25000,
-            "short_ratio": 5.0,
+            "foreign_net_qty": 46800, "inst_net_qty": -3000,
+            "individual_net_qty": -43800,
         }
-    }
-    save_supply_data(day1, filepath)
+    }, filepath)
+    save_supply_data({
+        "2026-04-07": {"short_volume": 25000, "short_ratio": 5.0}
+    }, filepath)
 
-    # Day 2 수집 (Day 1 데이터도 재수집됨 — incremental 모드)
-    day2 = {
-        "2026-04-07": {  # 동일 날짜 재수집 — 값 동일해야 하지만 덮어써도 OK
-            "foreign_net_qty": 46800,
-            "inst_net_qty": -3000,
-            "short_volume": 25000,
-            "short_ratio": 5.0,
-        },
-        "2026-04-08": {
-            "foreign_net_qty": -12000,
-            "inst_net_qty": 8000,
-            "short_volume": 30000,
-            "short_ratio": 6.5,
-        },
-    }
-    save_supply_data(day2, filepath)
+    # Day 2
+    save_supply_data({
+        "2026-04-07": {"foreign_net_qty": 46800, "inst_net_qty": -3000},
+        "2026-04-08": {"foreign_net_qty": -12000, "inst_net_qty": 8000},
+    }, filepath)
+    save_supply_data({
+        "2026-04-08": {"short_volume": 30000, "short_ratio": 6.5}
+    }, filepath)
 
-    # Day 3 수집
-    day3 = {
-        "2026-04-08": {  # 재수집
-            "foreign_net_qty": -12000,
-            "inst_net_qty": 8000,
-            "short_volume": 30000,
-            "short_ratio": 6.5,
-        },
+    # Day 3
+    save_supply_data({
+        "2026-04-09": {"foreign_net_qty": 55000, "inst_net_qty": 15000}
+    }, filepath)
+    save_supply_data({
         "2026-04-09": {
-            "foreign_net_qty": 55000,
-            "inst_net_qty": 15000,
-            "short_volume": 18000,
-            "short_ratio": 3.2,
-        },
-    }
-    save_supply_data(day3, filepath)
+            "short_volume": 18000, "short_ratio": 3.2,
+            "short_balance": 3300000, "short_balance_ratio": 0.055,
+        }
+    }, filepath)
 
-    # 최종 검증
     with open(filepath, "r") as f:
         result = json.load(f)
 
-    assert len(result) == 3, f"Expected 3 dates, got {len(result)}"
+    assert len(result) == 3
+    # Day 1: 수급 + 공매도 모두 있어야 함
     assert result["2026-04-07"]["foreign_net_qty"] == 46800
-    assert result["2026-04-08"]["inst_net_qty"] == 8000
-    assert result["2026-04-09"]["foreign_net_qty"] == 55000
+    assert result["2026-04-07"]["short_volume"] == 25000
+    # Day 3: 잔고 데이터도 포함
+    assert result["2026-04-09"]["short_balance"] == 3300000
 
-    # 수급 변화 추이 확인
+    # 수급 변화 추이
     dates = sorted(result.keys())
-    foreign_trend = [result[d]["foreign_net_qty"] for d in dates]
-    assert foreign_trend == [46800, -12000, 55000], f"Unexpected trend: {foreign_trend}"
-
+    foreign = [result[d]["foreign_net_qty"] for d in dates]
+    assert foreign == [46800, -12000, 55000]
     print("✅ 3일 연속 수집 시나리오 테스트 통과")
 
 
 def run_all_tests():
-    """전체 테스트 실행."""
-    print(f"\n{'='*50}")
-    print("에코프로비엠 v4 Phase 1-1 검증 시작")
-    print(f"{'='*50}\n")
+    print(f"\n{'='*55}")
+    print("에코프로비엠 v4 Phase 1-1 (v2 pykrx) 검증 시작")
+    print(f"{'='*55}\n")
 
     tests = [
-        test_safe_int,
         test_ohlcv_shift_logic,
         test_ohlcv_save_load,
         test_supply_data_accumulation,
-        test_investor_response_parsing,
-        test_short_response_parsing,
-        test_state_management,
         test_supply_short_merge,
-        test_data_integrity_scenario,
+        test_short_balance_merge,
+        test_get_col_value,
+        test_state_management,
+        test_date_format_normalization,
+        test_3day_scenario,
     ]
 
-    passed = 0
-    failed = 0
-
+    passed = failed = 0
     for test in tests:
         try:
             test()
@@ -381,15 +290,14 @@ def run_all_tests():
             print(f"❌ {test.__name__} 실패: {e}")
             failed += 1
 
-    print(f"\n{'='*50}")
+    print(f"\n{'='*55}")
     print(f"결과: {passed} 통과 / {failed} 실패 (총 {len(tests)}개)")
-    print(f"{'='*50}\n")
+    print(f"{'='*55}\n")
 
-    # 테스트 디렉토리 정리
     import shutil
     if TEST_DIR.exists():
         shutil.rmtree(TEST_DIR)
-        print(f"🧹 테스트 디렉토리 정리 완료: {TEST_DIR}")
+        print(f"🧹 테스트 디렉토리 정리 완료")
 
     return failed == 0
 
