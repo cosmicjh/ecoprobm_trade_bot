@@ -1,6 +1,6 @@
 # .github/workflows/ecoprobm_v4_collect.yml
 # ──────────────────────────────────────────────
-# 에코프로비엠 (247540) v4 — Phase 1-1 데이터 수집
+# 에코프로비엠 (247540) v4 — 데이터 수집 (pykrx)
 # cron-job.org에서 workflow_dispatch로 트리거
 # ──────────────────────────────────────────────
 
@@ -18,10 +18,13 @@ on:
           - incremental
           - full
 
-# schedule 블록은 사용하지 않음
-# cron-job.org에서 아래 시간에 workflow_dispatch 호출:
-#   09:05 KST — 장 시작 직후 (전일 확정 데이터 수집)
-#   15:10 KST — 장 마감 직후 (당일 확정 데이터 수집)
+# schedule 블록 없음 → cron-job.org에서 workflow_dispatch 호출
+# 수집 스케줄:
+#   09:05 KST — 전일 확정 데이터 수집 (OHLCV + 수급 + 공매도)
+#   18:30 KST — 당일 확정 데이터 수집 (투자자별 매매는 18시 이후 확정)
+#
+# ※ 기존 4회(09:05, 11:00, 13:30, 15:10)에서 2회로 축소
+#   → 데이터 수집은 확정 데이터만 필요. 장중 트레이딩은 Phase 2에서 별도 워크플로우
 
 jobs:
   collect:
@@ -40,7 +43,9 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install FinanceDataReader mojito2 pandas numpy requests
+          pip install pykrx pandas numpy requests
+          # FDR은 fallback 전용 (선택 설치)
+          pip install FinanceDataReader || true
 
       - name: Restore state files
         uses: actions/cache@v4
@@ -58,10 +63,6 @@ jobs:
 
       - name: Run data collection
         env:
-          KIS_API_KEY: ${{ secrets.KIS_API_KEY }}
-          KIS_API_SECRET: ${{ secrets.KIS_API_SECRET }}
-          KIS_ACC_NO: ${{ secrets.KIS_ACC_NO }}
-          KIS_MOCK: "Y"
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           STATE_DIR: "state"
