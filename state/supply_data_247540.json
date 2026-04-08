@@ -1,0 +1,882 @@
+{
+  "2026-04-08": {
+    "foreign_net_qty": 0,
+    "foreign_net_amt": 0,
+    "inst_net_qty": 0,
+    "inst_net_amt": 0,
+    "individual_net_qty": 0,
+    "individual_net_amt": 0,
+    "short_volume": 0,
+    "total_volume": 426487,
+    "short_ratio_vol": 0.0,
+    "short_amount": 0,
+    "short_ratio_amt": 0.0
+  },
+  "2026-04-07": {
+    "foreign_net_qty": 3920,
+    "foreign_net_amt": 1034,
+    "inst_net_qty": 100618,
+    "inst_net_amt": 20683,
+    "individual_net_qty": -101536,
+    "individual_net_amt": -21097,
+    "short_volume": 88827,
+    "total_volume": 542160,
+    "short_ratio_vol": 16.38,
+    "short_amount": 18091396750,
+    "short_ratio_amt": 16.28
+  },
+  "2026-04-06": {
+    "foreign_net_qty": 121666,
+    "foreign_net_amt": 24255,
+    "inst_net_qty": 71153,
+    "inst_net_amt": 14300,
+    "individual_net_qty": -192864,
+    "individual_net_amt": -38564,
+    "short_volume": 76016,
+    "total_volume": 579226,
+    "short_ratio_vol": 13.12,
+    "short_amount": 15174756550,
+    "short_ratio_amt": 13.13
+  },
+  "2026-04-03": {
+    "foreign_net_qty": -94143,
+    "foreign_net_amt": -18238,
+    "inst_net_qty": -75711,
+    "inst_net_amt": -14688,
+    "individual_net_qty": 168497,
+    "individual_net_amt": 32666,
+    "short_volume": 92256,
+    "total_volume": 470485,
+    "short_ratio_vol": 19.61,
+    "short_amount": 17818660950,
+    "short_ratio_amt": 19.55
+  },
+  "2026-04-02": {
+    "foreign_net_qty": 38390,
+    "foreign_net_amt": 7629,
+    "inst_net_qty": -3808,
+    "inst_net_amt": -668,
+    "individual_net_qty": -15395,
+    "individual_net_amt": -3052,
+    "short_volume": 41708,
+    "total_volume": 728719,
+    "short_ratio_vol": 5.72,
+    "short_amount": 8322935000,
+    "short_ratio_amt": 5.71
+  },
+  "2026-04-01": {
+    "foreign_net_qty": -28366,
+    "foreign_net_amt": -5636,
+    "inst_net_qty": 118621,
+    "inst_net_amt": 23915,
+    "individual_net_qty": -89847,
+    "individual_net_amt": -18197,
+    "short_volume": 71243,
+    "total_volume": 410700,
+    "short_ratio_vol": 17.35,
+    "short_amount": 14275158900,
+    "short_ratio_amt": 17.32
+  },
+  "2026-03-31": {
+    "foreign_net_qty": -135119,
+    "foreign_net_amt": -27000,
+    "inst_net_qty": 53588,
+    "inst_net_amt": 10732,
+    "individual_net_qty": 82187,
+    "individual_net_amt": 16392,
+    "short_volume": 78938,
+    "total_volume": 603090,
+    "short_ratio_vol": 13.09,
+    "short_amount": 15604849150,
+    "short_ratio_amt": 13.04
+  },
+  "2026-03-30": {
+    "foreign_net_qty": 7483,
+    "foreign_net_amt": 1496,
+    "inst_net_qty": -13362,
+    "inst_net_amt": -2670,
+    "individual_net_qty": 15378,
+    "individual_net_amt": 3094,
+    "short_volume": 39280,
+    "total_volume": 404454,
+    "short_ratio_vol": 9.71,
+    "short_amount": 7961487950,
+    "short_ratio_amt": 9.71
+  },
+  "2026-03-27": {
+    "foreign_net_qty": 26602,
+    "foreign_net_amt": 5355,
+    "inst_net_qty": -2816,
+    "inst_net_amt": -266,
+    "individual_net_qty": -12865,
+    "individual_net_amt": -2882,
+    "short_volume": 45754,
+    "total_volume": 499114,
+    "short_ratio_vol": 9.17,
+    "short_amount": 9027629550,
+    "short_ratio_amt": 9.14
+  },
+  "2026-03-26": {
+    "foreign_net_qty": 112309,
+    "foreign_net_amt": 22675,
+    "inst_net_qty": -58200,
+    "inst_net_amt": -11724,
+    "individual_net_qty": -53467,
+    "individual_net_amt": -10822,
+    "short_volume": 45416,
+    "total_volume": 374921,
+    "short_ratio_vol": 12.11,
+    "short_amount": 9157915150,
+    "short_ratio_amt": 12.09
+  },
+  "2026-03-25": {
+    "foreign_net_qty": 184175,
+    "foreign_net_amt": 37001,
+    "inst_net_qty": 70766,
+    "inst_net_amt": 14284,
+    "individual_net_qty": -249212,
+    "individual_net_amt": -50124,
+    "short_volume": 33037,
+    "total_volume": 505161,
+    "short_ratio_vol": 6.54,
+    "short_amount": 6621532000,
+    "short_ratio_amt": 6.53
+  },
+  "2026-03-24": {
+    "foreign_net_qty": 179335,
+    "foreign_net_amt": 34366,
+    "inst_net_qty": 28480,
+    "inst_net_amt": 5560,
+    "individual_net_qty": -209645,
+    "individual_net_amt": -40279,
+    "short_volume": 65686,
+    "total_volume": 615748,
+    "short_ratio_vol": 10.67,
+    "short_amount": 12564846100,
+    "short_ratio_amt": 10.64
+  },
+  "2026-03-23": {
+    "foreign_net_qty": 7921,
+    "foreign_net_amt": 1384,
+    "inst_net_qty": -53937,
+    "inst_net_amt": -9738,
+    "individual_net_qty": 46411,
+    "individual_net_amt": 8425,
+    "short_volume": 100437,
+    "total_volume": 461538,
+    "short_ratio_vol": 21.76,
+    "short_amount": 18142378600,
+    "short_ratio_amt": 21.74
+  },
+  "2026-03-20": {
+    "foreign_net_qty": -7066,
+    "foreign_net_amt": -1329,
+    "inst_net_qty": -1734,
+    "inst_net_amt": -269,
+    "individual_net_qty": 9143,
+    "individual_net_amt": 1663,
+    "short_volume": 153858,
+    "total_volume": 410787,
+    "short_ratio_vol": 37.45,
+    "short_amount": 29271876600,
+    "short_ratio_amt": 37.4
+  },
+  "2026-03-19": {
+    "foreign_net_qty": -12832,
+    "foreign_net_amt": -2449,
+    "inst_net_qty": -31107,
+    "inst_net_amt": -5881,
+    "individual_net_qty": 44273,
+    "individual_net_amt": 8396,
+    "short_volume": 130454,
+    "total_volume": 439588,
+    "short_ratio_vol": 29.68,
+    "short_amount": 25039127200,
+    "short_ratio_amt": 29.69
+  },
+  "2026-03-18": {
+    "foreign_net_qty": -17561,
+    "foreign_net_amt": -3418,
+    "inst_net_qty": 95647,
+    "inst_net_amt": 18772,
+    "individual_net_qty": -76998,
+    "individual_net_amt": -15141,
+    "short_volume": 55876,
+    "total_volume": 324967,
+    "short_ratio_vol": 17.19,
+    "short_amount": 10941451800,
+    "short_ratio_amt": 17.19
+  },
+  "2026-03-17": {
+    "foreign_net_qty": 12468,
+    "foreign_net_amt": 2313,
+    "inst_net_qty": 128846,
+    "inst_net_amt": 25016,
+    "individual_net_qty": -140750,
+    "individual_net_amt": -27222,
+    "short_volume": 48681,
+    "total_volume": 476351,
+    "short_ratio_vol": 10.22,
+    "short_amount": 9366363200,
+    "short_ratio_amt": 10.22
+  },
+  "2026-03-16": {
+    "foreign_net_qty": 19062,
+    "foreign_net_amt": 3522,
+    "inst_net_qty": -80318,
+    "inst_net_amt": -14647,
+    "individual_net_qty": 61158,
+    "individual_net_amt": 11107,
+    "short_volume": 68608,
+    "total_volume": 605477,
+    "short_ratio_vol": 11.33,
+    "short_amount": 12748670500,
+    "short_ratio_amt": 11.33
+  },
+  "2026-03-13": {
+    "foreign_net_qty": -99785,
+    "foreign_net_amt": -18906,
+    "inst_net_qty": 74351,
+    "inst_net_amt": 14464,
+    "individual_net_qty": 25155,
+    "individual_net_amt": 4392,
+    "short_volume": 124161,
+    "total_volume": 747253,
+    "short_ratio_vol": 16.62,
+    "short_amount": 23371575050,
+    "short_ratio_amt": 16.56
+  },
+  "2026-03-12": {
+    "foreign_net_qty": -113086,
+    "foreign_net_amt": -22073,
+    "inst_net_qty": 28426,
+    "inst_net_amt": 5780,
+    "individual_net_qty": 84961,
+    "individual_net_amt": 16351,
+    "short_volume": 71995,
+    "total_volume": 683785,
+    "short_ratio_vol": 10.53,
+    "short_amount": 14063325650,
+    "short_ratio_amt": 10.5
+  },
+  "2026-03-11": {
+    "foreign_net_qty": -8225,
+    "foreign_net_amt": -1550,
+    "inst_net_qty": -103658,
+    "inst_net_amt": -20812,
+    "individual_net_qty": 114494,
+    "individual_net_amt": 22899,
+    "short_volume": 100016,
+    "total_volume": 507330,
+    "short_ratio_vol": 19.71,
+    "short_amount": 20176572450,
+    "short_ratio_amt": 19.69
+  },
+  "2026-03-10": {
+    "foreign_net_qty": -196526,
+    "foreign_net_amt": -40620,
+    "inst_net_qty": 67489,
+    "inst_net_amt": 14021,
+    "individual_net_qty": 132370,
+    "individual_net_amt": 27279,
+    "short_volume": 103388,
+    "total_volume": 653625,
+    "short_ratio_vol": 15.82,
+    "short_amount": 21268802250,
+    "short_ratio_amt": 15.79
+  },
+  "2026-03-09": {
+    "foreign_net_qty": 15119,
+    "foreign_net_amt": 3154,
+    "inst_net_qty": -66342,
+    "inst_net_amt": -12965,
+    "individual_net_qty": 49679,
+    "individual_net_amt": 9510,
+    "short_volume": 89601,
+    "total_volume": 907354,
+    "short_ratio_vol": 9.87,
+    "short_amount": 17702576500,
+    "short_ratio_amt": 9.86
+  },
+  "2026-03-06": {
+    "foreign_net_qty": -12867,
+    "foreign_net_amt": -2647,
+    "inst_net_qty": 11777,
+    "inst_net_amt": 2397,
+    "individual_net_qty": -3233,
+    "individual_net_amt": -614,
+    "short_volume": 62660,
+    "total_volume": 655517,
+    "short_ratio_vol": 9.56,
+    "short_amount": 12548855600,
+    "short_ratio_amt": 9.61
+  },
+  "2026-03-05": {
+    "foreign_net_qty": 32854,
+    "foreign_net_amt": 5554,
+    "inst_net_qty": 161718,
+    "inst_net_amt": 32658,
+    "individual_net_qty": -184474,
+    "individual_net_amt": -36269,
+    "short_volume": 83727,
+    "total_volume": 1237046,
+    "short_ratio_vol": 6.77,
+    "short_amount": 16354341000,
+    "short_ratio_amt": 6.79
+  },
+  "2026-03-04": {
+    "foreign_net_qty": 267295,
+    "foreign_net_amt": 46093,
+    "inst_net_qty": -18164,
+    "inst_net_amt": -1082,
+    "individual_net_qty": -241644,
+    "individual_net_amt": -43657,
+    "short_volume": 72946,
+    "total_volume": 1517050,
+    "short_ratio_vol": 4.81,
+    "short_amount": 13177413000,
+    "short_ratio_amt": 4.85
+  },
+  "2026-03-03": {
+    "foreign_net_qty": 52114,
+    "foreign_net_amt": 10248,
+    "inst_net_qty": -107734,
+    "inst_net_amt": -21780,
+    "individual_net_qty": 52993,
+    "individual_net_amt": 10937,
+    "short_volume": 92847,
+    "total_volume": 884982,
+    "short_ratio_vol": 10.49,
+    "short_amount": 19506073800,
+    "short_ratio_amt": 10.47
+  },
+  "2026-02-27": {
+    "foreign_net_qty": 105751,
+    "foreign_net_amt": 23359,
+    "inst_net_qty": 80705,
+    "inst_net_amt": 17920,
+    "individual_net_qty": -125178,
+    "individual_net_amt": -27724,
+    "short_volume": 71918,
+    "total_volume": 786277,
+    "short_ratio_vol": 9.15,
+    "short_amount": 15770976000,
+    "short_ratio_amt": 9.11
+  },
+  "2026-02-26": {
+    "foreign_net_qty": -23276,
+    "foreign_net_amt": -4852,
+    "inst_net_qty": 11044,
+    "inst_net_amt": 2476,
+    "individual_net_qty": 63517,
+    "individual_net_amt": 13763,
+    "short_volume": 97606,
+    "total_volume": 855441,
+    "short_ratio_vol": 11.41,
+    "short_amount": 21367853000,
+    "short_ratio_amt": 11.38
+  },
+  "2026-02-25": {
+    "foreign_net_qty": 76368,
+    "foreign_net_amt": 16562,
+    "inst_net_qty": -5722,
+    "inst_net_amt": -1199,
+    "individual_net_qty": -44148,
+    "individual_net_amt": -9650,
+    "short_volume": 52119,
+    "total_volume": 556738,
+    "short_ratio_vol": 9.36,
+    "short_amount": 11220654750,
+    "short_ratio_amt": 9.33
+  },
+  "2026-02-24": {
+    "short_volume": 83806,
+    "total_volume": 472468,
+    "short_ratio_vol": 17.74,
+    "short_amount": 17722768000,
+    "short_ratio_amt": 17.73
+  },
+  "2026-02-23": {
+    "short_volume": 89996,
+    "total_volume": 557503,
+    "short_ratio_vol": 16.14,
+    "short_amount": 19128869250,
+    "short_ratio_amt": 16.04
+  },
+  "2026-02-20": {
+    "short_volume": 49493,
+    "total_volume": 416915,
+    "short_ratio_vol": 11.87,
+    "short_amount": 10533796250,
+    "short_ratio_amt": 11.86
+  },
+  "2026-02-19": {
+    "short_volume": 87095,
+    "total_volume": 1095763,
+    "short_ratio_vol": 7.95,
+    "short_amount": 18296265800,
+    "short_ratio_amt": 7.97
+  },
+  "2026-02-13": {
+    "short_volume": 159421,
+    "total_volume": 817275,
+    "short_ratio_vol": 19.51,
+    "short_amount": 31595684200,
+    "short_ratio_amt": 19.51
+  },
+  "2026-02-12": {
+    "short_volume": 78742,
+    "total_volume": 575581,
+    "short_ratio_vol": 13.68,
+    "short_amount": 16158595000,
+    "short_ratio_amt": 13.71
+  },
+  "2026-02-11": {
+    "short_volume": 48136,
+    "total_volume": 369839,
+    "short_ratio_vol": 13.02,
+    "short_amount": 9737326250,
+    "short_ratio_amt": 12.99
+  },
+  "2026-02-10": {
+    "short_volume": 71151,
+    "total_volume": 447491,
+    "short_ratio_vol": 15.9,
+    "short_amount": 14516899250,
+    "short_ratio_amt": 15.84
+  },
+  "2026-02-09": {
+    "short_volume": 53857,
+    "total_volume": 899864,
+    "short_ratio_vol": 5.99,
+    "short_amount": 10896328550,
+    "short_ratio_amt": 5.98
+  },
+  "2026-02-06": {
+    "short_volume": 170771,
+    "total_volume": 1121283,
+    "short_ratio_vol": 15.23,
+    "short_amount": 33681274150,
+    "short_ratio_amt": 15.23
+  },
+  "2026-02-05": {
+    "short_volume": 122877,
+    "total_volume": 974505,
+    "short_ratio_vol": 12.61,
+    "short_amount": 26245512000,
+    "short_ratio_amt": 12.62
+  },
+  "2026-02-04": {
+    "short_volume": 34418,
+    "total_volume": 1082553,
+    "short_ratio_vol": 3.18,
+    "short_amount": 7642689000,
+    "short_ratio_amt": 3.17
+  },
+  "2026-02-03": {
+    "short_volume": 111927,
+    "total_volume": 1076313,
+    "short_ratio_vol": 10.4,
+    "short_amount": 24241087750,
+    "short_ratio_amt": 10.38
+  },
+  "2026-02-02": {
+    "short_volume": 183233,
+    "total_volume": 1896374,
+    "short_ratio_vol": 9.66,
+    "short_amount": 40827393000,
+    "short_ratio_amt": 9.7
+  },
+  "2026-01-30": {
+    "short_volume": 86334,
+    "total_volume": 2288279,
+    "short_ratio_vol": 3.77,
+    "short_amount": 20888760500,
+    "short_ratio_amt": 3.74
+  },
+  "2026-01-29": {
+    "short_volume": 97341,
+    "total_volume": 3368789,
+    "short_ratio_vol": 2.89,
+    "short_amount": 23755862000,
+    "short_ratio_amt": 2.89
+  },
+  "2026-01-28": {
+    "short_volume": 110957,
+    "total_volume": 2870049,
+    "short_ratio_vol": 3.87,
+    "short_amount": 24822175750,
+    "short_ratio_amt": 3.87
+  },
+  "2026-01-27": {
+    "short_volume": 50337,
+    "total_volume": 1805235,
+    "short_ratio_vol": 2.79,
+    "short_amount": 10627547000,
+    "short_ratio_amt": 2.79
+  },
+  "2026-01-26": {
+    "short_volume": 68038,
+    "total_volume": 4265569,
+    "short_ratio_vol": 1.6,
+    "short_amount": 13469370650,
+    "short_ratio_amt": 1.61
+  },
+  "2026-01-23": {
+    "short_volume": 55893,
+    "total_volume": 1003581,
+    "short_ratio_vol": 5.57,
+    "short_amount": 9620163100,
+    "short_ratio_amt": 5.59
+  },
+  "2026-01-22": {
+    "short_volume": 47945,
+    "total_volume": 1614324,
+    "short_ratio_vol": 2.97,
+    "short_amount": 8172287850,
+    "short_ratio_amt": 2.96
+  },
+  "2026-01-21": {
+    "short_volume": 59387,
+    "total_volume": 701320,
+    "short_ratio_vol": 8.47,
+    "short_amount": 9444261950,
+    "short_ratio_amt": 8.45
+  },
+  "2026-01-20": {
+    "short_volume": 60386,
+    "total_volume": 863013,
+    "short_ratio_vol": 7.0,
+    "short_amount": 9610471650,
+    "short_ratio_amt": 7.0
+  },
+  "2026-01-19": {
+    "short_volume": 40430,
+    "total_volume": 568539,
+    "short_ratio_vol": 7.11,
+    "short_amount": 6041481650,
+    "short_ratio_amt": 7.08
+  },
+  "2026-01-16": {
+    "short_volume": 46456,
+    "total_volume": 365913,
+    "short_ratio_vol": 12.7,
+    "short_amount": 6797970750,
+    "short_ratio_amt": 12.66
+  },
+  "2026-01-15": {
+    "short_volume": 62764,
+    "total_volume": 345964,
+    "short_ratio_vol": 18.14,
+    "short_amount": 9359861550,
+    "short_ratio_amt": 18.11
+  },
+  "2026-01-14": {
+    "short_volume": 103169,
+    "total_volume": 348414,
+    "short_ratio_vol": 29.61,
+    "short_amount": 15608704050,
+    "short_ratio_amt": 29.49
+  },
+  "2026-01-13": {
+    "short_volume": 36185,
+    "total_volume": 384550,
+    "short_ratio_vol": 9.41,
+    "short_amount": 5546309400,
+    "short_ratio_amt": 9.41
+  },
+  "2026-01-12": {
+    "short_volume": 27325,
+    "total_volume": 621211,
+    "short_ratio_vol": 4.4,
+    "short_amount": 4089118650,
+    "short_ratio_amt": 4.42
+  },
+  "2026-01-09": {
+    "short_volume": 50742,
+    "total_volume": 340906,
+    "short_ratio_vol": 14.88,
+    "short_amount": 7208616000,
+    "short_ratio_amt": 14.86
+  },
+  "2026-01-08": {
+    "short_volume": 67135,
+    "total_volume": 634042,
+    "short_ratio_vol": 10.59,
+    "short_amount": 9769203100,
+    "short_ratio_amt": 10.54
+  },
+  "2026-01-07": {
+    "short_volume": 42048,
+    "total_volume": 351759,
+    "short_ratio_vol": 11.95,
+    "short_amount": 6207849000,
+    "short_ratio_amt": 11.89
+  },
+  "2026-01-06": {
+    "short_volume": 86949,
+    "total_volume": 383139,
+    "short_ratio_vol": 22.69,
+    "short_amount": 12860310250,
+    "short_ratio_amt": 22.64
+  },
+  "2026-01-05": {
+    "short_volume": 103935,
+    "total_volume": 551111,
+    "short_ratio_vol": 18.86,
+    "short_amount": 15162304500,
+    "short_ratio_amt": 18.9
+  },
+  "2026-01-02": {
+    "short_volume": 85466,
+    "total_volume": 462810,
+    "short_ratio_vol": 18.47,
+    "short_amount": 12259910700,
+    "short_ratio_amt": 18.52
+  },
+  "2025-12-30": {
+    "short_volume": 131903,
+    "total_volume": 560716,
+    "short_ratio_vol": 23.52,
+    "short_amount": 19507961150,
+    "short_ratio_amt": 23.43
+  },
+  "2025-12-29": {
+    "short_volume": 36780,
+    "total_volume": 286734,
+    "short_ratio_vol": 12.83,
+    "short_amount": 5726396650,
+    "short_ratio_amt": 12.83
+  },
+  "2025-12-26": {
+    "short_volume": 54909,
+    "total_volume": 269772,
+    "short_ratio_vol": 20.35,
+    "short_amount": 8603243750,
+    "short_ratio_amt": 20.34
+  },
+  "2025-12-24": {
+    "short_volume": 23619,
+    "total_volume": 249357,
+    "short_ratio_vol": 9.47,
+    "short_amount": 3739099600,
+    "short_ratio_amt": 9.45
+  },
+  "2025-12-23": {
+    "short_volume": 51007,
+    "total_volume": 245633,
+    "short_ratio_vol": 20.77,
+    "short_amount": 8059075200,
+    "short_ratio_amt": 20.75
+  },
+  "2025-12-22": {
+    "short_volume": 50083,
+    "total_volume": 333968,
+    "short_ratio_vol": 15.0,
+    "short_amount": 7934112350,
+    "short_ratio_amt": 15.02
+  },
+  "2025-12-19": {
+    "short_volume": 112644,
+    "total_volume": 762795,
+    "short_ratio_vol": 14.77,
+    "short_amount": 17346416300,
+    "short_ratio_amt": 14.85
+  },
+  "2025-12-18": {
+    "short_volume": 118584,
+    "total_volume": 539839,
+    "short_ratio_vol": 21.97,
+    "short_amount": 18546219400,
+    "short_ratio_amt": 21.89
+  },
+  "2025-12-17": {
+    "short_volume": 57917,
+    "total_volume": 410948,
+    "short_ratio_vol": 14.09,
+    "short_amount": 9604027750,
+    "short_ratio_amt": 14.07
+  },
+  "2025-12-16": {
+    "short_volume": 129300,
+    "total_volume": 853073,
+    "short_ratio_vol": 15.16,
+    "short_amount": 21635955700,
+    "short_ratio_amt": 15.03
+  },
+  "2025-12-15": {
+    "short_volume": 50052,
+    "total_volume": 536214,
+    "short_ratio_vol": 9.33,
+    "short_amount": 8864233850,
+    "short_ratio_amt": 9.33
+  },
+  "2025-12-12": {
+    "short_volume": 26942,
+    "total_volume": 392230,
+    "short_ratio_vol": 6.87,
+    "short_amount": 4706478000,
+    "short_ratio_amt": 6.88
+  },
+  "2025-12-11": {
+    "short_volume": 93557,
+    "total_volume": 854760,
+    "short_ratio_vol": 10.95,
+    "short_amount": 16284570900,
+    "short_ratio_amt": 10.9
+  },
+  "2025-12-10": {
+    "short_volume": 20971,
+    "total_volume": 674670,
+    "short_ratio_vol": 3.11,
+    "short_amount": 3796695500,
+    "short_ratio_amt": 3.1
+  },
+  "2025-12-09": {
+    "short_volume": 85868,
+    "total_volume": 2222927,
+    "short_ratio_vol": 3.86,
+    "short_amount": 15696147250,
+    "short_ratio_amt": 3.86
+  },
+  "2025-12-08": {
+    "short_volume": 28429,
+    "total_volume": 1641004,
+    "short_ratio_vol": 1.73,
+    "short_amount": 4833030750,
+    "short_ratio_amt": 1.73
+  },
+  "2025-12-05": {
+    "short_volume": 49112,
+    "total_volume": 442403,
+    "short_ratio_vol": 11.1,
+    "short_amount": 7796284700,
+    "short_ratio_amt": 11.05
+  },
+  "2025-12-04": {
+    "short_volume": 36622,
+    "total_volume": 387314,
+    "short_ratio_vol": 9.46,
+    "short_amount": 5792085050,
+    "short_ratio_amt": 9.4
+  },
+  "2025-12-03": {
+    "short_volume": 45208,
+    "total_volume": 230829,
+    "short_ratio_vol": 19.59,
+    "short_amount": 7123711450,
+    "short_ratio_amt": 19.53
+  },
+  "2025-12-02": {
+    "short_volume": 75737,
+    "total_volume": 351622,
+    "short_ratio_vol": 21.54,
+    "short_amount": 11991575750,
+    "short_ratio_amt": 21.55
+  },
+  "2025-12-01": {
+    "short_volume": 30051,
+    "total_volume": 937384,
+    "short_ratio_vol": 3.21,
+    "short_amount": 4779561350,
+    "short_ratio_amt": 3.19
+  },
+  "2025-11-28": {
+    "short_volume": 47101,
+    "total_volume": 379604,
+    "short_ratio_vol": 12.41,
+    "short_amount": 7023938650,
+    "short_ratio_amt": 12.34
+  },
+  "2025-11-27": {
+    "short_volume": 39951,
+    "total_volume": 237991,
+    "short_ratio_vol": 16.79,
+    "short_amount": 5918505200,
+    "short_ratio_amt": 16.74
+  },
+  "2025-11-26": {
+    "short_volume": 31580,
+    "total_volume": 509226,
+    "short_ratio_vol": 6.2,
+    "short_amount": 4638192250,
+    "short_ratio_amt": 6.23
+  },
+  "2025-11-25": {
+    "short_volume": 43954,
+    "total_volume": 218794,
+    "short_ratio_vol": 20.09,
+    "short_amount": 6059109750,
+    "short_ratio_amt": 19.96
+  },
+  "2025-11-24": {
+    "short_volume": 115613,
+    "total_volume": 483265,
+    "short_ratio_vol": 23.92,
+    "short_amount": 15717233800,
+    "short_ratio_amt": 23.82
+  },
+  "2025-11-21": {
+    "short_volume": 45550,
+    "total_volume": 288050,
+    "short_ratio_vol": 15.81,
+    "short_amount": 6338458600,
+    "short_ratio_amt": 15.82
+  },
+  "2025-11-20": {
+    "short_volume": 46710,
+    "total_volume": 245476,
+    "short_ratio_vol": 19.03,
+    "short_amount": 6827872450,
+    "short_ratio_amt": 19.0
+  },
+  "2025-11-19": {
+    "short_volume": 75830,
+    "total_volume": 412954,
+    "short_ratio_vol": 18.36,
+    "short_amount": 10798496850,
+    "short_ratio_amt": 18.38
+  },
+  "2025-11-18": {
+    "short_volume": 65622,
+    "total_volume": 390511,
+    "short_ratio_vol": 16.8,
+    "short_amount": 9742217950,
+    "short_ratio_amt": 16.79
+  },
+  "2025-11-17": {
+    "short_volume": 23220,
+    "total_volume": 337973,
+    "short_ratio_vol": 6.87,
+    "short_amount": 3565274500,
+    "short_ratio_amt": 6.84
+  },
+  "2025-11-14": {
+    "short_volume": 66282,
+    "total_volume": 370728,
+    "short_ratio_vol": 17.88,
+    "short_amount": 10192868150,
+    "short_ratio_amt": 17.9
+  },
+  "2025-11-13": {
+    "short_volume": 27705,
+    "total_volume": 578111,
+    "short_ratio_vol": 4.79,
+    "short_amount": 4358448000,
+    "short_ratio_amt": 4.76
+  },
+  "2025-11-12": {
+    "short_volume": 27089,
+    "total_volume": 316121,
+    "short_ratio_vol": 8.57,
+    "short_amount": 4201384150,
+    "short_ratio_amt": 8.57
+  },
+  "2025-11-11": {
+    "short_volume": 38641,
+    "total_volume": 561388,
+    "short_ratio_vol": 6.88,
+    "short_amount": 6058066150,
+    "short_ratio_amt": 6.86
+  }
+}
