@@ -537,6 +537,12 @@ def run_bot(mode: str = "morning"):
     params = load_params()
     state = load_bot_state()
 
+    ai = AILayer(str(STATE_DIR))
+    ai.load_models()
+    
+    if mode == "morning":
+        _run_morning(client, params, state, today, ai)  
+
     # 일일 PnL 리셋
     if state.last_trade_date != today:
         state.daily_pnl = 0.0
