@@ -585,7 +585,7 @@ def _run_morning(client, params, state, today):
     log.info(f"[PRICE] 현재가={current:,}, 시가={today_open:,}, 전일종가={price['prev_close']:,}")
 
     # 지표 계산
-    df = get_ohlcv_recent(client, days=params.ma_long + 30)
+    df = get_ohlcv_recent(client, days=params.ma_long + 60)
     if df.empty or len(df) < params.ma_long:
         log.warning(f"[DATA] OHLCV 부족: {len(df)}일")
         return
