@@ -117,8 +117,8 @@ class BotState:
     tp1_done: bool = False           # 1차 익절 완료 여부
 
     # 자금
-    cash: float = 10_000_000.0
-    initial_capital: float = 10_000_000.0
+    cash: float = 1_500_000.0
+    initial_capital: float = 1_500_000.0
 
     # 리스크
     cooldown_until: str = ""         # 쿨다운 만료일 (YYYY-MM-DD)
