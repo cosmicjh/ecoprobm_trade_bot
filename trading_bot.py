@@ -537,6 +537,7 @@ def run_bot(mode: str = "morning"):
     params = load_params()
     state = load_bot_state()
 
+    # AI 레이어 로드
     ai = AILayer(str(STATE_DIR))
     ai.load_models()
     
@@ -603,6 +604,30 @@ def _run_morning(client, params, state, today):
     latest = df_ind.iloc[-1]
     regime = classify_regime(latest, params)
 
+    # ★ AI 앙상블 (추가)
+    hmm_result = {"regime": "UNKNOWN", "confidence": 0}
+    supply_anomaly = {"is_anomaly": False, "direction": "neutral"}
+    
+    if ai and ai.models_loaded:
+        hmm_result = ai.get_hmm_regime(df)
+        ensemble = ensemble_regime(regime, hmm_result)
+        regime = ensemble["regime"]    # ← 앙상블 결과로 교체
+        log.info(f"[AI] 앙상블: {ensemble['detail']} → {regime} ({ensemble['confidence']:.0%})")
+        
+        # 수급 이상 감지
+        supply_anomaly = ai.detect_supply_anomaly(
+            {"foreign_net_qty": inv.get("latest_foreign", 0),
+             "inst_net_qty": inv.get("latest_inst", 0),
+             "short_ratio_vol": 0},
+            {"vol_ratio": latest.get("vol_ratio", 1.0)},
+        )
+        if supply_anomaly["is_anomaly"]:
+            log.info(f"[AI] 수급 이상 감지: {supply_anomaly['direction']} (score={supply_anomaly['anomaly_score']:.3f})")
+    
+    # ★ 수급 이상을 매수 시그널에 반영 (추가)
+    # 미보유 + TREND_UP + bullish 이상 → 최대 비율로 매수
+    # 미보유 + bearish 이상 → 진입 보류
+  
     # 수급 조회
     inv = get_investor_data(client)
     dual_buy = inv.get("dual_buy", False)
@@ -692,6 +717,11 @@ def _run_morning(client, params, state, today):
         f"📊 <b>{TICKER_NAME} Morning</b>",
         f"시그널: <b>{signal}</b>",
         f"레짐: {regime}",
+
+      # AI 정보 추가
+        
+        f"HMM: {hmm_result.get('regime', 'N/A')} ({hmm_result.get('confidence', 0):.0%})",
+        f"수급이상: {'🚨 ' + supply_anomaly['direction'] if supply_anomaly['is_anomaly'] else '정상'}",
         f"현재가: {current:,}원",
         f"RSI: {latest.get('rsi', 0):.1f} | ATR비율: {latest.get('atr_ratio', 0):.2f}",
         f"수급: 외{inv.get('latest_foreign',0):,} / 기{inv.get('latest_inst',0):,}",
