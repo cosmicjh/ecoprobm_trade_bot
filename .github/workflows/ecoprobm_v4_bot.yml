@@ -37,6 +37,7 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install mojito2 pandas numpy requests
+          pip install hmmlearn scikit-learn
 
       - name: Restore state files
         uses: actions/cache@v4
