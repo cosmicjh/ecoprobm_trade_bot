@@ -541,19 +541,20 @@ def run_bot(mode: str = "morning"):
         state.last_trade_date = today
 
     # KIS 클라이언트
-    try:
-        client = KISClient()
-    except Exception as e:
-        log.error(f"[AUTH] 실패: {e}")
-        send_telegram(f"❌ {TICKER_NAME} 봇 인증 실패: {e}")
-        return
-
-    if mode == "morning":
-        _run_morning(client, params, state, today)
-    elif mode == "closing":
-        _run_closing(client, params, state, today)
-    elif mode == "evening":
-        _run_evening(client, params, state, today)
+    if mode == "evening":
+        _run_evening(None, params, state, today)
+    else:
+        try:
+            client = KISClient()
+        except Exception as e:
+            log.error(f"[AUTH] 실패: {e}")
+            send_telegram(f"❌ {TICKER_NAME} 봇 인증 실패: {e}")
+            return
+            
+        if mode == "morning":
+            _run_morning(client, params, state, today)
+        elif mode == "closing":
+            _run_closing(client, params, state, today)
 
     state.last_run = datetime.now().isoformat()
     save_bot_state(state)
