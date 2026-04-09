@@ -28,6 +28,8 @@ from time import sleep
 import numpy as np
 import pandas as pd
 
+import ai_layer import AILayer, ensemble_regime
+
 # ── mojito2 (주문 실행 전용) ──
 try:
     import mojito
