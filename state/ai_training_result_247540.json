@@ -1,0 +1,76 @@
+{
+  "hmm": {
+    "n_states": 4,
+    "log_likelihood": -4415.881724087801,
+    "state_distribution": {
+      "HIGH_VOLATILITY": {
+        "count": 133,
+        "pct": 12.8,
+        "mean_daily_return": 3.25,
+        "mean_atr_ratio": 1.43
+      },
+      "RANGE_BOUND": {
+        "count": 368,
+        "pct": 35.4,
+        "mean_daily_return": -0.689,
+        "mean_atr_ratio": 0.92
+      },
+      "TREND_UP": {
+        "count": 381,
+        "pct": 36.6,
+        "mean_daily_return": 0.084,
+        "mean_atr_ratio": 0.98
+      },
+      "TREND_DOWN": {
+        "count": 159,
+        "pct": 15.3,
+        "mean_daily_return": -0.391,
+        "mean_atr_ratio": 1.01
+      }
+    },
+    "transition_matrix": [
+      [
+        0.7372476304944656,
+        1.8717828204575607e-16,
+        0.25144279209579656,
+        0.011309577409737662
+      ],
+      [
+        0.005189679420817055,
+        0.6667515598659691,
+        0.00012452463296326445,
+        0.3279342360802505
+      ],
+      [
+        0.07241396735155532,
+        0.00010262819789554296,
+        0.848836253862751,
+        0.07864715058779818
+      ],
+      [
+        0.041103735889539084,
+        0.6643428139577485,
+        0.12428656637236433,
+        0.17026688378034807
+      ]
+    ]
+  },
+  "hmm_current": {
+    "regime": "TREND_UP",
+    "confidence": 0.992,
+    "all_probs": {
+      "HIGH_VOLATILITY": 0.007,
+      "RANGE_BOUND": 0.0,
+      "TREND_UP": 0.992,
+      "TREND_DOWN": 0.001
+    },
+    "transition_hint": "",
+    "source": "hmm"
+  },
+  "isolation_forest": {
+    "total_samples": 101,
+    "anomaly_count": 5,
+    "anomaly_rate": 5.0,
+    "contamination": 0.05
+  }
+}
