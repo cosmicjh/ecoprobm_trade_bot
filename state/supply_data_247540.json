@@ -1,16 +1,16 @@
 {
   "2026-04-08": {
-    "foreign_net_qty": 0,
-    "foreign_net_amt": 0,
-    "inst_net_qty": 0,
-    "inst_net_amt": 0,
-    "individual_net_qty": 0,
-    "individual_net_amt": 0,
-    "short_volume": 0,
-    "total_volume": 526287,
-    "short_ratio_vol": 0.0,
-    "short_amount": 0,
-    "short_ratio_amt": 0.0
+    "foreign_net_qty": -65976,
+    "foreign_net_amt": -13731,
+    "inst_net_qty": 174594,
+    "inst_net_amt": 36521,
+    "individual_net_qty": -68699,
+    "individual_net_amt": -14502,
+    "short_volume": 52502,
+    "total_volume": 585119,
+    "short_ratio_vol": 8.97,
+    "short_amount": 10912318250,
+    "short_ratio_amt": 8.95
   },
   "2026-04-07": {
     "foreign_net_qty": 3920,
@@ -878,5 +878,18 @@
     "short_ratio_vol": 6.88,
     "short_amount": 6058066150,
     "short_ratio_amt": 6.86
+  },
+  "2026-04-09": {
+    "foreign_net_qty": 0,
+    "foreign_net_amt": 0,
+    "inst_net_qty": 0,
+    "inst_net_amt": 0,
+    "individual_net_qty": 0,
+    "individual_net_amt": 0,
+    "short_volume": 0,
+    "total_volume": 22874,
+    "short_ratio_vol": 0.0,
+    "short_amount": 0,
+    "short_ratio_amt": 0.0
   }
 }
