@@ -1,0 +1,23 @@
+{
+  "position_qty": 0,
+  "entry_price": 0.0,
+  "entry_date": "",
+  "highest_since_entry": 0.0,
+  "tp1_done": false,
+  "cash": 1500000.0,
+  "initial_capital": 1500000.0,
+  "cooldown_until": "",
+  "daily_pnl": 0.0,
+  "weekly_pnl": 0.0,
+  "monthly_pnl": 0.0,
+  "last_trade_date": "2026-04-09",
+  "last_week_reset": "",
+  "last_month_reset": "",
+  "halted": false,
+  "halt_reason": "",
+  "last_regime": "RANGE_BOUND",
+  "last_signal": "HOLD",
+  "last_run": "2026-04-09T04:24:09.421707",
+  "total_trades": 0,
+  "version": "v4.2.1"
+}
