@@ -880,16 +880,16 @@
     "short_ratio_amt": 6.86
   },
   "2026-04-09": {
-    "foreign_net_qty": 0,
-    "foreign_net_amt": 0,
-    "inst_net_qty": 0,
-    "inst_net_amt": 0,
-    "individual_net_qty": 0,
-    "individual_net_amt": 0,
-    "short_volume": 0,
-    "total_volume": 82877,
-    "short_ratio_vol": 0.0,
-    "short_amount": 0,
-    "short_ratio_amt": 0.0
+    "foreign_net_qty": -49255,
+    "foreign_net_amt": -10166,
+    "inst_net_qty": -119251,
+    "inst_net_amt": -24169,
+    "individual_net_qty": 164316,
+    "individual_net_amt": 33469,
+    "short_volume": 159387,
+    "total_volume": 574238,
+    "short_ratio_vol": 27.76,
+    "short_amount": 32487883500,
+    "short_ratio_amt": 27.66
   }
 }
