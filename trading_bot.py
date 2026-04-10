@@ -482,6 +482,11 @@ def _execute_buy(client: KISClient, state: BotState, price: int, qty: int, regim
             state.tp1_done = False
             state.total_trades += 1
             log.info(f"[BUY] 성공: {qty}주 @ {price:,} ({regime})")
+            # PendingOrder 생성 & 저장
+            pending = create_pending_from_response(resp, "buy", "ENTRY", qty, price)
+            if pending:
+                state.pending_orders.append(asdict(pending))
+                log.info(f"[PENDING] 매수 추적 등록: {pending.order_no}")          
         else:
             log.error(f"[BUY] KIS 응답 에러: {resp.get('msg1')}")
     except Exception as e:
@@ -522,6 +527,12 @@ def _execute_sell(client: KISClient, params: StrategyParams, state: BotState, pr
                     state.cooldown_until = cd.strftime("%Y-%m-%d")
 
             log.info(f"[SELL_{reason}] 성공: {qty}주 @ {price:,} | PnL={pnl:+,.0f} ({regime})")
+
+            # PendingOrder 생성 & 저장
+            pending = create_pending_from_response(resp, "sell", reason, qty, price)
+            if pending:
+                state.pending_orders.append(asdict(pending))
+                log.info(f"[PENDING] 매도 추적 등록: {pending.order_no} ({reason})")
         else:
             log.error(f"[SELL] KIS 응답 에러: {resp.get('msg1')}")
     except Exception as e:
@@ -604,6 +615,17 @@ def run_bot(mode: str = "morning"):
     if state.last_trade_date != today:
         state.daily_pnl = 0.0
         state.last_trade_date = today
+
+        # 이전 날짜의 추적 주문 정리
+        # 당일 주문이 아닌 것은 조회 대상이 아니므로 제거
+        if state.pending_orders:
+            old_count = len(state.pending_orders)
+            state.pending_orders = [
+                p for p in state.pending_orders
+                if p.get("ordered_date", "") == today.replace("-", "")
+            ]
+            if old_count != len(state.pending_orders):
+                log.info(f"[CLEANUP] 이전 추적 주문 {old_count - len(state.pending_orders)}건 제거")  
 
     # KIS 클라이언트
     if mode == "evening":
@@ -805,6 +827,9 @@ def _run_closing(client, params, state, today):
     if state.position_qty > 0 and current > 0:
         state.highest_since_entry = max(state.highest_since_entry, current)
 
+    # 미체결 주문 처리
+    unfilled_result = handle_unfilled_orders(client, state, current_price=current)
+  
     equity = state.cash + state.position_qty * current
     pnl_total = (equity - state.initial_capital) / state.initial_capital * 100
 
@@ -816,6 +841,20 @@ def _run_closing(client, params, state, today):
         f"일일 PnL: {state.daily_pnl:+,.0f}원",
         f"레짐: {state.last_regime}",
     ]
+
+    # 미체결 처리 결과를 Telegram에 포함
+    if unfilled_result["checked"] > 0:
+        lines.append("")
+        lines.append(f"📝 주문 확인: {unfilled_result['checked']}건")
+        if unfilled_result["filled"] > 0:
+            lines.append(f"  ✅ 체결: {unfilled_result['filled']}건")
+        if unfilled_result["cancelled"] > 0:
+            lines.append(f"  🚫 취소: {unfilled_result['cancelled']}건")
+        if unfilled_result["modified"] > 0:
+            lines.append(f"  ✏️ 정정: {unfilled_result['modified']}건")
+        if unfilled_result["errors"]:
+            lines.append(f"  ❌ 오류: {len(unfilled_result['errors'])}건")
+  
     send_telegram("\n".join(lines))
 
 
