@@ -30,13 +30,6 @@ import pandas as pd
 
 from ai_layer import AILayer, ensemble_regime
 
-# ── mojito2 (주문 실행 전용) ──
-try:
-    import mojito
-    MOJITO_AVAILABLE = True
-except ImportError:
-    mojito = None
-    MOJITO_AVAILABLE = False
 
 # ── 로깅 ──
 logging.basicConfig(
@@ -363,8 +356,7 @@ def get_investor_data(client: KISClient, ticker=TICKER) -> dict:
         "latest_inst": records[target_idx]["inst_net"] if records else 0,
         "foreign_ma5": int(np.mean([r["foreign_net"] for r in records[:5]])) if len(records) >= 5 else 0,
         "inst_ma5": int(np.mean([r["inst_net"] for r in records[:5]])) if len(records) >= 5 else 0,
-        "dual_buy": records[0]["foreign_net"] > 0 and records[0]["inst_net"] > 0 if records else False,
-    }
+        "dual_buy": records[target_idx]["foreign_net"] > 0 and records[target_idx]["inst_net"] > 0 if records else False,    }
 
 
 # ═══════════════════════════════════════════════════════════════════
