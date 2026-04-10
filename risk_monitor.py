@@ -20,7 +20,7 @@
 한투 API:
   해외주식 현재가: /uapi/overseas-price/v1/quotations/price
   tr_id: HHDFS00000300 (실전)
-  거래소: NASD (나스닥), NYSE (뉴욕)
+  거래소: NAS (나스닥), NYS (뉴욕)
 """
 
 import os
@@ -109,7 +109,7 @@ def fetch_us_stock_price(client, symbol: str, exchange: str) -> dict:
 
     params = {
         "AUTH": "",
-        "EXCD": exchange,  # NASD, NYSE, AMEX
+        "EXCD": exchange,  # NAS, NYS, AMS
         "SYMB": symbol,
     }
 
