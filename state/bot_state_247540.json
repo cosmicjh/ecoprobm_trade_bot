@@ -1,10 +1,10 @@
 {
-  "position_qty": 0,
-  "entry_price": 0.0,
-  "entry_date": "",
+  "position_qty": 2,
+  "entry_price": 204500.0,
+  "entry_date": "2026-04-10",
   "highest_since_entry": 0.0,
   "tp1_done": false,
-  "cash": 1500000.0,
+  "cash": 1091000.0,
   "initial_capital": 1500000.0,
   "cooldown_until": "",
   "daily_pnl": 0.0,
@@ -17,7 +17,7 @@
   "halt_reason": "",
   "last_regime": "TREND_UP",
   "last_signal": "BUY_TREND",
-  "last_run": "2026-04-10T00:51:40.382913",
-  "total_trades": 0,
+  "last_run": "2026-04-10T01:12:24.607186",
+  "total_trades": 1,
   "version": "v4.2.1"
 }
