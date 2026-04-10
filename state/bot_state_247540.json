@@ -16,8 +16,8 @@
   "halted": false,
   "halt_reason": "",
   "last_regime": "TREND_UP",
-  "last_signal": "BUY_TREND",
-  "last_run": "2026-04-10T01:12:24.607186",
+  "last_signal": "HOLD",
+  "last_run": "2026-04-10T01:15:04.680133",
   "total_trades": 1,
   "version": "v4.2.1"
 }
