@@ -537,12 +537,10 @@ def run_bot(mode: str = "morning"):
     params = load_params()
     state = load_bot_state()
 
-    # AI 레이어 로드
+# AI 레이어 로드
     ai = AILayer(str(STATE_DIR))
     ai.load_models()
     
-    if mode == "morning":
-        _run_morning(client, params, state, today, ai)  
 
     # 일일 PnL 리셋
     if state.last_trade_date != today:
@@ -554,14 +552,15 @@ def run_bot(mode: str = "morning"):
         _run_evening(None, params, state, today)
     else:
         try:
-            client = KISClient()
+            client = KISClient() # client 객체 정상적 생성
         except Exception as e:
             log.error(f"[AUTH] 실패: {e}")
             send_telegram(f"❌ {TICKER_NAME} 봇 인증 실패: {e}")
             return
             
         if mode == "morning":
-            _run_morning(client, params, state, today)
+            # client 생성 이후 호출, ai 인자 추가
+            _run_morning(client, params, state, today, ai)
         elif mode == "closing":
             _run_closing(client, params, state, today)
 
