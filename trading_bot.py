@@ -344,16 +344,23 @@ def get_investor_data(client: KISClient, ticker=TICKER) -> dict:
     if not output:
         return {}
 
-    # 최근 5일간 데이터 수집
+    # 최근 데이터 수집 루프 안에서 당일(0) 데이터가 아닌 D-1 데이터를 latest로 잡도록 수정
     records = []
     for item in output[:10]:
         records.append({
+            "date": item.get("stck_bsop_date", ""),
             "foreign_net": _si(item.get("frgn_ntby_qty", 0)),
             "inst_net": _si(item.get("orgn_ntby_qty", 0)),
         })
+    
+    # 만약 records의 첫 번째(인덱스 0)가 당일인데 데이터가 0이라면 전일(인덱스 1) 데이터를 사용
+    target_idx = 0
+    if len(records) > 1 and records[0]["foreign_net"] == 0 and records[0]["inst_net"] == 0:
+        target_idx = 1
+        
     return {
-        "latest_foreign": records[0]["foreign_net"] if records else 0,
-        "latest_inst": records[0]["inst_net"] if records else 0,
+        "latest_foreign": records[target_idx]["foreign_net"] if records else 0,
+        "latest_inst": records[target_idx]["inst_net"] if records else 0,
         "foreign_ma5": int(np.mean([r["foreign_net"] for r in records[:5]])) if len(records) >= 5 else 0,
         "inst_ma5": int(np.mean([r["inst_net"] for r in records[:5]])) if len(records) >= 5 else 0,
         "dual_buy": records[0]["foreign_net"] > 0 and records[0]["inst_net"] > 0 if records else False,
