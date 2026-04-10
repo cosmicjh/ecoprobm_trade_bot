@@ -354,8 +354,8 @@ def get_investor_data(client: KISClient, ticker=TICKER) -> dict:
     return {
         "latest_foreign": records[target_idx]["foreign_net"] if records else 0,
         "latest_inst": records[target_idx]["inst_net"] if records else 0,
-        "foreign_ma5": int(np.mean([r["foreign_net"] for r in records[:5]])) if len(records) >= 5 else 0,
-        "inst_ma5": int(np.mean([r["inst_net"] for r in records[:5]])) if len(records) >= 5 else 0,
+        "foreign_ma5": int(np.mean([r["foreign_net"] for r in records[target_idx : target_idx+5]])) if len(records) >= 5 else 0,
+        "inst_ma5": int(np.mean([r["inst_net"] for r in records[target_idx : target_idx+5]])) if len(records) >= 5 else 0,
         "dual_buy": records[target_idx]["foreign_net"] > 0 and records[target_idx]["inst_net"] > 0 if records else False,    }
 
 
