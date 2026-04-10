@@ -28,7 +28,7 @@ from time import sleep
 import numpy as np
 import pandas as pd
 
-import ai_layer import AILayer, ensemble_regime
+from ai_layer import AILayer, ensemble_regime
 
 # ── mojito2 (주문 실행 전용) ──
 try:
@@ -600,11 +600,16 @@ def _run_morning(client, params, state, today):
         log.warning(f"[DATA] OHLCV 부족: {len(df)}일")
         return
 
+# ... (생략) ...
     df_ind = compute_indicators(df, params)
     latest = df_ind.iloc[-1]
     regime = classify_regime(latest, params)
 
-    # ★ AI 앙상블 (추가)
+    # 수급 조회 먼저 실행 (inv 변수 선언)
+    inv = get_investor_data(client)
+    dual_buy = inv.get("dual_buy", False)
+
+    # AI 앙상블 및 수급 이상 감지 실행
     hmm_result = {"regime": "UNKNOWN", "confidence": 0}
     supply_anomaly = {"is_anomaly": False, "direction": "neutral"}
     
@@ -614,7 +619,7 @@ def _run_morning(client, params, state, today):
         regime = ensemble["regime"]    # ← 앙상블 결과로 교체
         log.info(f"[AI] 앙상블: {ensemble['detail']} → {regime} ({ensemble['confidence']:.0%})")
         
-        # 수급 이상 감지
+        # 위에서 선언된 inv 변수 정상적 사용
         supply_anomaly = ai.detect_supply_anomaly(
             {"foreign_net_qty": inv.get("latest_foreign", 0),
              "inst_net_qty": inv.get("latest_inst", 0),
@@ -623,14 +628,6 @@ def _run_morning(client, params, state, today):
         )
         if supply_anomaly["is_anomaly"]:
             log.info(f"[AI] 수급 이상 감지: {supply_anomaly['direction']} (score={supply_anomaly['anomaly_score']:.3f})")
-    
-    # ★ 수급 이상을 매수 시그널에 반영 (추가)
-    # 미보유 + TREND_UP + bullish 이상 → 최대 비율로 매수
-    # 미보유 + bearish 이상 → 진입 보류
-  
-    # 수급 조회
-    inv = get_investor_data(client)
-    dual_buy = inv.get("dual_buy", False)
 
     log.info(f"[REGIME] {regime} | RSI={latest.get('rsi', 0):.1f} | ATR비율={latest.get('atr_ratio', 0):.2f}")
     log.info(f"[SUPPLY] 외국인={inv.get('latest_foreign', 0):,} | 기관={inv.get('latest_inst', 0):,} | 동반매수={dual_buy}")
