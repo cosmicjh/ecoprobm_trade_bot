@@ -10,14 +10,14 @@
   "daily_pnl": 0.0,
   "weekly_pnl": 0.0,
   "monthly_pnl": 0.0,
-  "last_trade_date": "2026-04-09",
+  "last_trade_date": "2026-04-10",
   "last_week_reset": "",
   "last_month_reset": "",
   "halted": false,
   "halt_reason": "",
-  "last_regime": "RANGE_BOUND",
-  "last_signal": "HOLD",
-  "last_run": "2026-04-09T12:52:51.199757",
+  "last_regime": "TREND_UP",
+  "last_signal": "BUY_TREND",
+  "last_run": "2026-04-10T00:51:40.382913",
   "total_trades": 0,
   "version": "v4.2.1"
 }
