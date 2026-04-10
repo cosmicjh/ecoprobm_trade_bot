@@ -431,8 +431,23 @@ def classify_regime(row, params: StrategyParams) -> str:
 
 
 # ═══════════════════════════════════════════════════════════════════
-# 5. 주문 실행 (mojito2)
+# 5. 주문 실행
 # ═══════════════════════════════════════════════════════════════════
+
+def kosdaq_tick_size(price: int) -> int:
+    """코스닥 호가 단위."""
+    for threshold, tick in KOSDAQ_TICK_TABLE:
+        if price < threshold:
+            return tick
+    return 1000
+
+def round_to_tick(price: int, direction: str = "down") -> int:
+    """호가 단위로 반올림."""
+    tick = kosdaq_tick_size(price)
+    if direction == "down":
+        return (price // tick) * tick
+    else:
+        return ((price + tick - 1) // tick) * tick
 
 def _execute_buy(client: KISClient, state: BotState, price: int, qty: int, regime: str, today: str):
     """직접 KISClient로 매수 실행."""
@@ -762,28 +777,6 @@ def _run_morning(client, params, state, today, ai):
     send_telegram("\n".join(lines))
 
 
-def _execute_buy(state: BotState, price: int, qty: int, regime: str, today: str):
-    """매수 실행."""
-    try:
-        broker = get_broker()
-        resp = place_buy_order(broker, TICKER, qty, price)
-        if resp:
-            cost = qty * price
-            state.cash -= cost
-            state.position_qty = qty
-            state.entry_price = float(price)
-            state.entry_date = today
-            state.highest_since_entry = 0.0
-            state.tp1_done = False
-            state.total_trades += 1
-            log.info(f"[BUY] {qty}주 @ {price:,} ({regime})")
-    except Exception as e:
-        log.error(f"[BUY] 실패: {e}")
-
-
-def _execute_sell(params: StrategyParams, state: BotState, price: int, qty: int,
-                  reason: str, regime: str, today: str):
-    """매도 실행."""
     try:
         broker = get_broker()
         resp = place_sell_order(broker, TICKER, qty, price)
