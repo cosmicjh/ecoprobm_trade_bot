@@ -139,6 +139,9 @@ class BotState:
     total_trades: int = 0
     version: str = "v4.2.1"
 
+    # ★ 추가: 미체결 주문 추적 리스트 (PendingOrder의 dict 형태로 저장)
+    pending_orders: list = field(default_factory=list)
+
 
 def load_params(path: Optional[str] = None) -> StrategyParams:
     """Colab 최적화 결과 JSON에서 파라미터 로드."""
