@@ -569,7 +569,7 @@ def run_bot(mode: str = "morning"):
     log.info(f"[BOT] 완료. 포지션: {state.position_qty}주, 현금: {state.cash:,.0f}")
 
 
-def _run_morning(client, params, state, today):
+def _run_morning(client, params, state, today, ai):
     """09:05 — 시그널 판단 + 주문."""
     # 리스크 체크
     if check_risk_limits(state, params, today):
