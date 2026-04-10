@@ -237,6 +237,31 @@ class KISClient:
         sleep(0.5)
         return data
 
+    def get_hashkey(self, body):
+        """POST 요청(주문)에 필요한 보안 해시키 발급"""
+        url = f"{self.base_url}/uapi/hashkey"
+        headers = {
+            "content-type": "application/json",
+            "appkey": self.api_key,
+            "appsecret": self.api_secret,
+        }
+        resp = requests.post(url, headers=headers, json=body, timeout=10)
+        return resp.json().get("HASH", "")
+
+    def post(self, path, tr_id, body):
+        """실전 주문용 POST 메서드"""
+        headers = {
+            "content-type": "application/json; charset=utf-8",
+            "authorization": f"Bearer {self.access_token}",
+            "appkey": self.api_key,
+            "appsecret": self.api_secret,
+            "tr_id": tr_id,
+            "custtype": "P",
+            "hashkey": self.get_hashkey(body),  # 실전 주문은 해시키 필수
+        }
+        resp = requests.post(self.base_url + path, headers=headers, json=body, timeout=15)
+        return resp.json()
+
 
 # ═══════════════════════════════════════════════════════════════════
 # 3. 시세 조회
@@ -409,65 +434,75 @@ def classify_regime(row, params: StrategyParams) -> str:
 # 5. 주문 실행 (mojito2)
 # ═══════════════════════════════════════════════════════════════════
 
-def get_broker():
-    """mojito2 브로커 (주문 전용)."""
-    if not MOJITO_AVAILABLE:
-        raise RuntimeError("mojito2 미설치")
-    return mojito.KoreaInvestment(
-        api_key=os.getenv("KIS_API_KEY"),
-        api_secret=os.getenv("KIS_API_SECRET"),
-        acc_no=os.getenv("KIS_ACC_NO"),  # 하이픈 포함
-        mock=False,  # 실전
-    )
-
-
-def kosdaq_tick_size(price: int) -> int:
-    """코스닥 호가 단위."""
-    for threshold, tick in KOSDAQ_TICK_TABLE:
-        if price < threshold:
-            return tick
-    return 1000
-
-
-def round_to_tick(price: int, direction: str = "down") -> int:
-    """호가 단위로 반올림."""
-    tick = kosdaq_tick_size(price)
-    if direction == "down":
-        return (price // tick) * tick
-    else:
-        return ((price + tick - 1) // tick) * tick
-
-
-def place_buy_order(broker, ticker, qty, price):
-    """지정가 매수 주문."""
-    log.info(f"[ORDER] 매수 주문: {ticker} × {qty}주 @ {price:,}원")
+def _execute_buy(client: KISClient, state: BotState, price: int, qty: int, regime: str, today: str):
+    """직접 KISClient로 매수 실행."""
     try:
-        resp = broker.create_limit_buy_order(
-            symbol=ticker,
-            price=price,
-            quantity=qty,
-        )
-        log.info(f"[ORDER] 매수 응답: {resp}")
-        return resp
+        acc_no = os.getenv("KIS_ACC_NO", "")
+        cano, acnt_prdt_cd = acc_no.split("-")
+        
+        body = {
+            "CANO": cano, "ACNT_PRDT_CD": acnt_prdt_cd,
+            "PDNO": TICKER, "ORD_DVSN": "00", # 00: 지정가
+            "ORD_QTY": str(qty), "ORD_UNPR": str(price),
+        }
+        
+        log.info(f"[ORDER] 매수 주문: {TICKER} {qty}주 @ {price:,}원")
+        resp = client.post("/uapi/domestic-stock/v1/trading/order-cash", "TTTC0802U", body)
+        
+        if resp.get("rt_cd") == "0":
+            cost = qty * price
+            state.cash -= cost
+            state.position_qty = qty
+            state.entry_price = float(price)
+            state.entry_date = today
+            state.highest_since_entry = 0.0
+            state.tp1_done = False
+            state.total_trades += 1
+            log.info(f"[BUY] 성공: {qty}주 @ {price:,} ({regime})")
+        else:
+            log.error(f"[BUY] KIS 응답 에러: {resp.get('msg1')}")
     except Exception as e:
-        log.error(f"[ORDER] 매수 실패: {e}")
-        return None
+        log.error(f"[BUY] 예외 발생: {e}")
 
-
-def place_sell_order(broker, ticker, qty, price):
-    """지정가 매도 주문."""
-    log.info(f"[ORDER] 매도 주문: {ticker} × {qty}주 @ {price:,}원")
+def _execute_sell(client: KISClient, params: StrategyParams, state: BotState, price: int, qty: int, reason: str, regime: str, today: str):
+    """직접 KISClient로 매도 실행."""
     try:
-        resp = broker.create_limit_sell_order(
-            symbol=ticker,
-            price=price,
-            quantity=qty,
-        )
-        log.info(f"[ORDER] 매도 응답: {resp}")
-        return resp
+        acc_no = os.getenv("KIS_ACC_NO", "")
+        cano, acnt_prdt_cd = acc_no.split("-")
+        
+        body = {
+            "CANO": cano, "ACNT_PRDT_CD": acnt_prdt_cd,
+            "PDNO": TICKER, "ORD_DVSN": "00",
+            "ORD_QTY": str(qty), "ORD_UNPR": str(price),
+        }
+        
+        log.info(f"[ORDER] 매도 주문: {TICKER} {qty}주 @ {price:,}원")
+        resp = client.post("/uapi/domestic-stock/v1/trading/order-cash", "TTTC0801U", body)
+        
+        if resp.get("rt_cd") == "0":
+            proceeds = qty * price
+            pnl = (price - state.entry_price) * qty
+            state.cash += proceeds
+            state.position_qty -= qty
+            state.daily_pnl += pnl
+            state.weekly_pnl += pnl
+            state.monthly_pnl += pnl
+            state.total_trades += 1
+
+            if state.position_qty <= 0:
+                state.position_qty = 0
+                state.entry_price = 0.0
+                state.tp1_done = False
+                state.highest_since_entry = 0.0
+                if reason == "SL":
+                    cd = (datetime.strptime(today, "%Y-%m-%d") + timedelta(days=params.cooldown_days))
+                    state.cooldown_until = cd.strftime("%Y-%m-%d")
+
+            log.info(f"[SELL_{reason}] 성공: {qty}주 @ {price:,} | PnL={pnl:+,.0f} ({regime})")
+        else:
+            log.error(f"[SELL] KIS 응답 에러: {resp.get('msg1')}")
     except Exception as e:
-        log.error(f"[ORDER] 매도 실패: {e}")
-        return None
+        log.error(f"[SELL] 예외 발생: {e}")
 
 
 # ═══════════════════════════════════════════════════════════════════
