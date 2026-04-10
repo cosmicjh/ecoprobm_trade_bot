@@ -20,7 +20,7 @@ import logging
 import requests
 from datetime import datetime, timedelta
 from pathlib import Path
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from typing import Optional
 from time import sleep
 
