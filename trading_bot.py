@@ -784,9 +784,6 @@ def _run_morning(client, params, state, today, ai):
     send_telegram("\n".join(lines))
 
 
-    try:
-        broker = get_broker()
-        resp = place_sell_order(broker, TICKER, qty, price)
         if resp:
             proceeds = qty * price
             pnl = (price - state.entry_price) * qty
