@@ -784,30 +784,6 @@ def _run_morning(client, params, state, today, ai):
     send_telegram("\n".join(lines))
 
 
-        if resp:
-            proceeds = qty * price
-            pnl = (price - state.entry_price) * qty
-            state.cash += proceeds
-            state.position_qty -= qty
-            state.daily_pnl += pnl
-            state.weekly_pnl += pnl
-            state.monthly_pnl += pnl
-            state.total_trades += 1
-
-            if state.position_qty <= 0:
-                state.position_qty = 0
-                state.entry_price = 0.0
-                state.tp1_done = False
-                state.highest_since_entry = 0.0
-                if reason == "SL":
-                    cd = (datetime.strptime(today, "%Y-%m-%d") + timedelta(days=params.cooldown_days))
-                    state.cooldown_until = cd.strftime("%Y-%m-%d")
-
-            log.info(f"[SELL_{reason}] {qty}주 @ {price:,} | PnL={pnl:+,.0f} ({regime})")
-    except Exception as e:
-        log.error(f"[SELL] 실패: {e}")
-
-
 def _run_closing(client, params, state, today):
     """15:10 — 체결 확인 + 상태 갱신."""
     price = get_current_price(client)
