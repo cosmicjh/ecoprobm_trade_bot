@@ -677,14 +677,14 @@ def _run_morning(client, params, state, today, ai):
         if pnl_pct <= params.sl_pct:
             signal = "SELL_SL"
             sell_price = round_to_tick(today_open, "down")
-            _execute_sell(params, state, sell_price, state.position_qty, "SL", regime, today)
+            _execute_sell(client, params, state, sell_price, state.position_qty, "SL", regime, today)
 
         # 1차 익절 (미실행 시)
         elif pnl_pct >= params.tp1_pct and not state.tp1_done:
             signal = "SELL_TP1"
             sell_qty = max(1, int(state.position_qty * params.tp1_sell_ratio))
             sell_price = round_to_tick(today_open, "down")
-            _execute_sell(params, state, sell_price, sell_qty, "TP1", regime, today)
+            _execute_sell(client, params, state, sell_price, sell_qty, "TP1", regime, today)
             state.tp1_done = True
             state.highest_since_entry = today_open
 
@@ -698,7 +698,7 @@ def _run_morning(client, params, state, today, ai):
                 if current <= trail_stop:
                     signal = "SELL_TRAIL"
                     sell_price = round_to_tick(current, "down")
-                    _execute_sell(params, state, sell_price, state.position_qty, "TRAIL", regime, today)
+                    _execute_sell(client, params, state, sell_price, state.position_qty, "TRAIL", regime, today)
 
     # ── 미보유: 진입 판단 ──
     elif state.position_qty == 0:
@@ -715,7 +715,7 @@ def _run_morning(client, params, state, today, ai):
             buy_price = round_to_tick(current, "up")
             qty = int(invest / buy_price) if buy_price > 0 else 0
             if qty > 0:
-                _execute_buy(state, buy_price, qty, regime, today)
+                _execute_buy(client, state, buy_price, qty, regime, today)
 
         elif regime == "RANGE_BOUND":
             rsi_val = latest.get("rsi", 50)
@@ -726,7 +726,7 @@ def _run_morning(client, params, state, today, ai):
                 buy_price = round_to_tick(current, "up")
                 qty = int(invest / buy_price) if buy_price > 0 else 0
                 if qty > 0:
-                    _execute_buy(state, buy_price, qty, regime, today)
+                    _execute_buy(client, state, buy_price, qty, regime, today)
 
         elif regime == "HIGH_VOLATILITY":
             rsi_val = latest.get("rsi", 50)
@@ -736,7 +736,7 @@ def _run_morning(client, params, state, today, ai):
                 buy_price = round_to_tick(current, "up")
                 qty = int(invest / buy_price) if buy_price > 0 else 0
                 if qty > 0:
-                    _execute_buy(state, buy_price, qty, regime, today)
+                    _execute_buy(client, state, buy_price, qty, regime, today)
 
     state.last_signal = signal
 
