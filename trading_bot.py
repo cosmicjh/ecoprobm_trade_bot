@@ -31,6 +31,12 @@ from ai_layer import AILayer, ensemble_regime
 
 from risk_monitor import assess_risk, adjust_invest_ratio, should_skip_entry, format_risk_telegram, save_risk_history
 
+from order_manager import (
+    PendingOrder,
+    create_pending_from_response,
+    handle_unfilled_orders,
+)
+
 # ── 로깅 ──
 logging.basicConfig(
     level=logging.INFO,
