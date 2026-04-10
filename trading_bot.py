@@ -29,6 +29,7 @@ import pandas as pd
 
 from ai_layer import AILayer, ensemble_regime
 
+from risk_monitor import assess_risk, adjust_invest_ratio, should_skip_entry, format_risk_telegram, save_risk_history
 
 # ── 로깅 ──
 logging.basicConfig(
@@ -641,13 +642,25 @@ def _run_morning(client, params, state, today, ai):
 
     log.info(f"[PRICE] 현재가={current:,}, 시가={today_open:,}, 전일종가={price['prev_close']:,}")
 
+    # 갭다운 사전 경고
+    risk = assess_risk(client, bot_state=state)
+    save_risk_history(risk, str(STATE_DIR))
+    send_telegram(format_risk_telegram(risk))
+    
+    # 진입 차단 판단
+    skip, skip_reason = should_skip_entry(risk)
+    if skip:
+        log.warning(f"[RISK] 진입 차단: {skip_reason}")
+        state.last_signal = f"BLOCKED: {skip_reason}"
+        save_bot_state(state)
+        return
+
     # 지표 계산
     df = get_ohlcv_recent(client, days=params.ma_long + 60)
     if df.empty or len(df) < params.ma_long:
         log.warning(f"[DATA] OHLCV 부족: {len(df)}일")
         return
 
-# ... (생략) ...
     df_ind = compute_indicators(df, params)
     latest = df_ind.iloc[-1]
     regime = classify_regime(latest, params)
