@@ -40,11 +40,11 @@ log = logging.getLogger(__name__)
 # ═══════════════════════════════════════════════════════════════════
 
 US_BATTERY_STOCKS = [
-    {"symbol": "RIVN", "exchange": "NASD", "name": "Rivian", "weight": 0.20},
-    {"symbol": "QS",   "exchange": "NYSE", "name": "QuantumScape", "weight": 0.15},
-    {"symbol": "ENVX", "exchange": "NASD", "name": "Ennovia", "weight": 0.10},
-    {"symbol": "ALB",  "exchange": "NYSE", "name": "Albemarle", "weight": 0.25},
-    {"symbol": "LIT",  "exchange": "NASD", "name": "Lithium ETF", "weight": 0.30},
+    {"symbol": "RIVN", "exchange": "NAS", "name": "Rivian", "weight": 0.20},
+    {"symbol": "QS",   "exchange": "NYS", "name": "QuantumScape", "weight": 0.15},
+    {"symbol": "ENVX", "exchange": "NAS", "name": "Ennovia", "weight": 0.10},
+    {"symbol": "ALB",  "exchange": "NYS", "name": "Albemarle", "weight": 0.25},
+    {"symbol": "LIT",  "exchange": "NAS", "name": "Lithium ETF", "weight": 0.30},
 ]
 
 # 리스크 레벨 임계치
