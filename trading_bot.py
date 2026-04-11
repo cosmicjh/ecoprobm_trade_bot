@@ -37,6 +37,15 @@ from order_manager import (
     handle_unfilled_orders,
 )
 
+from reporter import (
+    log_trade,
+    format_daily_report,
+    format_weekly_report,
+    format_monthly_report,
+    should_send_weekly_report,
+    should_send_monthly_report,
+)
+
 # ── 로깅 ──
 logging.basicConfig(
     level=logging.INFO,
@@ -482,11 +491,21 @@ def _execute_buy(client: KISClient, state: BotState, price: int, qty: int, regim
             state.tp1_done = False
             state.total_trades += 1
             log.info(f"[BUY] 성공: {qty}주 @ {price:,} ({regime})")
+
+            # 매매 이력 기록
+            log_trade(
+                state_dir=str(STATE_DIR),
+                side="buy", reason="ENTRY",
+                price=price, qty=qty,
+                regime=regime, signal=state.last_signal,
+            )
+            
             # PendingOrder 생성 & 저장
             pending = create_pending_from_response(resp, "buy", "ENTRY", qty, price)
             if pending:
                 state.pending_orders.append(asdict(pending))
-                log.info(f"[PENDING] 매수 추적 등록: {pending.order_no}")          
+                log.info(f"[PENDING] 매수 추적 등록: {pending.order_no}")      
+            
         else:
             log.error(f"[BUY] KIS 응답 에러: {resp.get('msg1')}")
     except Exception as e:
@@ -510,6 +529,10 @@ def _execute_sell(client: KISClient, params: StrategyParams, state: BotState, pr
         if resp.get("rt_cd") == "0":
             proceeds = qty * price
             pnl = (price - state.entry_price) * qty
+            
+            entry_price_snapshot = state.entry_price  # 청산 전 진입가 보관
+            entry_date_snapshot = state.entry_date
+
             state.cash += proceeds
             state.position_qty -= qty
             state.daily_pnl += pnl
@@ -528,6 +551,16 @@ def _execute_sell(client: KISClient, params: StrategyParams, state: BotState, pr
 
             log.info(f"[SELL_{reason}] 성공: {qty}주 @ {price:,} | PnL={pnl:+,.0f} ({regime})")
 
+            # 매매 이력 기록 (entry_price/date는 reset 전 값 사용)
+            log_trade(
+                state_dir=str(STATE_DIR),
+                side="sell", reason=reason,
+                price=price, qty=qty, pnl=int(pnl),
+                regime=regime, signal=state.last_signal,
+                entry_price=entry_price_snapshot,
+                entry_date=entry_date_snapshot,
+            )
+          
             # PendingOrder 생성 & 저장
             pending = create_pending_from_response(resp, "sell", reason, qty, price)
             if pending:
@@ -829,6 +862,9 @@ def _run_closing(client, params, state, today):
 
     # 미체결 주문 처리
     unfilled_result = handle_unfilled_orders(client, state, current_price=current)
+
+    # 일일 종합 리포트
+    daily_msg = format_daily_report(state, current, str(STATE_DIR))  
   
     equity = state.cash + state.position_qty * current
     pnl_total = (equity - state.initial_capital) / state.initial_capital * 100
@@ -857,6 +893,17 @@ def _run_closing(client, params, state, today):
   
     send_telegram("\n".join(lines))
 
+    # 금요일이면 주간 리포트 추가 발송
+    if should_send_weekly_report():
+        weekly_msg = format_weekly_report(state, str(STATE_DIR))
+        send_telegram(weekly_msg)
+        log.info("[REPORT] 주간 리포트 발송 완료")
+ 
+    # 월말이면 월간 리포트 추가 발송
+    if should_send_monthly_report():
+        monthly_msg = format_monthly_report(state, str(STATE_DIR))
+        send_telegram(monthly_msg)
+        log.info("[REPORT] 월간 리포트 발송 완료")
 
 def _run_evening(client, params, state, today):
     """18:30 — 확정 데이터 수집 (data_collector 호출)."""
