@@ -92,8 +92,11 @@ class KISClient:
             raise RuntimeError(f"[KIS] 토큰 발급 실패: {data}")
 
     def get(self, path: str, tr_id: str, params: dict,
-            extra_headers: Optional[dict] = None) -> dict:
-        """한투 API GET 요청."""
+        extra_headers: Optional[dict] = None) -> dict:
+      """한투 API GET 요청. 토큰 만료 시 1회 자동 재발급."""
+      from kis_token_store import is_token_error, invalidate_cache
+
+      def _do_request():
         url = self.base_url + path
         headers = {
             "content-type": "application/json; charset=utf-8",
@@ -101,22 +104,39 @@ class KISClient:
             "appkey": self.api_key,
             "appsecret": self.api_secret,
             "tr_id": tr_id,
-            "custtype": "P",  # 개인 고객 (설명서: 필수)
+            "custtype": "P",
         }
-
         if extra_headers:
             headers.update(extra_headers)
-
         resp = requests.get(url, headers=headers, params=params, timeout=15)
-        data = resp.json()
+        try:
+            rj = resp.json()
+        except Exception:
+            rj = {}
+        return resp, rj
 
-        rt_cd = data.get("rt_cd", "")
-        if rt_cd != "0":
-            msg = data.get("msg1", "Unknown")
-            log.warning(f"[KIS] API 오류 (tr_id={tr_id}): rt_cd={rt_cd}, msg={msg}")
+    # 1차 시도
+    resp, data = _do_request()
 
-        sleep(API_CALL_DELAY)
-        return data
+    # 401/토큰만료 → 재발급 후 1회 재시도
+    if is_token_error(resp.status_code, data):
+        log.warning(f"[KIS] 토큰 거부 (status={resp.status_code}, "
+                    f"msg_cd={data.get('msg_cd','')}), 재발급 후 재시도")
+        invalidate_cache(str(STATE_DIR))
+        self._get_token()
+        resp, data = _do_request()
+
+        if is_token_error(resp.status_code, data):
+            raise RuntimeError(f"[KIS] 재인증 실패: {data}")
+
+    # 기존 rt_cd 체크 유지
+    rt_cd = data.get("rt_cd", "")
+    if rt_cd != "0":
+        msg = data.get("msg1", "Unknown")
+        log.warning(f"[KIS] API 오류 (tr_id={tr_id}): rt_cd={rt_cd}, msg={msg}")
+
+    sleep(API_CALL_DELAY)
+    return data
 
 
 # ═══════════════════════════════════════════════════════════════════
