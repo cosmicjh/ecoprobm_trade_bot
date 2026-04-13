@@ -48,6 +48,8 @@ from reporter import (
 
 from accuracy_tracker import record_prediction, evaluate_pending_predictions
 
+from news_sentiment import get_sentiment_signal, format_sentiment_telegram
+
 # ── 로깅 ──
 logging.basicConfig(
     level=logging.INFO,
@@ -779,6 +781,11 @@ def _run_morning(client, params, state, today, ai):
     state.last_regime = regime
     signal = "HOLD"
 
+    # ── 뉴스 센티먼트 게이트 ──
+    sent = get_sentiment_signal(str(STATE_DIR))
+    log.info(f"[NEWS] score={sent['score']:+d}, multiplier=×{sent['multiplier']}, "
+             f"block={sent['block_entry']}, n={sent['n_articles']}")
+  
     # ── 보유 중: 청산 판단 ──
     if state.position_qty > 0:
         pnl_pct = (today_open - state.entry_price) / state.entry_price
@@ -812,16 +819,25 @@ def _run_morning(client, params, state, today, ai):
 
     # ── 미보유: 진입 판단 ──
     elif state.position_qty == 0:
-        if regime == "TREND_DOWN" or regime == "UNKNOWN":
+        # 뉴스 센티먼트로 진입 차단
+        if sent["block_entry"]:
+            log.warning("[NEWS] 부정 뉴스 과다, 진입 차단")
+            signal = "BLOCKED_NEG_NEWS"
+            state.last_signal = signal
+            # 텔레그램 메시지 뒤에서 이어 붙이므로 여기서는 send 생략
+        elif regime == "TREND_DOWN" or regime == "UNKNOWN":
             signal = "NO_ENTRY"
 
         elif regime == "TREND_UP":
-            invest = state.cash * params.invest_ratio
+            base_ratio = params.invest_ratio
             if dual_buy:
-                invest = state.cash * params.max_invest_ratio
+                base_ratio = params.max_invest_ratio
                 signal = "BUY_TREND_DUAL"
             else:
                 signal = "BUY_TREND"
+            # 센티먼트 multiplier 적용 (max_invest_ratio cap)
+            effective_ratio = min(base_ratio * sent["multiplier"], params.max_invest_ratio)
+            invest = state.cash * effective_ratio
             buy_price = round_to_tick(current, "up")
             qty = int(invest / buy_price) if buy_price > 0 else 0
             if qty > 0:
@@ -832,7 +848,11 @@ def _run_morning(client, params, state, today, ai):
             bb_pctb = latest.get("bb_pctb", 0.5)
             if rsi_val < params.rsi_entry and bb_pctb < 0.1:
                 signal = "BUY_RB"
-                invest = state.cash * params.invest_ratio * 0.5
+                effective_ratio = min(
+                    params.invest_ratio * 0.5 * sent["multiplier"],
+                    params.max_invest_ratio,
+                )
+                invest = state.cash * effective_ratio
                 buy_price = round_to_tick(current, "up")
                 qty = int(invest / buy_price) if buy_price > 0 else 0
                 if qty > 0:
@@ -842,7 +862,11 @@ def _run_morning(client, params, state, today, ai):
             rsi_val = latest.get("rsi", 50)
             if rsi_val < 25:
                 signal = "BUY_HV"
-                invest = state.cash * params.invest_ratio * params.hvol_size_reduction
+                effective_ratio = min(
+                    params.invest_ratio * params.hvol_size_reduction * sent["multiplier"],
+                    params.max_invest_ratio,
+                )
+                invest = state.cash * effective_ratio
                 buy_price = round_to_tick(current, "up")
                 qty = int(invest / buy_price) if buy_price > 0 else 0
                 if qty > 0:
@@ -868,6 +892,7 @@ def _run_morning(client, params, state, today, ai):
         f"수급: 외{inv.get('latest_foreign',0):,} / 기{inv.get('latest_inst',0):,}",
         f"포지션: {state.position_qty}주" + (f" @ {state.entry_price:,.0f}" if state.position_qty > 0 else ""),
         f"평가: {equity:,.0f}원 ({pnl_total:+.1f}%)",
+        format_sentiment_telegram(sent),
     ]
 
     # 예측 기록
