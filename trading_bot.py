@@ -228,6 +228,9 @@ class KISClient:
       )
 
     def get(self, path, tr_id, params, extra_headers=None):
+      from kis_token_store import is_token_error, invalidate_cache
+
+      def _do_request():
         headers = {
             "content-type": "application/json; charset=utf-8",
             "authorization": f"Bearer {self.access_token}",
@@ -238,12 +241,32 @@ class KISClient:
         }
         if extra_headers:
             headers.update(extra_headers)
-        resp = requests.get(self.base_url + path, headers=headers, params=params, timeout=15)
-        data = resp.json()
-        if data.get("rt_cd") != "0":
-            log.warning(f"[KIS] {tr_id}: {data.get('msg1', '')}")
-        sleep(0.5)
-        return data
+        url = self.base_url + path
+        resp = requests.get(url, headers=headers, params=params, timeout=15)
+        try:
+            rj = resp.json()
+        except Exception:
+            rj = {}
+        return resp, rj
+
+    # 1차 시도
+    resp, data = _do_request()
+
+    # 401/토큰만료 감지 → 재발급 후 1회 재시도
+    if is_token_error(resp.status_code, data):
+        log.warning(f"[KIS] 토큰 거부 감지 (status={resp.status_code}, "
+                    f"msg_cd={data.get('msg_cd','')}), 재발급 후 재시도")
+        invalidate_cache(str(STATE_DIR))
+        self._get_token()   # 새 토큰 발급 (캐시 삭제됐으므로 신규 발급)
+        resp, data = _do_request()
+
+        if is_token_error(resp.status_code, data):
+            raise RuntimeError(
+                f"[KIS] 토큰 재발급 후에도 인증 실패: {data}"
+            )
+
+    sleep(0.3)   # API_CALL_DELAY 대체 (trading_bot에 상수가 없으면)
+    return data
 
     def get_hashkey(self, body):
         """POST 요청(주문)에 필요한 보안 해시키 발급"""
