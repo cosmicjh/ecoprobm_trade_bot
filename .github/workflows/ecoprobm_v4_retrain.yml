@@ -1,0 +1,78 @@
+# .github/workflows/ecoprobm_v4_retrain.yml
+name: EcoProBM v4 Weekly AI Retrain
+
+on:
+  workflow_dispatch:
+
+# cron-job.org에서 매주 일요일 22:00 KST (= 일요일 13:00 UTC)에
+# workflow_dispatch 호출로 트리거.
+#
+# 시장이 닫혀 있는 주말에 한 주간 새로 쌓인 데이터로
+# HMM + Isolation Forest 를 다시 학습합니다.
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install mojito2 pandas numpy requests
+          pip install hmmlearn scikit-learn
+
+      - name: Restore state files
+        uses: actions/cache@v4
+        with:
+          path: |
+            state/bot_state_247540.json
+            state/ohlcv_247540.json
+            state/supply_data_247540.json
+            state/trade_history_247540.json
+            state/hmm_model_247540.pkl
+            state/if_model_247540.pkl
+            state/retrain_history_247540.json
+          key: ecoprobm-v4-retrain-${{ github.run_number }}
+          restore-keys: |
+            ecoprobm-v4-retrain-
+            ecoprobm-v4-bot-
+
+      - name: Create state directory
+        run: mkdir -p state
+
+      - name: Run weekly retrain
+        env:
+          KIS_API_KEY: ${{ secrets.KIS_API_KEY }}
+          KIS_API_SECRET: ${{ secrets.KIS_API_SECRET }}
+          KIS_ACC_NO: ${{ secrets.KIS_ACC_NO }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          STATE_DIR: "state"
+        run: |
+          python retrain_weekly.py --state-dir state
+
+      - name: Upload state as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecoprobm-v4-retrain-state-${{ github.run_number }}
+          path: state/
+          retention-days: 30
+
+      - name: Commit updated models
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add state/
+          git diff --staged --quiet || git commit -m "ai: weekly retrain $(date +%Y-%m-%d)"
+          git push
