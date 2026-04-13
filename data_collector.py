@@ -73,24 +73,14 @@ class KISClient:
         self._get_token()
 
     def _get_token(self):
-        """실전 서버에서 직접 access_token 발급. mojito2 미사용."""
-        url = f"{self.base_url}/oauth2/tokenP"
-        body = {
-            "grant_type": "client_credentials",
-            "appkey": self.api_key,
-            "appsecret": self.api_secret,
-        }
-
-        log.info(f"[KIS] 토큰 발급 요청: {self.base_url}")
-        resp = requests.post(url, json=body, timeout=10)
-        data = resp.json()
-
-        self.access_token = data.get("access_token", "")
-        if self.access_token:
-            log.info(f"[KIS] 실전 서버 토큰 발급 성공 (len={len(self.access_token)})")
-        else:
-            raise RuntimeError(f"[KIS] 토큰 발급 실패: {data}")
-
+      """토큰 발급 (캐시 재사용 지원)."""
+      from kis_token_store import get_or_refresh_token
+      self.access_token = get_or_refresh_token(
+        api_key=self.api_key,
+        api_secret=self.api_secret,
+        base_url=self.base_url,
+        state_dir=str(STATE_DIR),
+      )
     def get(self, path: str, tr_id: str, params: dict,
         extra_headers: Optional[dict] = None) -> dict:
       """한투 API GET 요청. 토큰 만료 시 1회 자동 재발급."""
@@ -590,16 +580,23 @@ def _send_report(result: dict) -> None:
 # ═══════════════════════════════════════════════════════════════════
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=["full", "incremental"], default="incremental")
-    parser.add_argument("--state-dir", type=str, default=".")
+
+    parser = argparse.ArgumentParser(...)  # 기존 그대로
+    parser.add_argument("--mode", choices=["incremental", "full"], default="incremental")
+    parser.add_argument("--state-dir", type=str, default="state")
     args = parser.parse_args()
 
+    # 모듈 레벨 경로 상수를 CLI 인자로 교체
     STATE_DIR = Path(args.state_dir)
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     OHLCV_FILE = STATE_DIR / "ohlcv_247540.json"
     SUPPLY_FILE = STATE_DIR / "supply_data_247540.json"
     PIPELINE_STATE_FILE = STATE_DIR / "pipeline_state_247540.json"
 
-    result = run_daily_collection(mode=args.mode)
-    exit(1 if result["errors"] else 0)
+    # 함수 기본값에도 새 경로가 반영되도록 globals 업데이트
+    globals()["STATE_DIR"] = STATE_DIR
+    globals()["OHLCV_FILE"] = OHLCV_FILE
+    globals()["SUPPLY_FILE"] = SUPPLY_FILE
+    globals()["PIPELINE_STATE_FILE"] = PIPELINE_STATE_FILE
+
+    run_daily_collection(mode=args.mode)
