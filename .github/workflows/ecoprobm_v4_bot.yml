@@ -38,6 +38,7 @@ jobs:
           pip install --upgrade pip
           pip install mojito2 pandas numpy requests
           pip install hmmlearn scikit-learn
+          pip install anthropic feedparser
 
       - name: Restore state files
         uses: actions/cache@v4
@@ -47,6 +48,8 @@ jobs:
             state/optimized_params_247540.json
             state/ohlcv_247540.json
             state/supply_data_247540.json
+            state/kis_token.json
+            state/news_sentiment_247540.json
             state/kis_token.json
           key: ecoprobm-v4-bot-${{ github.run_number }}
           restore-keys: |
@@ -63,6 +66,7 @@ jobs:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           STATE_DIR: "state"
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           python trading_bot.py \
             --mode ${{ github.event.inputs.mode || 'morning' }} \
