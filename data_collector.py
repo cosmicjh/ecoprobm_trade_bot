@@ -115,11 +115,11 @@ class KISClient:
             rj = {}
         return resp, rj
 
-    # 1차 시도
-    resp, data = _do_request()
+      # 1차 시도
+      resp, data = _do_request()
 
-    # 401/토큰만료 → 재발급 후 1회 재시도
-    if is_token_error(resp.status_code, data):
+      # 401/토큰만료 → 재발급 후 1회 재시도
+      if is_token_error(resp.status_code, data):
         log.warning(f"[KIS] 토큰 거부 (status={resp.status_code}, "
                     f"msg_cd={data.get('msg_cd','')}), 재발급 후 재시도")
         invalidate_cache(str(STATE_DIR))
@@ -129,15 +129,15 @@ class KISClient:
         if is_token_error(resp.status_code, data):
             raise RuntimeError(f"[KIS] 재인증 실패: {data}")
 
-    # 기존 rt_cd 체크 유지
-    rt_cd = data.get("rt_cd", "")
-    if rt_cd != "0":
+      # 기존 rt_cd 체크 유지
+      rt_cd = data.get("rt_cd", "")
+      if rt_cd != "0":
         msg = data.get("msg1", "Unknown")
         log.warning(f"[KIS] API 오류 (tr_id={tr_id}): rt_cd={rt_cd}, msg={msg}")
 
-    sleep(API_CALL_DELAY)
-    return data
-
+      sleep(API_CALL_DELAY)
+      return data
+  
 
 # ═══════════════════════════════════════════════════════════════════
 # 2. OHLCV 데이터 수집
