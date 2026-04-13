@@ -46,6 +46,8 @@ from reporter import (
     should_send_monthly_report,
 )
 
+from accuracy_tracker import record_prediction, evaluate_pending_predictions
+
 # ── 로깅 ──
 logging.basicConfig(
     level=logging.INFO,
@@ -849,6 +851,20 @@ def _run_morning(client, params, state, today, ai):
         f"포지션: {state.position_qty}주" + (f" @ {state.entry_price:,.0f}" if state.position_qty > 0 else ""),
         f"평가: {equity:,.0f}원 ({pnl_total:+.1f}%)",
     ]
+
+    # 예측 기록
+    record_prediction(
+        state_dir=str(STATE_DIR),
+        date=today,
+        regime=regime,
+        signal=signal,
+        hmm_regime=hmm_result.get("regime", "UNKNOWN"),
+        hmm_confidence=hmm_result.get("confidence", 0),
+        supply_anomaly=supply_anomaly.get("is_anomaly", False),
+        supply_direction=supply_anomaly.get("direction", "neutral"),
+        price_at_prediction=current,
+    )
+  
     send_telegram("\n".join(lines))
 
 
@@ -863,6 +879,9 @@ def _run_closing(client, params, state, today):
     # 미체결 주문 처리
     unfilled_result = handle_unfilled_orders(client, state, current_price=current)
 
+    # 어제 예측 라벨링
+    evaluate_pending_predictions(str(STATE_DIR))
+  
     # 일일 종합 리포트
     daily_msg = format_daily_report(state, current, str(STATE_DIR))  
   
