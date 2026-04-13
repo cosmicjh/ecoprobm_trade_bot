@@ -1,0 +1,137 @@
+{
+  "optimized_at": "2026-04-09T00:48:09.863873",
+  "optimization": {
+    "method": "Optuna TPE",
+    "n_trials": 200,
+    "objective": "Sharpe Ratio"
+  },
+  "params": {
+    "ma_short": 10,
+    "ma_long": 80,
+    "bb_squeeze_threshold": 0.8,
+    "atr_hvol_threshold": 1.5,
+    "tp1_pct": 0.11,
+    "tp1_sell_ratio": 0.6000000000000001,
+    "trail_atr_mult": 1.75,
+    "sl_pct": -0.039999999999999994,
+    "cooldown_days": 1,
+    "rsi_entry": 25.0,
+    "invest_ratio": 0.30000000000000004,
+    "max_invest_ratio": 0.6
+  },
+  "backtest_result": {
+    "total_return": 39.84,
+    "annual_return": 9.17,
+    "max_drawdown": -11.45,
+    "sharpe_ratio": 1.031,
+    "win_rate": 64.3,
+    "total_trades": 48,
+    "profit_factor": 2.49,
+    "buy_hold_return": 77.13,
+    "excess_return": -37.29
+  },
+  "walk_forward": [
+    {
+      "split": 1,
+      "train_return": 23.24,
+      "train_sharpe": 2.267,
+      "test_return": -1.93,
+      "test_sharpe": -1.173,
+      "test_mdd": -3.41,
+      "test_trades": 2,
+      "test_bh": -13.04,
+      "test_excess": 11.11,
+      "best_params": {
+        "ma_short": 10,
+        "ma_long": 80,
+        "bb_squeeze_threshold": 0.7,
+        "atr_hvol_threshold": 1.6,
+        "tp1_pct": 0.11,
+        "tp1_sell_ratio": 0.7,
+        "trail_atr_mult": 1.5,
+        "sl_pct": -0.03,
+        "cooldown_days": 3,
+        "rsi_entry": 35.0,
+        "invest_ratio": 0.30000000000000004,
+        "max_invest_ratio": 0.55
+      }
+    },
+    {
+      "split": 2,
+      "train_return": 17.61,
+      "train_sharpe": 1.696,
+      "test_return": -7.49,
+      "test_sharpe": -1.967,
+      "test_mdd": -7.77,
+      "test_trades": 8,
+      "test_bh": -30.53,
+      "test_excess": 23.04,
+      "best_params": {
+        "ma_short": 15,
+        "ma_long": 40,
+        "bb_squeeze_threshold": 0.7,
+        "atr_hvol_threshold": 1.3,
+        "tp1_pct": 0.11,
+        "tp1_sell_ratio": 0.7,
+        "trail_atr_mult": 2.0,
+        "sl_pct": -0.055,
+        "cooldown_days": 3,
+        "rsi_entry": 25.0,
+        "invest_ratio": 0.25,
+        "max_invest_ratio": 0.5
+      }
+    },
+    {
+      "split": 3,
+      "train_return": 3.72,
+      "train_sharpe": 0.693,
+      "test_return": -1.52,
+      "test_sharpe": -0.308,
+      "test_mdd": -3.72,
+      "test_trades": 13,
+      "test_bh": 29.75,
+      "test_excess": -31.27,
+      "best_params": {
+        "ma_short": 30,
+        "ma_long": 40,
+        "bb_squeeze_threshold": 0.7,
+        "atr_hvol_threshold": 1.6,
+        "tp1_pct": 0.060000000000000005,
+        "tp1_sell_ratio": 0.3,
+        "trail_atr_mult": 3.0,
+        "sl_pct": -0.049999999999999996,
+        "cooldown_days": 5,
+        "rsi_entry": 27.5,
+        "invest_ratio": 0.2,
+        "max_invest_ratio": 0.45
+      }
+    },
+    {
+      "split": 4,
+      "train_return": 17.1,
+      "train_sharpe": 3.43,
+      "test_return": 0.0,
+      "test_sharpe": 0.0,
+      "test_mdd": 0.0,
+      "test_trades": 0,
+      "test_bh": 5.46,
+      "test_excess": -5.46,
+      "best_params": {
+        "ma_short": 10,
+        "ma_long": 70,
+        "bb_squeeze_threshold": 0.8,
+        "atr_hvol_threshold": 1.8,
+        "tp1_pct": 0.15,
+        "tp1_sell_ratio": 0.7,
+        "trail_atr_mult": 1.75,
+        "sl_pct": -0.024999999999999994,
+        "cooldown_days": 4,
+        "rsi_entry": 25.0,
+        "invest_ratio": 0.30000000000000004,
+        "max_invest_ratio": 0.6
+      }
+    }
+  ],
+  "data_period": "2022-01-04 ~ 2026-04-09",
+  "data_days": 1042
+}

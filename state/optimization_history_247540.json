@@ -22,5 +22,29 @@
     "n_windows": 1,
     "avg_return": 0,
     "avg_drawdown": 0
+  },
+  {
+    "timestamp": "2026-04-13T06:26:58.793644",
+    "n_trials": 50,
+    "old_score": -0.7053727423287767,
+    "new_score": -0.40056034239744726,
+    "improvement": 0.3048123999313294,
+    "improved": true,
+    "best_params": {
+      "ma_short": 13,
+      "ma_long": 79,
+      "bb_squeeze_threshold": 0.812998962413234,
+      "atr_hvol_threshold": 1.8724297533826495,
+      "tp1_pct": 0.18316617062542137,
+      "tp1_sell_ratio": 0.7821265326466517,
+      "trail_atr_mult": 2.1940860133358857,
+      "sl_pct": -0.03899255461077213,
+      "cooldown_days": 0,
+      "rsi_entry": 32.42192653087845,
+      "invest_ratio": 0.49310623527141323
+    },
+    "n_windows": 41,
+    "avg_return": 0.0029274598587347178,
+    "avg_drawdown": -0.015931834087488935
   }
 ]
