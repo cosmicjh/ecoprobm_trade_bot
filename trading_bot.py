@@ -219,18 +219,13 @@ class KISClient:
         self._get_token()
 
     def _get_token(self):
-        url = f"{self.base_url}/oauth2/tokenP"
-        body = {
-            "grant_type": "client_credentials",
-            "appkey": self.api_key,
-            "appsecret": self.api_secret,
-        }
-        resp = requests.post(url, json=body, timeout=10)
-        data = resp.json()
-        self.access_token = data.get("access_token", "")
-        if not self.access_token:
-            raise RuntimeError(f"토큰 발급 실패: {data}")
-        log.info("[KIS] 실전 토큰 발급 완료")
+      from kis_token_store import get_or_refresh_token
+      self.access_token = get_or_refresh_token(
+        api_key=self.api_key,
+        api_secret=self.api_secret,
+        base_url=self.base_url,
+        state_dir=str(STATE_DIR),
+      )
 
     def get(self, path, tr_id, params, extra_headers=None):
         headers = {
