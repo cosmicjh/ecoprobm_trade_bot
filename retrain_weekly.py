@@ -33,6 +33,13 @@ from reporter import format_weekly_report, load_trade_history
 # trading_bot의 BotState를 그대로 재사용 (주간 리포트가 state 객체를 요구)
 from trading_bot import load_bot_state, save_bot_state
 
+# Phase 4-3: 예측 정확도 트래킹
+from accuracy_tracker import (
+    evaluate_pending_predictions,
+    compute_accuracy_stats,
+    format_accuracy_telegram,
+)
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -221,6 +228,15 @@ def run_weekly_retrain(state_dir: str = "state"):
     except Exception as e:
         log.error(f"[RETRAIN] 주간 리포트 실패: {e}")
         send_telegram(f"⚠️ {TICKER_NAME} 주간 리포트 생성 실패: {str(e)[:300]}")
+
+    # ── 3. 예측 정확도 트래킹 ──
+    try:
+        n_labeled = evaluate_pending_predictions(str(sd))
+        log.info(f"[RETRAIN] 예측 라벨링: {n_labeled}건")
+        stats = compute_accuracy_stats(str(sd), days=7)
+        send_telegram(format_accuracy_telegram(stats))
+    except Exception as e:
+        log.error(f"[RETRAIN] 정확도 트래킹 실패: {e}")
 
     log.info("=" * 60)
     log.info("[RETRAIN] 완료")
