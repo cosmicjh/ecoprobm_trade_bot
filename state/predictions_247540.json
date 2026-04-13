@@ -1,0 +1,18 @@
+[
+  {
+    "date": "2026-04-13",
+    "regime": "TREND_DOWN",
+    "signal": "HOLD",
+    "hmm_regime": "TREND_DOWN",
+    "hmm_confidence": 1.0,
+    "supply_anomaly": false,
+    "supply_direction": "neutral",
+    "price_at_prediction": 199200.0,
+    "evaluated": false,
+    "next_return_pct": null,
+    "regime_correct": null,
+    "hmm_correct": null,
+    "signal_correct": null,
+    "supply_correct": null
+  }
+]

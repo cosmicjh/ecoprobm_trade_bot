@@ -15,9 +15,9 @@
   "last_month_reset": "",
   "halted": false,
   "halt_reason": "",
-  "last_regime": "TREND_UP",
+  "last_regime": "TREND_DOWN",
   "last_signal": "HOLD",
-  "last_run": "2026-04-13T00:05:55.771587",
+  "last_run": "2026-04-13T06:22:33.012357",
   "total_trades": 1,
   "version": "v4.2.1",
   "pending_orders": []
