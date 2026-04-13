@@ -43,6 +43,7 @@ jobs:
             state/ohlcv_247540.json
             state/optimized_params_247540.json
             state/optimization_history_247540.json
+            state/kis_token.json
           key: ecoprobm-v4-optimize-${{ github.run_number }}
           restore-keys: |
             ecoprobm-v4-optimize-
