@@ -1,0 +1,11 @@
+[
+  {
+    "timestamp": "2026-04-13T03:38:02.530502",
+    "success": true,
+    "error": "",
+    "hmm_n_states": 4,
+    "hmm_log_likelihood": 61.24895095966636,
+    "hmm_current_regime": "TREND_DOWN",
+    "hmm_current_confidence": 1.0
+  }
+]
