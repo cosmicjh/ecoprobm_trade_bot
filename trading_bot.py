@@ -686,15 +686,21 @@ def run_bot(mode: str = "morning"):
     if mode == "evening":
         _run_evening(None, params, state, today)
     else:
+        # morning 모드: 하루의 시작 — 캐시를 비우고 신규 토큰 강제 발급
+        # (이후 closing/evening/data_collector가 이 토큰을 재사용)
+        if mode == "morning":
+            from kis_token_store import invalidate_cache
+            invalidate_cache(str(STATE_DIR))
+            log.info("[KIS] morning 모드: 신규 토큰 강제 발급")
+
         try:
-            client = KISClient() # client 객체 정상적 생성
+            client = KISClient()  # client 객체 정상적 생성
         except Exception as e:
             log.error(f"[AUTH] 실패: {e}")
             send_telegram(f"❌ {TICKER_NAME} 봇 인증 실패: {e}")
             return
-            
+
         if mode == "morning":
-            # client 생성 이후 호출, ai 인자 추가
             _run_morning(client, params, state, today, ai)
         elif mode == "closing":
             _run_closing(client, params, state, today)
