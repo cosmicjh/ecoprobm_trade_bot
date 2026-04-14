@@ -661,7 +661,7 @@ def run_bot(mode: str = "morning"):
     params = load_params()
     state = load_bot_state()
 
-# AI 레이어 로드
+    # AI 레이어 로드
     ai = AILayer(str(STATE_DIR))
     ai.load_models()
     
@@ -708,7 +708,20 @@ def run_bot(mode: str = "morning"):
     state.last_run = datetime.now().isoformat()
     save_bot_state(state)
     log.info(f"[BOT] 완료. 포지션: {state.position_qty}주, 현금: {state.cash:,.0f}")
-
+    except Exception as e:
+        error_msg = str(e)
+        raise
+    finally:
+        from run_logger import log_run
+        log_run(
+            state_dir=str(STATE_DIR),
+            mode=mode,
+            status="error" if error_msg else "ok",
+            duration_sec=time.time() - start_ts,
+            signal=getattr(state, "last_signal", None) if 'state' in locals() else None,
+            regime=getattr(state, "last_regime", None) if 'state' in locals() else None,
+            error=error_msg,
+        )
 
 def _run_morning(client, params, state, today, ai):
     """09:05 — 시그널 판단 + 주문."""
