@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>에코프로비엠 자동매매 대시보드</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1419; --bg2: #1a1f2e; --border: #2a3040;
+    --text: #e4e6eb; --text2: #8b949e;
+    --green: #3fb950; --red: #f85149; --blue: #58a6ff; --yellow: #d29922;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: var(--bg); color: var(--text); padding: 16px; max-width: 1100px; margin: 0 auto;
+  }
+  h1 { font-size: 22px; margin: 0 0 4px; font-weight: 600; }
+  h2 { font-size: 15px; margin: 0 0 12px; color: var(--text2); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+  .meta { color: var(--text2); font-size: 12px; margin-bottom: 24px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 24px; }
+  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .card .label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .card .value { font-size: 22px; font-weight: 600; }
+  .card .sub { font-size: 11px; color: var(--text2); margin-top: 4px; }
+  .green { color: var(--green); } .red { color: var(--red); } .blue { color: var(--blue); } .yellow { color: var(--yellow); }
+  .section { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin-bottom: 20px; }
+  canvas { max-height: 280px; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  th { color: var(--text2); font-weight: 500; text-transform: uppercase; font-size: 10px; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 16px; flex-wrap: wrap; }
+  .tab { padding: 6px 14px; background: transparent; border: 1px solid var(--border); color: var(--text2);
+          border-radius: 6px; cursor: pointer; font-size: 13px; }
+  .tab.active { background: var(--bg2); color: var(--text); border-color: var(--blue); }
+  .tab-content { display: none; } .tab-content.active { display: block; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+  .badge-ok { background: rgba(63,185,80,0.15); color: var(--green); }
+  .badge-err { background: rgba(248,81,73,0.15); color: var(--red); }
+  .badge-warn { background: rgba(210,153,34,0.15); color: var(--yellow); }
+</style>
+</head>
+<body>
+  <h1>에코프로비엠 (247540) 자동매매 대시보드</h1>
+  <div class="meta">생성: <span id="genAt"></span></div>
+
+  <div class="grid" id="kpiGrid"></div>
+
+  <div class="tabs">
+    <button class="tab active" data-tab="equity">자산</button>
+    <button class="tab" data-tab="trades">매매</button>
+    <button class="tab" data-tab="accuracy">정확도</button>
+    <button class="tab" data-tab="ai">AI/최적화</button>
+    <button class="tab" data-tab="news">뉴스</button>
+    <button class="tab" data-tab="runs">실행로그</button>
+  </div>
+
+  <div class="tab-content active" id="tab-equity">
+    <div class="section"><h2>자산 곡선</h2><canvas id="equityChart"></canvas></div>
+    <div class="section"><h2>가격 (90일)</h2><canvas id="priceChart"></canvas></div>
+  </div>
+
+  <div class="tab-content" id="tab-trades">
+    <div class="section"><h2>최근 매매 (최대 100건)</h2><div id="tradesTable"></div></div>
+  </div>
+
+  <div class="tab-content" id="tab-accuracy">
+    <div class="section"><h2>예측 정확도 (최근 30일)</h2><div id="accuracyView"></div></div>
+  </div>
+
+  <div class="tab-content" id="tab-ai">
+    <div class="section"><h2>AI 재학습 이력</h2><div id="retrainView"></div></div>
+    <div class="section"><h2>파라미터 최적화 score 추이</h2><canvas id="optChart"></canvas></div>
+    <div class="section"><h2>현재 적용 파라미터</h2><div id="paramsView"></div></div>
+  </div>
+
+  <div class="tab-content" id="tab-news">
+    <div class="section"><h2>뉴스 센티먼트 (일별 합산)</h2><canvas id="newsChart"></canvas></div>
+  </div>
+
+  <div class="tab-content" id="tab-runs">
+    <div class="section"><h2>최근 실행 로그</h2><div id="runsTable"></div></div>
+  </div>
+
+<script>
+window.__DATA__ = {"ticker": "247540", "ticker_name": "에코프로비엠", "generated_at": "2026-04-14T06:57:13.787354", "bot_state": {"position_qty": 2, "entry_price": 204500.0, "entry_date": "2026-04-10", "highest_since_entry": 203500, "tp1_done": false, "cash": 1091000.0, "initial_capital": 1500000.0, "cooldown_until": "", "daily_pnl": 0.0, "weekly_pnl": 0.0, "monthly_pnl": 0.0, "last_trade_date": "2026-04-14", "last_week_reset": "2026-04-13", "last_month_reset": "", "halted": false, "halt_reason": "", "last_regime": "RANGE_BOUND", "last_signal": "HOLD", "last_run": "2026-04-14T06:57:12.414107", "total_trades": 1, "version": "v4.2.1", "pending_orders": []}, "trade_history": [], "ohlcv": {"2026-03-17": {"Open": 191300, "High": 196900, "Low": 188400, "Close": 193500, "Volume": 476351, "prev_Open": 189700, "prev_High": 192300, "prev_Low": 181300, "prev_Close": 187400, "prev_Volume": 605477}, "2026-03-18": {"Open": 196900, "High": 197000, "Low": 193500, "Close": 196500, "Volume": 324967, "prev_Open": 191300, "prev_High": 196900, "prev_Low": 188400, "prev_Close": 193500, "prev_Volume": 476351}, "2026-03-19": {"Open": 190200, "High": 196000, "Low": 189500, "Close": 189700, "Volume": 439588, "prev_Open": 196900, "prev_High": 197000, "prev_Low": 193500, "prev_Close": 196500, "prev_Volume": 324967}, "2026-03-20": {"Open": 190800, "High": 193000, "Low": 188800, "Close": 191900, "Volume": 410787, "prev_Open": 190200, "prev_High": 196000, "prev_Low": 189500, "prev_Close": 189700, "prev_Volume": 439588}, "2026-03-23": {"Open": 183800, "High": 184300, "Low": 178300, "Close": 179100, "Volume": 461538, "prev_Open": 190800, "prev_High": 193000, "prev_Low": 188800, "prev_Close": 191900, "prev_Volume": 410787}, "2026-03-24": {"Open": 186800, "High": 196900, "Low": 185700, "Close": 193000, "Volume": 615748, "prev_Open": 183800, "prev_High": 184300, "prev_Low": 178300, "prev_Close": 179100, "prev_Volume": 461538}, "2026-03-25": {"Open": 193400, "High": 204000, "Low": 193200, "Close": 203000, "Volume": 505161, "prev_Open": 186800, "prev_High": 196900, "prev_Low": 185700, "prev_Close": 193000, "prev_Volume": 615748}, "2026-03-26": {"Open": 202000, "High": 207000, "Low": 197400, "Close": 198900, "Volume": 374921, "prev_Open": 193400, "prev_High": 204000, "prev_Low": 193200, "prev_Close": 203000, "prev_Volume": 505161}, "2026-03-27": {"Open": 193900, "High": 206000, "Low": 188700, "Close": 202500, "Volume": 499114, "prev_Open": 202000, "prev_High": 207000, "prev_Low": 197400, "prev_Close": 198900, "prev_Volume": 374921}, "2026-03-30": {"Open": 196500, "High": 206000, "Low": 196300, "Close": 203500, "Volume": 404454, "prev_Open": 193900, "prev_High": 206000, "prev_Low": 188700, "prev_Close": 202500, "prev_Volume": 499114}, "2026-03-31": {"Open": 205000, "High": 205500, "Low": 192200, "Close": 192200, "Volume": 603090, "prev_Open": 196500, "prev_High": 206000, "prev_Low": 196300, "prev_Close": 203500, "prev_Volume": 404454}, "2026-04-01": {"Open": 202000, "High": 204000, "Low": 197500, "Close": 202000, "Volume": 410700, "prev_Open": 205000, "prev_High": 205500, "prev_Low": 192200, "prev_Close": 192200, "prev_Volume": 603090}, "2026-04-02": {"Open": 202500, "High": 211000, "Low": 193700, "Close": 196900, "Volume": 728719, "prev_Open": 202000, "prev_High": 204000, "prev_Low": 197500, "prev_Close": 202000, "prev_Volume": 410700}, "2026-04-03": {"Open": 199500, "High": 200500, "Low": 190000, "Close": 192600, "Volume": 470485, "prev_Open": 202500, "prev_High": 211000, "prev_Low": 193700, "prev_Close": 196900, "prev_Volume": 728719}, "2026-04-06": {"Open": 192600, "High": 204000, "Low": 192600, "Close": 199900, "Volume": 579226, "prev_Open": 199500, "prev_High": 200500, "prev_Low": 190000, "prev_Close": 192600, "prev_Volume": 470485}, "2026-04-07": {"Open": 199700, "High": 211000, "Low": 198700, "Close": 201500, "Volume": 542160, "prev_Open": 192600, "prev_High": 204000, "prev_Low": 192600, "prev_Close": 199900, "prev_Volume": 579226}, "2026-04-08": {"Open": 212500, "High": 214500, "Low": 205000, "Close": 208500, "Volume": 585119, "prev_Open": 199700, "prev_High": 211000, "prev_Low": 198700, "prev_Close": 201500, "prev_Volume": 542160}, "2026-04-09": {"Open": 207500, "High": 209750, "Low": 200000, "Close": 206000, "Volume": 574238, "prev_Open": 212500, "prev_High": 214500, "prev_Low": 205000, "prev_Close": 208500, "prev_Volume": 585119}, "2026-04-10": {"Open": 207000, "High": 207000, "Low": 201500, "Close": 201500, "Volume": 267837, "prev_Open": 207500, "prev_High": 209750, "prev_Low": 200000, "prev_Close": 206000, "prev_Volume": 574238}, "2026-04-13": {"Open": 201500, "High": 204500, "Low": 199000, "Close": 199000, "Volume": 286581, "prev_Open": 207000, "prev_High": 207000, "prev_Low": 201500, "prev_Close": 201500, "prev_Volume": 267837}}, "equity_curve": [], "accuracy": {"n": 0}, "predictions": [{"date": "2026-04-13", "regime": "TREND_DOWN", "signal": "HOLD", "hmm_regime": "TREND_DOWN", "hmm_confidence": 1.0, "supply_anomaly": false, "supply_direction": "neutral", "price_at_prediction": 199200.0, "evaluated": false, "next_return_pct": null, "regime_correct": null, "hmm_correct": null, "signal_correct": null, "supply_correct": null}, {"date": "2026-04-14", "regime": "RANGE_BOUND", "signal": "HOLD", "hmm_regime": "RANGE_BOUND", "hmm_confidence": 0.866, "supply_anomaly": false, "supply_direction": "neutral", "price_at_prediction": 203500.0, "evaluated": false, "next_return_pct": null, "regime_correct": null, "hmm_correct": null, "signal_correct": null, "supply_correct": null}], "retrain_history": [{"timestamp": "2026-04-13T03:38:02.530502", "success": true, "error": "", "hmm_n_states": 4, "hmm_log_likelihood": 61.24895095966636, "hmm_current_regime": "TREND_DOWN", "hmm_current_confidence": 1.0}, {"timestamp": "2026-04-13T06:25:24.605299", "success": true, "error": "", "hmm_n_states": 5, "hmm_log_likelihood": -4321.25070756379, "hmm_current_regime": "RANGE_BOUND", "hmm_current_confidence": 0.688}], "optimization_history": [{"timestamp": "2026-04-13T03:39:57.101666", "n_trials": 50, "old_score": -1.0, "new_score": -1.0, "improvement": 0.0, "improved": false, "best_params": {"ma_short": 10, "ma_long": 117, "bb_squeeze_threshold": 0.8659969709057025, "atr_hvol_threshold": 1.6789267873576292, "tp1_pct": 0.07340279606636549, "tp1_sell_ratio": 0.3779972601681013, "trail_atr_mult": 1.116167224336399, "sl_pct": -0.026691192711253246, "cooldown_days": 2, "rsi_entry": 30.621088666940683, "invest_ratio": 0.20617534828874073}, "n_windows": 1, "avg_return": 0, "avg_drawdown": 0}, {"timestamp": "2026-04-13T06:26:58.793644", "n_trials": 50, "old_score": -0.7053727423287767, "new_score": -0.40056034239744726, "improvement": 0.3048123999313294, "improved": true, "best_params": {"ma_short": 13, "ma_long": 79, "bb_squeeze_threshold": 0.812998962413234, "atr_hvol_threshold": 1.8724297533826495, "tp1_pct": 0.18316617062542137, "tp1_sell_ratio": 0.7821265326466517, "trail_atr_mult": 2.1940860133358857, "sl_pct": -0.03899255461077213, "cooldown_days": 0, "rsi_entry": 32.42192653087845, "invest_ratio": 0.49310623527141323}, "n_windows": 41, "avg_return": 0.0029274598587347178, "avg_drawdown": -0.015931834087488935}], "optimized_params": {"optimized_at": "2026-04-09T00:48:09.863873", "optimization": {"method": "Optuna TPE", "n_trials": 200, "objective": "Sharpe Ratio"}, "params": {"ma_short": 10, "ma_long": 80, "bb_squeeze_threshold": 0.8, "atr_hvol_threshold": 1.5, "tp1_pct": 0.11, "tp1_sell_ratio": 0.6000000000000001, "trail_atr_mult": 1.75, "sl_pct": -0.039999999999999994, "cooldown_days": 1, "rsi_entry": 25.0, "invest_ratio": 0.30000000000000004, "max_invest_ratio": 0.6}, "backtest_result": {"total_return": 39.84, "annual_return": 9.17, "max_drawdown": -11.45, "sharpe_ratio": 1.031, "win_rate": 64.3, "total_trades": 48, "profit_factor": 2.49, "buy_hold_return": 77.13, "excess_return": -37.29}, "walk_forward": [{"split": 1, "train_return": 23.24, "train_sharpe": 2.267, "test_return": -1.93, "test_sharpe": -1.173, "test_mdd": -3.41, "test_trades": 2, "test_bh": -13.04, "test_excess": 11.11, "best_params": {"ma_short": 10, "ma_long": 80, "bb_squeeze_threshold": 0.7, "atr_hvol_threshold": 1.6, "tp1_pct": 0.11, "tp1_sell_ratio": 0.7, "trail_atr_mult": 1.5, "sl_pct": -0.03, "cooldown_days": 3, "rsi_entry": 35.0, "invest_ratio": 0.30000000000000004, "max_invest_ratio": 0.55}}, {"split": 2, "train_return": 17.61, "train_sharpe": 1.696, "test_return": -7.49, "test_sharpe": -1.967, "test_mdd": -7.77, "test_trades": 8, "test_bh": -30.53, "test_excess": 23.04, "best_params": {"ma_short": 15, "ma_long": 40, "bb_squeeze_threshold": 0.7, "atr_hvol_threshold": 1.3, "tp1_pct": 0.11, "tp1_sell_ratio": 0.7, "trail_atr_mult": 2.0, "sl_pct": -0.055, "cooldown_days": 3, "rsi_entry": 25.0, "invest_ratio": 0.25, "max_invest_ratio": 0.5}}, {"split": 3, "train_return": 3.72, "train_sharpe": 0.693, "test_return": -1.52, "test_sharpe": -0.308, "test_mdd": -3.72, "test_trades": 13, "test_bh": 29.75, "test_excess": -31.27, "best_params": {"ma_short": 30, "ma_long": 40, "bb_squeeze_threshold": 0.7, "atr_hvol_threshold": 1.6, "tp1_pct": 0.060000000000000005, "tp1_sell_ratio": 0.3, "trail_atr_mult": 3.0, "sl_pct": -0.049999999999999996, "cooldown_days": 5, "rsi_entry": 27.5, "invest_ratio": 0.2, "max_invest_ratio": 0.45}}, {"split": 4, "train_return": 17.1, "train_sharpe": 3.43, "test_return": 0.0, "test_sharpe": 0.0, "test_mdd": 0.0, "test_trades": 0, "test_bh": 5.46, "test_excess": -5.46, "best_params": {"ma_short": 10, "ma_long": 70, "bb_squeeze_threshold": 0.8, "atr_hvol_threshold": 1.8, "tp1_pct": 0.15, "tp1_sell_ratio": 0.7, "trail_atr_mult": 1.75, "sl_pct": -0.024999999999999994, "cooldown_days": 4, "rsi_entry": 25.0, "invest_ratio": 0.30000000000000004, "max_invest_ratio": 0.6}}], "data_period": "2022-01-04 ~ 2026-04-09", "data_days": 1042}, "news_series": [{"date": "2026-04-14", "sum": -1, "n": 8}], "run_logs": [{"timestamp": "2026-04-14T06:57:12.415669", "date": "2026-04-14", "mode": "closing", "status": "ok", "duration_sec": 1.53, "signal": "HOLD", "regime": "RANGE_BOUND"}]};
+
+// ── 유틸 ──
+const fmt = n => n == null ? "-" : Number(n).toLocaleString();
+const pct = n => n == null ? "-" : (n * 100).toFixed(1) + "%";
+const cls = n => n > 0 ? "green" : n < 0 ? "red" : "";
+
+document.getElementById("genAt").textContent = new Date(__DATA__.generated_at).toLocaleString("ko-KR");
+
+// ── KPI 카드 ──
+const bs = __DATA__.bot_state;
+const initial = bs.initial_capital || 1500000;
+const lastEquity = (__DATA__.equity_curve.slice(-1)[0] || {}).equity || (bs.cash + bs.position_qty * bs.entry_price) || initial;
+const totalRet = (lastEquity - initial) / initial;
+const acc = __DATA__.accuracy;
+
+const kpis = [
+  { label: "총 자산", value: fmt(lastEquity) + "원", sub: (totalRet * 100).toFixed(2) + "%", cls: cls(totalRet) },
+  { label: "현금 / 보유", value: fmt(bs.cash) + "원", sub: bs.position_qty + "주" + (bs.entry_price ? " @ " + fmt(bs.entry_price) : "") },
+  { label: "총 매매", value: bs.total_trades || 0, sub: "최근: " + (bs.last_signal || "-") },
+  { label: "현재 레짐", value: bs.last_regime || "-", sub: bs.halted ? "⛔ " + bs.halt_reason : "정상" },
+  { label: "룰 정확도 (30d)", value: acc.regime_rule ? pct(acc.regime_rule.rate) : "-", sub: acc.regime_rule ? "n=" + acc.regime_rule.n : "" },
+  { label: "HMM 정확도 (30d)", value: acc.regime_hmm ? pct(acc.regime_hmm.rate) : "-", sub: acc.regime_hmm ? "n=" + acc.regime_hmm.n : "" },
+];
+document.getElementById("kpiGrid").innerHTML = kpis.map(k =>
+  `<div class="card"><div class="label">${k.label}</div><div class="value ${k.cls || ''}">${k.value}</div><div class="sub">${k.sub || ''}</div></div>`
+).join("");
+
+// ── 탭 전환 ──
+document.querySelectorAll(".tab").forEach(t => {
+  t.onclick = () => {
+    document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(x => x.classList.remove("active"));
+    t.classList.add("active");
+    document.getElementById("tab-" + t.dataset.tab).classList.add("active");
+  };
+});
+
+// ── Chart.js 공통 ──
+Chart.defaults.color = "#8b949e";
+Chart.defaults.borderColor = "#2a3040";
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, sans-serif";
+
+// ── 자산 곡선 ──
+const eq = __DATA__.equity_curve;
+new Chart(document.getElementById("equityChart"), {
+  type: "line",
+  data: {
+    labels: eq.map(e => e.date),
+    datasets: [{ label: "Equity", data: eq.map(e => e.equity), borderColor: "#58a6ff",
+                 backgroundColor: "rgba(88,166,255,0.1)", fill: true, tension: 0.2 }]
+  },
+  options: { plugins: { legend: { display: false } } }
+});
+
+// ── 가격 차트 ──
+const ohlcvDates = Object.keys(__DATA__.ohlcv);
+const ohlcvCloses = ohlcvDates.map(d => __DATA__.ohlcv[d].Close);
+new Chart(document.getElementById("priceChart"), {
+  type: "line",
+  data: {
+    labels: ohlcvDates,
+    datasets: [{ label: "Close", data: ohlcvCloses, borderColor: "#3fb950",
+                 backgroundColor: "rgba(63,185,80,0.1)", fill: true, tension: 0.2 }]
+  },
+  options: { plugins: { legend: { display: false } } }
+});
+
+// ── 매매 테이블 ──
+document.getElementById("tradesTable").innerHTML = `<table>
+  <tr><th>일자</th><th>구분</th><th>사유</th><th>수량</th><th>가격</th><th>손익</th><th>레짐</th></tr>
+  ${__DATA__.trade_history.slice().reverse().map(t => `
+    <tr>
+      <td>${t.date}</td>
+      <td>${t.side === 'buy' ? '매수' : '매도'}</td>
+      <td>${t.reason || '-'}</td>
+      <td>${t.qty || 0}</td>
+      <td>${fmt(t.price)}</td>
+      <td class="${t.pnl > 0 ? 'green' : t.pnl < 0 ? 'red' : ''}">${t.pnl ? fmt(t.pnl) : '-'}</td>
+      <td>${t.regime || '-'}</td>
+    </tr>`).join('')}
+</table>`;
+
+// ── 정확도 ──
+const renderAcc = () => {
+  const a = __DATA__.accuracy;
+  if (!a.n) return '<div class="meta">평가 가능 데이터 없음</div>';
+  const rows = [
+    ["룰 레짐", a.regime_rule],
+    ["HMM 레짐", a.regime_hmm],
+    ["매수 시그널", a.signal],
+    ["수급 이상", a.supply],
+  ];
+  return `<table><tr><th>지표</th><th>정확도</th><th>표본</th></tr>
+    ${rows.map(([k, v]) => `<tr><td>${k}</td><td>${v ? pct(v.rate) : '-'}</td><td>${v ? v.n : 0}</td></tr>`).join('')}
+  </table>`;
+};
+document.getElementById("accuracyView").innerHTML = renderAcc();
+
+// ── 재학습 이력 ──
+document.getElementById("retrainView").innerHTML = `<table>
+  <tr><th>일시</th><th>성공</th><th>HMM states</th><th>현재 레짐</th><th>LL</th></tr>
+  ${__DATA__.retrain_history.slice().reverse().slice(0, 20).map(r => `
+    <tr>
+      <td>${(r.timestamp || '').slice(0, 16).replace('T', ' ')}</td>
+      <td>${r.success ? '<span class="badge badge-ok">OK</span>' : '<span class="badge badge-err">FAIL</span>'}</td>
+      <td>${r.hmm_n_states || '-'}</td>
+      <td>${r.hmm_current_regime || '-'} ${r.hmm_current_confidence ? '(' + (r.hmm_current_confidence * 100).toFixed(0) + '%)' : ''}</td>
+      <td>${r.hmm_log_likelihood ? r.hmm_log_likelihood.toFixed(1) : '-'}</td>
+    </tr>`).join('')}
+</table>`;
+
+// ── 최적화 score 차트 ──
+const opt = __DATA__.optimization_history;
+new Chart(document.getElementById("optChart"), {
+  type: "line",
+  data: {
+    labels: opt.map(o => (o.timestamp || '').slice(0, 10)),
+    datasets: [
+      { label: "기존 score", data: opt.map(o => o.old_score), borderColor: "#8b949e", borderDash: [5, 5] },
+      { label: "신규 score", data: opt.map(o => o.new_score), borderColor: "#58a6ff" }
+    ]
+  }
+});
+
+// ── 파라미터 ──
+const params = (__DATA__.optimized_params.params) || {};
+document.getElementById("paramsView").innerHTML = `<table>
+  ${Object.entries(params).map(([k, v]) => `<tr><td>${k}</td><td>${typeof v === 'number' ? v.toFixed(3) : v}</td></tr>`).join('')}
+</table>`;
+
+// ── 뉴스 차트 ──
+const news = __DATA__.news_series;
+new Chart(document.getElementById("newsChart"), {
+  type: "bar",
+  data: {
+    labels: news.map(n => n.date),
+    datasets: [{
+      label: "센티먼트 합계",
+      data: news.map(n => n.sum),
+      backgroundColor: news.map(n => n.sum >= 0 ? "rgba(63,185,80,0.6)" : "rgba(248,81,73,0.6)"),
+    }]
+  }
+});
+
+// ── 실행 로그 ──
+document.getElementById("runsTable").innerHTML = `<table>
+  <tr><th>시각</th><th>모드</th><th>상태</th><th>소요</th><th>시그널</th><th>레짐</th><th>에러</th></tr>
+  ${__DATA__.run_logs.slice().reverse().slice(0, 80).map(r => `
+    <tr>
+      <td>${(r.timestamp || '').slice(5, 16).replace('T', ' ')}</td>
+      <td>${r.mode}</td>
+      <td><span class="badge badge-${r.status === 'ok' ? 'ok' : r.status === 'error' ? 'err' : 'warn'}">${r.status}</span></td>
+      <td>${r.duration_sec}s</td>
+      <td>${r.signal || '-'}</td>
+      <td>${r.regime || '-'}</td>
+      <td style="color:#f85149">${r.error || ''}</td>
+    </tr>`).join('')}
+</table>`;
+</script>
+</body>
+</html>
