@@ -581,7 +581,7 @@ def _send_report(result: dict) -> None:
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(...)  # 기존 그대로
+    parser = argparse.ArgumentParser(description=f"{TICKER_NAME} v4 데이터 수집")
     parser.add_argument("--mode", choices=["incremental", "full"], default="incremental")
     parser.add_argument("--state-dir", type=str, default="state")
     args = parser.parse_args()
