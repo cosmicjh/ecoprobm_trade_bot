@@ -708,9 +708,9 @@ def run_bot(mode: str = "morning"):
           elif mode == "closing":
               _run_closing(client, params, state, today)
   
-        state.last_run = datetime.now().isoformat()
-        save_bot_state(state)
-        log.info(f"[BOT] 완료. 포지션: {state.position_qty}주, 현금: {state.cash:,.0f}")
+      state.last_run = datetime.now().isoformat()
+      save_bot_state(state)
+      log.info(f"[BOT] 완료. 포지션: {state.position_qty}주, 현금: {state.cash:,.0f}")
     
     except Exception as e:
         error_msg = str(e)
