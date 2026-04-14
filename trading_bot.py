@@ -653,61 +653,65 @@ def run_bot(mode: str = "morning"):
       "closing"  — 15:10 KST: 체결 확인 + 상태 갱신
       "evening"  — 18:30 KST: 데이터 수집 + 지표 갱신
     """
-    log.info(f"{'='*60}")
-    log.info(f"[BOT] {TICKER_NAME} v4 실행 (mode={mode})")
-    log.info(f"{'='*60}")
-
-    today = datetime.now().strftime("%Y-%m-%d")
-    params = load_params()
-    state = load_bot_state()
-
-    # AI 레이어 로드
-    ai = AILayer(str(STATE_DIR))
-    ai.load_models()
+    start_ts = time.time()
+    error_msg = None
+    try:
+      log.info(f"{'='*60}")
+      log.info(f"[BOT] {TICKER_NAME} v4 실행 (mode={mode})")
+      log.info(f"{'='*60}")
+  
+      today = datetime.now().strftime("%Y-%m-%d")
+      params = load_params()
+      state = load_bot_state()
+  
+      # AI 레이어 로드
+      ai = AILayer(str(STATE_DIR))
+      ai.load_models()
+      
+  
+      # 일일 PnL 리셋
+      if state.last_trade_date != today:
+          state.daily_pnl = 0.0
+          state.last_trade_date = today
+  
+          # 이전 날짜의 추적 주문 정리
+          # 당일 주문이 아닌 것은 조회 대상이 아니므로 제거
+          if state.pending_orders:
+              old_count = len(state.pending_orders)
+              state.pending_orders = [
+                  p for p in state.pending_orders
+                  if p.get("ordered_date", "") == today.replace("-", "")
+              ]
+              if old_count != len(state.pending_orders):
+                  log.info(f"[CLEANUP] 이전 추적 주문 {old_count - len(state.pending_orders)}건 제거")  
+  
+      # KIS 클라이언트
+      if mode == "evening":
+          _run_evening(None, params, state, today)
+      else:
+          # morning 모드: 하루의 시작 — 캐시를 비우고 신규 토큰 강제 발급
+          # (이후 closing/evening/data_collector가 이 토큰을 재사용)
+          if mode == "morning":
+              from kis_token_store import invalidate_cache
+              invalidate_cache(str(STATE_DIR))
+              log.info("[KIS] morning 모드: 신규 토큰 강제 발급")
+  
+          try:
+              client = KISClient()  # client 객체 정상적 생성
+          except Exception as e:
+              log.error(f"[AUTH] 실패: {e}")
+              send_telegram(f"❌ {TICKER_NAME} 봇 인증 실패: {e}")
+              return
+  
+          if mode == "morning":
+              _run_morning(client, params, state, today, ai)
+          elif mode == "closing":
+              _run_closing(client, params, state, today)
+  
+        state.last_run = datetime.now().isoformat()
+        save_bot_state(state)
+        log.info(f"[BOT] 완료. 포지션: {state.position_qty}주, 현금: {state.cash:,.0f}")
     
-
-    # 일일 PnL 리셋
-    if state.last_trade_date != today:
-        state.daily_pnl = 0.0
-        state.last_trade_date = today
-
-        # 이전 날짜의 추적 주문 정리
-        # 당일 주문이 아닌 것은 조회 대상이 아니므로 제거
-        if state.pending_orders:
-            old_count = len(state.pending_orders)
-            state.pending_orders = [
-                p for p in state.pending_orders
-                if p.get("ordered_date", "") == today.replace("-", "")
-            ]
-            if old_count != len(state.pending_orders):
-                log.info(f"[CLEANUP] 이전 추적 주문 {old_count - len(state.pending_orders)}건 제거")  
-
-    # KIS 클라이언트
-    if mode == "evening":
-        _run_evening(None, params, state, today)
-    else:
-        # morning 모드: 하루의 시작 — 캐시를 비우고 신규 토큰 강제 발급
-        # (이후 closing/evening/data_collector가 이 토큰을 재사용)
-        if mode == "morning":
-            from kis_token_store import invalidate_cache
-            invalidate_cache(str(STATE_DIR))
-            log.info("[KIS] morning 모드: 신규 토큰 강제 발급")
-
-        try:
-            client = KISClient()  # client 객체 정상적 생성
-        except Exception as e:
-            log.error(f"[AUTH] 실패: {e}")
-            send_telegram(f"❌ {TICKER_NAME} 봇 인증 실패: {e}")
-            return
-
-        if mode == "morning":
-            _run_morning(client, params, state, today, ai)
-        elif mode == "closing":
-            _run_closing(client, params, state, today)
-
-    state.last_run = datetime.now().isoformat()
-    save_bot_state(state)
-    log.info(f"[BOT] 완료. 포지션: {state.position_qty}주, 현금: {state.cash:,.0f}")
     except Exception as e:
         error_msg = str(e)
         raise
