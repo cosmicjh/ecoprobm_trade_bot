@@ -24,6 +24,8 @@ from dataclasses import dataclass, asdict, field
 from typing import Optional
 from time import sleep
 
+import time
+
 import numpy as np
 import pandas as pd
 
