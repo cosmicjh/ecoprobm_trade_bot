@@ -188,7 +188,7 @@ document.getElementById("retrainView").innerHTML = `<table>
   <tr><th>일시</th><th>성공</th><th>HMM states</th><th>현재 레짐</th><th>LL</th></tr>
   ${__DATA__.retrain_history.slice().reverse().slice(0, 20).map(r => `
     <tr>
-      <td>${(r.timestamp || '').slice(0, 16).replace('T', ' ')}</td>
+      <td>${(r.timestamp_kst || '').slice(0, 16).replace('T', ' ')}</td>
       <td>${r.success ? '<span class="badge badge-ok">OK</span>' : '<span class="badge badge-err">FAIL</span>'}</td>
       <td>${r.hmm_n_states || '-'}</td>
       <td>${r.hmm_current_regime || '-'} ${r.hmm_current_confidence ? '(' + (r.hmm_current_confidence * 100).toFixed(0) + '%)' : ''}</td>
@@ -234,7 +234,7 @@ document.getElementById("runsTable").innerHTML = `<table>
   <tr><th>시각</th><th>모드</th><th>상태</th><th>소요</th><th>시그널</th><th>레짐</th><th>에러</th></tr>
   ${__DATA__.run_logs.slice().reverse().slice(0, 80).map(r => `
     <tr>
-      <td>${(r.timestamp || '').slice(5, 16).replace('T', ' ')}</td>
+      <td>${(r.timestamp_kst || '').slice(5, 16).replace('T', ' ')}</td>
       <td>${r.mode}</td>
       <td><span class="badge badge-${r.status === 'ok' ? 'ok' : r.status === 'error' ? 'err' : 'warn'}">${r.status}</span></td>
       <td>${r.duration_sec}s</td>
