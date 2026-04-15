@@ -262,7 +262,7 @@ const fmt = n => n == null ? "-" : Number(n).toLocaleString();
 const pct = n => n == null ? "-" : (n * 100).toFixed(1) + "%";
 const cls = n => n > 0 ? "green" : n < 0 ? "red" : "";
 
-document.getElementById("genAt").textContent = new Date(__DATA__.generated_at).toLocaleString("ko-KR");
+document.getElementById("genAt").textContent = __DATA__.generated_at;
 
 // ── KPI 카드 ──
 const bs = __DATA__.bot_state;
