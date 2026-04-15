@@ -14,7 +14,7 @@ GitHub Pages가 docs/를 자동으로 발행하므로,
 
 import json
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 log = logging.getLogger(__name__)
@@ -82,7 +82,7 @@ def collect_dashboard_data(state_dir: str) -> dict:
     return {
         "ticker": TICKER,
         "ticker_name": TICKER_NAME,
-        "generated_at": datetime.now().isoformat(),
+        "generated_at": (datetime.utcnow() + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M:%S KST"),
         "bot_state": bot_state,
         "trade_history": trade_history[-100:],   # 최근 100건
         "ohlcv": ohlcv_recent,
