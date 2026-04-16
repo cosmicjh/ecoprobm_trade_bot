@@ -79,6 +79,26 @@ def collect_dashboard_data(state_dir: str) -> dict:
     # 뉴스 시계열 (점수만)
     news_series = _summarize_news(news_state)
 
+    # ── KST 변환 ──
+    def _to_kst(iso_str):
+        if not iso_str:
+            return ""
+        try:
+            dt = datetime.fromisoformat(iso_str.replace("Z", ""))
+            return (dt + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M")
+        except Exception:
+            return iso_str
+
+    for t in trade_history[-100:]:
+        if "timestamp" in t:
+            t["timestamp_kst"] = _to_kst(t["timestamp"])
+    for r in run_logs:
+        if "timestamp" in r:
+            r["timestamp_kst"] = _to_kst(r["timestamp"])
+    for r in retrain_history:
+        if "timestamp" in r:
+            r["timestamp_kst"] = _to_kst(r["timestamp"])
+  
     return {
         "ticker": TICKER,
         "ticker_name": TICKER_NAME,
