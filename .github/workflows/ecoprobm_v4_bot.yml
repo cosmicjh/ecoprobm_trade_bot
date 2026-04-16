@@ -58,7 +58,9 @@ jobs:
             ecoprobm-v4-bot-
 
       - name: Create state directory
-        run: mkdir -p state
+        run: |
+          mkdir -p state
+          echo "kis_token.json" > state/.gitignore
 
       - name: Run trading bot
         env:
