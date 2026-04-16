@@ -49,8 +49,10 @@ jobs:
             state/ohlcv_247540.json
             state/supply_data_247540.json
             state/kis_token.json
+            state/predictions_247540.json
             state/news_sentiment_247540.json
-            state/kis_token.json
+            state/run_log_247540.jsonl
+            state/trade_history_247540.json
           key: ecoprobm-v4-bot-${{ github.run_number }}
           restore-keys: |
             ecoprobm-v4-bot-
