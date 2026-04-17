@@ -46,5 +46,21 @@
     "hmm_correct": null,
     "signal_correct": null,
     "supply_correct": null
+  },
+  {
+    "date": "2026-04-17",
+    "regime": "RANGE_BOUND",
+    "signal": "HOLD",
+    "hmm_regime": "RANGE_BOUND",
+    "hmm_confidence": 0.947,
+    "supply_anomaly": false,
+    "supply_direction": "neutral",
+    "price_at_prediction": 209500.0,
+    "evaluated": false,
+    "next_return_pct": null,
+    "regime_correct": null,
+    "hmm_correct": null,
+    "signal_correct": null,
+    "supply_correct": null
   }
 ]
