@@ -84,18 +84,14 @@ def save_token(state_dir: str, access_token: str, expires_in: int = 86400):
 
 def get_or_refresh_token(api_key: str, api_secret: str, base_url: str,
                           state_dir: str = "state") -> str:
-    """캐시된 토큰이 유효하면 재사용, 아니면 신규 발급 후 저장."""
-    cached = load_cached_token(state_dir)
-    if cached:
-        return cached
-
+    """매 실행마다 신규 토큰 발급. public 리포 보안을 위해 캐시 사용 안 함."""
     url = f"{base_url}/oauth2/tokenP"
     body = {
         "grant_type": "client_credentials",
         "appkey": api_key,
         "appsecret": api_secret,
     }
-    log.info(f"[KIS] 신규 토큰 발급 요청: {base_url}")
+    log.info(f"[KIS] 토큰 발급 요청: {base_url}")
     resp = requests.post(url, json=body, timeout=10)
     data = resp.json()
 
@@ -103,9 +99,7 @@ def get_or_refresh_token(api_key: str, api_secret: str, base_url: str,
     if not token:
         raise RuntimeError(f"[KIS] 토큰 발급 실패: {data}")
 
-    expires_in = int(data.get("expires_in", 86400))
-    save_token(state_dir, token, expires_in)
-    log.info(f"[KIS] 신규 토큰 발급 완료 (len={len(token)})")
+    log.info(f"[KIS] 토큰 발급 완료 (len={len(token)})")
     return token
 
 
