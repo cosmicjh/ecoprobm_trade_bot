@@ -943,5 +943,31 @@
     "short_ratio_vol": 11.81,
     "short_amount": 8871076750,
     "short_ratio_amt": 11.81
+  },
+  "2026-04-17": {
+    "foreign_net_qty": 95951,
+    "foreign_net_amt": 19939,
+    "inst_net_qty": 41398,
+    "inst_net_amt": 8717,
+    "individual_net_qty": -5780,
+    "individual_net_amt": -1358,
+    "short_volume": 58021,
+    "total_volume": 575204,
+    "short_ratio_vol": 10.09,
+    "short_amount": 12042600000,
+    "short_ratio_amt": 10.07
+  },
+  "2026-04-16": {
+    "foreign_net_qty": 37783,
+    "foreign_net_amt": 7737,
+    "inst_net_qty": -61647,
+    "inst_net_amt": -12582,
+    "individual_net_qty": 25600,
+    "individual_net_amt": 5203,
+    "short_volume": 25588,
+    "total_volume": 351483,
+    "short_ratio_vol": 7.28,
+    "short_amount": 5250770250,
+    "short_ratio_amt": 7.28
   }
 }
