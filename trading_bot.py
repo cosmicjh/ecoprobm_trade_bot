@@ -691,13 +691,6 @@ def run_bot(mode: str = "morning"):
       if mode == "evening":
           _run_evening(None, params, state, today)
       else:
-          # morning 모드: 하루의 시작 — 캐시를 비우고 신규 토큰 강제 발급
-          # (이후 closing/evening/data_collector가 이 토큰을 재사용)
-          if mode == "morning":
-              from kis_token_store import invalidate_cache
-              invalidate_cache(str(STATE_DIR))
-              log.info("[KIS] morning 모드: 신규 토큰 강제 발급")
-  
           try:
               client = KISClient()  # client 객체 정상적 생성
           except Exception as e:
