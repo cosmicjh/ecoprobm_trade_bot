@@ -4,3 +4,4 @@
 {"timestamp": "2026-04-15T06:10:46.563725", "date": "2026-04-15", "mode": "closing", "status": "ok", "duration_sec": 1.58, "signal": "HOLD", "regime": "RANGE_BOUND"}
 {"timestamp": "2026-04-15T09:31:06.424305", "date": "2026-04-15", "mode": "evening", "status": "ok", "duration_sec": 0.01, "signal": "HOLD", "regime": "RANGE_BOUND"}
 {"timestamp": "2026-04-17T01:17:40.618521", "date": "2026-04-17", "mode": "morning", "status": "ok", "duration_sec": 20.21, "signal": "HOLD", "regime": "RANGE_BOUND"}
+{"timestamp": "2026-04-17T06:35:47.410911", "date": "2026-04-17", "mode": "closing", "status": "ok", "duration_sec": 2.88, "signal": "HOLD", "regime": "RANGE_BOUND"}
