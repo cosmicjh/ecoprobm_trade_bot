@@ -98,6 +98,26 @@ def collect_dashboard_data(state_dir: str) -> dict:
     for r in retrain_history:
         if "timestamp" in r:
             r["timestamp_kst"] = _to_kst(r["timestamp"])
+
+    # ── KST 변환 ──
+    def _to_kst(iso_str):
+        if not iso_str:
+            return ""
+        try:
+            dt = datetime.fromisoformat(iso_str.replace("Z", ""))
+            return (dt + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M")
+        except Exception:
+            return iso_str
+
+    for t in trade_history[-100:]:
+        if "timestamp" in t:
+            t["timestamp_kst"] = _to_kst(t["timestamp"])
+    for r in run_logs:
+        if "timestamp" in r:
+            r["timestamp_kst"] = _to_kst(r["timestamp"])
+    for r in retrain_history:
+        if "timestamp" in r:
+            r["timestamp_kst"] = _to_kst(r["timestamp"])
   
     return {
         "ticker": TICKER,
@@ -479,18 +499,3 @@ def _to_kst(iso_str):
         return (dt + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M")
     except Exception:
         return iso_str
-
-# 매매 이력 timestamp 변환
-for t in trade_history[-100:]:
-    if "timestamp" in t:
-        t["timestamp_kst"] = _to_kst(t["timestamp"])
-
-# 실행 로그 변환
-for r in run_logs:
-    if "timestamp" in r:
-        r["timestamp_kst"] = _to_kst(r["timestamp"])
-
-# retrain 변환
-for r in retrain_history:
-    if "timestamp" in r:
-        r["timestamp_kst"] = _to_kst(r["timestamp"])
