@@ -48,7 +48,6 @@ jobs:
             state/optimized_params_247540.json
             state/ohlcv_247540.json
             state/supply_data_247540.json
-            state/kis_token.json
             state/predictions_247540.json
             state/news_sentiment_247540.json
             state/run_log_247540.jsonl
