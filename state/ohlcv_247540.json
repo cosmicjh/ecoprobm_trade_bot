@@ -238,5 +238,17 @@
     "prev_Low": 204000,
     "prev_Close": 208000,
     "prev_Volume": 575204
+  },
+  "2026-04-21": {
+    "Open": 214000,
+    "High": 220500,
+    "Low": 211000,
+    "Close": 220500,
+    "Volume": 962694,
+    "prev_Open": 208000,
+    "prev_High": 213000,
+    "prev_Low": 204500,
+    "prev_Close": 210000,
+    "prev_Volume": 468514
   }
 }
