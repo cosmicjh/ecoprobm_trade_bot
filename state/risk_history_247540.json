@@ -62,5 +62,13 @@
     "invest_multiplier": 1.0,
     "atr_alert": false,
     "assessed_at": "2026-04-22T00:02:41.844984"
+  },
+  "2026-04-23": {
+    "risk_level": "green",
+    "us_weighted_change": 1.57,
+    "gapdown_probability": "LOW",
+    "invest_multiplier": 1.0,
+    "atr_alert": false,
+    "assessed_at": "2026-04-23T00:02:42.579945"
   }
 }
