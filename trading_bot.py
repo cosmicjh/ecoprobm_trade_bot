@@ -1,17 +1,18 @@
 """
-에코프로비엠 (247540) v4 — Phase 2-1: 자동트레이딩 봇
+에코프로비엠 (247540) v4 — Phase 2-1: 자동트레이딩 봇 (+피라미딩)
 ======================================================
 3-Layer 전략 실행 봇:
   Layer 1: 레짐 판별 (MA/BB/ATR 기반)
   Layer 2: 수급 시그널 (외국인·기관 순매수, 공매도)
   Layer 3: 레짐별 실행 전략 (TREND_UP/RANGE_BOUND/HIGH_VOL)
+  Layer 4: 피라미딩 (1차 익절 후 수익 상태 + 강한 수급 시 추가 매수)
 
 인프라: GitHub Actions + cron-job.org (workflow_dispatch)
-  09:05 KST — 장 시작: 시그널 판단 + 주문 실행
-  15:10 KST — 장 마감: 당일 체결 확인 + 상태 갱신
-  18:30 KST — 장 후: 확정 데이터 수집 + 지표 갱신
+  09:02 KST (00:02 UTC) — 장 시작: 시그널 판단 + 주문 실행
+  15:35 KST (06:35 UTC) — 장 마감: 당일 체결 확인 + 상태 갱신
+  18:30 KST (09:30 UTC) — 장 후: 확정 데이터 수집 + 지표 갱신
 
-데이터: KISClient (직접 토큰, 실전 서버)
+데이터: KISClient (토큰 매번 발급, 실전 서버)
 """
 
 import os
@@ -23,8 +24,6 @@ from pathlib import Path
 from dataclasses import dataclass, asdict, field
 from typing import Optional
 from time import sleep
-
-import time
 
 import numpy as np
 import pandas as pd
@@ -121,6 +120,12 @@ class StrategyParams:
     weekly_loss_limit: float = -0.07   # 주간 -7%
     monthly_loss_limit: float = -0.12  # 월간 -12%
 
+    # Layer 4: 피라미딩 (추가 매수) — 신규
+    enable_pyramiding: bool = True
+    max_pyramiding: int = 2                      # 추가 매수 최대 횟수 (초기 매수 제외)
+    pyramiding_min_profit: float = 0.02          # 현재가 - 평균진입가 이익률 최소치 (+2%)
+    pyramiding_size_ratio: float = 0.5           # 추가 매수 규모 (최초 invest의 50%)
+
 
 @dataclass
 class BotState:
@@ -152,10 +157,14 @@ class BotState:
     last_signal: str = ""
     last_run: str = ""
     total_trades: int = 0
-    version: str = "v4.2.1"
+    version: str = "v4.3.0"          # 피라미딩 반영
 
-    # ★ 추가: 미체결 주문 추적 리스트 (PendingOrder의 dict 형태로 저장)
+    # 미체결 주문 추적 리스트 (PendingOrder의 dict 형태로 저장)
     pending_orders: list = field(default_factory=list)
+
+    # 피라미딩 추적 (신규)
+    pyramiding_count: int = 0                                     # 현재 포지션에서 추가 매수한 횟수
+    pyramiding_history: list = field(default_factory=list)        # [{date, price, qty, trigger, new_avg_entry}, ...]
 
 
 def load_params(path: Optional[str] = None) -> StrategyParams:
@@ -183,6 +192,15 @@ def load_params(path: Optional[str] = None) -> StrategyParams:
             rsi_entry=p.get("rsi_entry", 25.0),
             invest_ratio=p.get("invest_ratio", 0.30),
             max_invest_ratio=p.get("max_invest_ratio", 0.60),
+            hvol_size_reduction=p.get("hvol_size_reduction", 0.5),
+            daily_loss_limit=p.get("daily_loss_limit", -0.03),
+            weekly_loss_limit=p.get("weekly_loss_limit", -0.07),
+            monthly_loss_limit=p.get("monthly_loss_limit", -0.12),
+            # 피라미딩 파라미터
+            enable_pyramiding=p.get("enable_pyramiding", True),
+            max_pyramiding=p.get("max_pyramiding", 2),
+            pyramiding_min_profit=p.get("pyramiding_min_profit", 0.02),
+            pyramiding_size_ratio=p.get("pyramiding_size_ratio", 0.5),
         )
     else:
         log.warning(f"[PARAMS] 파일 없음, 기본 파라미터 사용")
@@ -213,7 +231,7 @@ def save_bot_state(state: BotState):
 # ═══════════════════════════════════════════════════════════════════
 
 class KISClient:
-    """한투 OpenAPI 직접 호출 (실전 서버, 토큰 직접 발급)."""
+    """한투 OpenAPI 직접 호출 (실전 서버, 매 실행 토큰 신규 발급)."""
 
     def __init__(self):
         self.api_key = os.getenv("KIS_API_KEY", "")
@@ -223,54 +241,51 @@ class KISClient:
         self._get_token()
 
     def _get_token(self):
-      from kis_token_store import get_or_refresh_token
-      self.access_token = get_or_refresh_token(
-        api_key=self.api_key,
-        api_secret=self.api_secret,
-        base_url=self.base_url,
-        state_dir=str(STATE_DIR),
-      )
+        from kis_token_store import get_or_refresh_token
+        self.access_token = get_or_refresh_token(
+            api_key=self.api_key,
+            api_secret=self.api_secret,
+            base_url=self.base_url,
+            state_dir=str(STATE_DIR),
+        )
 
     def get(self, path, tr_id, params, extra_headers=None):
-      from kis_token_store import is_token_error, invalidate_cache
+        from kis_token_store import is_token_error, invalidate_cache
 
-      def _do_request():
-        headers = {
-            "content-type": "application/json; charset=utf-8",
-            "authorization": f"Bearer {self.access_token}",
-            "appkey": self.api_key,
-            "appsecret": self.api_secret,
-            "tr_id": tr_id,
-            "custtype": "P",
-        }
-        if extra_headers:
-            headers.update(extra_headers)
-        url = self.base_url + path
-        resp = requests.get(url, headers=headers, params=params, timeout=15)
-        try:
-            rj = resp.json()
-        except Exception:
-            rj = {}
-        return resp, rj
+        def _do_request():
+            headers = {
+                "content-type": "application/json; charset=utf-8",
+                "authorization": f"Bearer {self.access_token}",
+                "appkey": self.api_key,
+                "appsecret": self.api_secret,
+                "tr_id": tr_id,
+                "custtype": "P",
+            }
+            if extra_headers:
+                headers.update(extra_headers)
+            url = self.base_url + path
+            resp = requests.get(url, headers=headers, params=params, timeout=15)
+            try:
+                rj = resp.json()
+            except Exception:
+                rj = {}
+            return resp, rj
 
-      # 1차 시도
-      resp, data = _do_request()
-
-      # 401/토큰만료 감지 → 재발급 후 1회 재시도
-      if is_token_error(resp.status_code, data):
-        log.warning(f"[KIS] 토큰 거부 감지 (status={resp.status_code}, "
-                    f"msg_cd={data.get('msg_cd','')}), 재발급 후 재시도")
-        invalidate_cache(str(STATE_DIR))
-        self._get_token()   # 새 토큰 발급 (캐시 삭제됐으므로 신규 발급)
+        # 1차 시도
         resp, data = _do_request()
 
+        # 401/토큰만료 감지 → 재발급 후 1회 재시도
         if is_token_error(resp.status_code, data):
-            raise RuntimeError(
-                f"[KIS] 토큰 재발급 후에도 인증 실패: {data}"
-            )
+            log.warning(f"[KIS] 토큰 거부 감지 (status={resp.status_code}, "
+                        f"msg_cd={data.get('msg_cd','')}), 재발급 후 재시도")
+            invalidate_cache(str(STATE_DIR))
+            self._get_token()
+            resp, data = _do_request()
+            if is_token_error(resp.status_code, data):
+                raise RuntimeError(f"[KIS] 토큰 재발급 후에도 인증 실패: {data}")
 
-      sleep(0.3)   # API_CALL_DELAY 대체 (trading_bot에 상수가 없으면)
-      return data
+        sleep(0.3)
+        return data
 
     def get_hashkey(self, body):
         """POST 요청(주문)에 필요한 보안 해시키 발급"""
@@ -292,7 +307,7 @@ class KISClient:
             "appsecret": self.api_secret,
             "tr_id": tr_id,
             "custtype": "P",
-            "hashkey": self.get_hashkey(body),  # 실전 주문은 해시키 필수
+            "hashkey": self.get_hashkey(body),
         }
         resp = requests.post(self.base_url + path, headers=headers, json=body, timeout=15)
         return resp.json()
@@ -379,7 +394,6 @@ def get_investor_data(client: KISClient, ticker=TICKER) -> dict:
     if not output:
         return {}
 
-    # 최근 데이터 수집 루프 안에서 당일(0) 데이터가 아닌 D-1 데이터를 latest로 잡도록 수정
     records = []
     for item in output[:10]:
         records.append({
@@ -387,18 +401,19 @@ def get_investor_data(client: KISClient, ticker=TICKER) -> dict:
             "foreign_net": _si(item.get("frgn_ntby_qty", 0)),
             "inst_net": _si(item.get("orgn_ntby_qty", 0)),
         })
-    
-    # 만약 records의 첫 번째(인덱스 0)가 당일인데 데이터가 0이라면 전일(인덱스 1) 데이터를 사용
+
+    # records[0]이 당일 0 값이면 D-1 사용
     target_idx = 0
     if len(records) > 1 and records[0]["foreign_net"] == 0 and records[0]["inst_net"] == 0:
         target_idx = 1
-        
+
     return {
         "latest_foreign": records[target_idx]["foreign_net"] if records else 0,
         "latest_inst": records[target_idx]["inst_net"] if records else 0,
-        "foreign_ma5": int(np.mean([r["foreign_net"] for r in records[target_idx : target_idx+5]])) if len(records) >= 5 else 0,
-        "inst_ma5": int(np.mean([r["inst_net"] for r in records[target_idx : target_idx+5]])) if len(records) >= 5 else 0,
-        "dual_buy": records[target_idx]["foreign_net"] > 0 and records[target_idx]["inst_net"] > 0 if records else False,    }
+        "foreign_ma5": int(np.mean([r["foreign_net"] for r in records[target_idx: target_idx+5]])) if len(records) >= 5 else 0,
+        "inst_ma5": int(np.mean([r["inst_net"] for r in records[target_idx: target_idx+5]])) if len(records) >= 5 else 0,
+        "dual_buy": records[target_idx]["foreign_net"] > 0 and records[target_idx]["inst_net"] > 0 if records else False,
+    }
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -482,6 +497,7 @@ def kosdaq_tick_size(price: int) -> int:
             return tick
     return 1000
 
+
 def round_to_tick(price: int, direction: str = "down") -> int:
     """호가 단위로 반올림."""
     tick = kosdaq_tick_size(price)
@@ -490,21 +506,22 @@ def round_to_tick(price: int, direction: str = "down") -> int:
     else:
         return ((price + tick - 1) // tick) * tick
 
+
 def _execute_buy(client: KISClient, state: BotState, price: int, qty: int, regime: str, today: str):
-    """직접 KISClient로 매수 실행."""
+    """직접 KISClient로 매수 실행 (신규 포지션 개시)."""
     try:
         acc_no = os.getenv("KIS_ACC_NO", "")
         cano, acnt_prdt_cd = acc_no.split("-")
-        
+
         body = {
             "CANO": cano, "ACNT_PRDT_CD": acnt_prdt_cd,
-            "PDNO": TICKER, "ORD_DVSN": "00", # 00: 지정가
+            "PDNO": TICKER, "ORD_DVSN": "00",   # 00: 지정가
             "ORD_QTY": str(qty), "ORD_UNPR": str(price),
         }
-        
+
         log.info(f"[ORDER] 매수 주문: {TICKER} {qty}주 @ {price:,}원")
         resp = client.post("/uapi/domestic-stock/v1/trading/order-cash", "TTTC0802U", body)
-        
+
         if resp.get("rt_cd") == "0":
             cost = qty * price
             state.cash -= cost
@@ -514,47 +531,119 @@ def _execute_buy(client: KISClient, state: BotState, price: int, qty: int, regim
             state.highest_since_entry = 0.0
             state.tp1_done = False
             state.total_trades += 1
+            # 신규 포지션이므로 피라미딩 상태 초기화
+            state.pyramiding_count = 0
+            state.pyramiding_history = []
+
             log.info(f"[BUY] 성공: {qty}주 @ {price:,} ({regime})")
 
-            # 매매 이력 기록
             log_trade(
                 state_dir=str(STATE_DIR),
                 side="buy", reason="ENTRY",
                 price=price, qty=qty,
                 regime=regime, signal=state.last_signal,
             )
-            
-            # PendingOrder 생성 & 저장
+
             pending = create_pending_from_response(resp, "buy", "ENTRY", qty, price)
             if pending:
                 state.pending_orders.append(asdict(pending))
-                log.info(f"[PENDING] 매수 추적 등록: {pending.order_no}")      
-            
+                log.info(f"[PENDING] 매수 추적 등록: {pending.order_no}")
         else:
             log.error(f"[BUY] KIS 응답 에러: {resp.get('msg1')}")
     except Exception as e:
         log.error(f"[BUY] 예외 발생: {e}")
+
+
+def _execute_pyramiding_buy(client: KISClient, params: StrategyParams,
+                              state: BotState, price: int, qty: int,
+                              regime: str, today: str, trigger: str):
+    """
+    피라미딩 매수 실행 (기존 포지션에 추가).
+
+    일반 _execute_buy와의 차이:
+      - 기존 포지션을 덮어쓰지 않고 수량만 추가
+      - entry_price는 가중평균으로 갱신 (손절/익절 기준도 자동 이동)
+      - tp1_done, highest_since_entry 유지 (1차 익절 후 상태 보존)
+      - pyramiding_count 증가, pyramiding_history에 이력 추가
+
+    trigger: "DUAL" (외국인·기관 동반매수) | "ANOMALY" (bullish 수급 이상)
+    """
+    try:
+        acc_no = os.getenv("KIS_ACC_NO", "")
+        cano, acnt_prdt_cd = acc_no.split("-")
+
+        body = {
+            "CANO": cano, "ACNT_PRDT_CD": acnt_prdt_cd,
+            "PDNO": TICKER, "ORD_DVSN": "00",
+            "ORD_QTY": str(qty), "ORD_UNPR": str(price),
+        }
+
+        log.info(f"[PYRAMID] 추가 매수 주문: {qty}주 @ {price:,}원 (trigger={trigger})")
+        resp = client.post("/uapi/domestic-stock/v1/trading/order-cash",
+                            "TTTC0802U", body)
+
+        if resp.get("rt_cd") == "0":
+            # 가중평균 진입가 재계산
+            old_cost = state.entry_price * state.position_qty
+            new_cost = price * qty
+            total_qty = state.position_qty + qty
+            avg_entry = (old_cost + new_cost) / total_qty
+
+            state.cash -= price * qty
+            state.position_qty = total_qty
+            state.entry_price = avg_entry
+            state.pyramiding_count += 1
+            state.pyramiding_history.append({
+                "date": today,
+                "price": price,
+                "qty": qty,
+                "trigger": trigger,
+                "new_avg_entry": round(avg_entry, 2),
+            })
+            state.total_trades += 1
+
+            log.info(f"[PYRAMID] 성공: +{qty}주 @ {price:,} | "
+                     f"총 {total_qty}주 | 평균진입가 {avg_entry:,.0f} "
+                     f"(count={state.pyramiding_count})")
+
+            log_trade(
+                state_dir=str(STATE_DIR),
+                side="buy",
+                reason=f"PYRAMID_{state.pyramiding_count}_{trigger}",
+                price=price, qty=qty,
+                regime=regime, signal=state.last_signal,
+            )
+
+            pending = create_pending_from_response(resp, "buy",
+                                                    f"PYRAMID_{trigger}", qty, price)
+            if pending:
+                state.pending_orders.append(asdict(pending))
+        else:
+            log.error(f"[PYRAMID] KIS 응답 에러: {resp.get('msg1')}")
+    except Exception as e:
+        log.error(f"[PYRAMID] 예외 발생: {e}")
+
 
 def _execute_sell(client: KISClient, params: StrategyParams, state: BotState, price: int, qty: int, reason: str, regime: str, today: str):
     """직접 KISClient로 매도 실행."""
     try:
         acc_no = os.getenv("KIS_ACC_NO", "")
         cano, acnt_prdt_cd = acc_no.split("-")
-        
+
         body = {
             "CANO": cano, "ACNT_PRDT_CD": acnt_prdt_cd,
             "PDNO": TICKER, "ORD_DVSN": "00",
             "ORD_QTY": str(qty), "ORD_UNPR": str(price),
         }
-        
+
         log.info(f"[ORDER] 매도 주문: {TICKER} {qty}주 @ {price:,}원")
         resp = client.post("/uapi/domestic-stock/v1/trading/order-cash", "TTTC0801U", body)
-        
+
         if resp.get("rt_cd") == "0":
             proceeds = qty * price
             pnl = (price - state.entry_price) * qty
-            
-            entry_price_snapshot = state.entry_price  # 청산 전 진입가 보관
+
+            entry_price_snapshot = state.entry_price
             entry_date_snapshot = state.entry_date
 
             state.cash += proceeds
@@ -569,13 +658,15 @@ def _execute_sell(client: KISClient, params: StrategyParams, state: BotState, pr
                 state.entry_price = 0.0
                 state.tp1_done = False
                 state.highest_since_entry = 0.0
+                # 전량 청산 시 피라미딩 상태도 리셋
+                state.pyramiding_count = 0
+                state.pyramiding_history = []
                 if reason == "SL":
                     cd = (datetime.strptime(today, "%Y-%m-%d") + timedelta(days=params.cooldown_days))
                     state.cooldown_until = cd.strftime("%Y-%m-%d")
 
             log.info(f"[SELL_{reason}] 성공: {qty}주 @ {price:,} | PnL={pnl:+,.0f} ({regime})")
 
-            # 매매 이력 기록 (entry_price/date는 reset 전 값 사용)
             log_trade(
                 state_dir=str(STATE_DIR),
                 side="sell", reason=reason,
@@ -584,8 +675,7 @@ def _execute_sell(client: KISClient, params: StrategyParams, state: BotState, pr
                 entry_price=entry_price_snapshot,
                 entry_date=entry_date_snapshot,
             )
-          
-            # PendingOrder 생성 & 저장
+
             pending = create_pending_from_response(resp, "sell", reason, qty, price)
             if pending:
                 state.pending_orders.append(asdict(pending))
@@ -602,7 +692,6 @@ def _execute_sell(client: KISClient, params: StrategyParams, state: BotState, pr
 
 def check_risk_limits(state: BotState, params: StrategyParams, today: str) -> bool:
     """리스크 한도 체크. 위반 시 True 반환 (거래 중단)."""
-    # 주간/월간 리셋
     today_dt = datetime.strptime(today, "%Y-%m-%d")
 
     # 주간 리셋 (월요일)
@@ -619,19 +708,16 @@ def check_risk_limits(state: BotState, params: StrategyParams, today: str) -> bo
 
     capital = state.initial_capital
 
-    # 일일 한도
     if state.daily_pnl / capital <= params.daily_loss_limit:
         state.halted = True
         state.halt_reason = f"일일 손실 한도 초과 ({state.daily_pnl/capital*100:.1f}%)"
         return True
 
-    # 주간 한도
     if state.weekly_pnl / capital <= params.weekly_loss_limit:
         state.halted = True
         state.halt_reason = f"주간 손실 한도 초과 ({state.weekly_pnl/capital*100:.1f}%)"
         return True
 
-    # 월간 한도
     if state.monthly_pnl / capital <= params.monthly_loss_limit:
         state.halted = True
         state.halt_reason = f"월간 손실 한도 초과 ({state.monthly_pnl/capital*100:.1f}%)"
@@ -647,83 +733,57 @@ def check_risk_limits(state: BotState, params: StrategyParams, today: str) -> bo
 # ═══════════════════════════════════════════════════════════════════
 
 def run_bot(mode: str = "morning"):
-    """
-    봇 메인 루프.
+    """봇 메인 루프."""
+    log.info(f"{'='*60}")
+    log.info(f"[BOT] {TICKER_NAME} v4 실행 (mode={mode})")
+    log.info(f"{'='*60}")
 
-    mode:
-      "morning"  — 09:05 KST: 시그널 판단 + 주문
-      "closing"  — 15:10 KST: 체결 확인 + 상태 갱신
-      "evening"  — 18:30 KST: 데이터 수집 + 지표 갱신
-    """
-    start_ts = time.time()
-    error_msg = None
-    try:
-      log.info(f"{'='*60}")
-      log.info(f"[BOT] {TICKER_NAME} v4 실행 (mode={mode})")
-      log.info(f"{'='*60}")
-  
-      today = datetime.now().strftime("%Y-%m-%d")
-      params = load_params()
-      state = load_bot_state()
-  
-      # AI 레이어 로드
-      ai = AILayer(str(STATE_DIR))
-      ai.load_models()
-      
-  
-      # 일일 PnL 리셋
-      if state.last_trade_date != today:
-          state.daily_pnl = 0.0
-          state.last_trade_date = today
-  
-          # 이전 날짜의 추적 주문 정리
-          # 당일 주문이 아닌 것은 조회 대상이 아니므로 제거
-          if state.pending_orders:
-              old_count = len(state.pending_orders)
-              state.pending_orders = [
-                  p for p in state.pending_orders
-                  if p.get("ordered_date", "") == today.replace("-", "")
-              ]
-              if old_count != len(state.pending_orders):
-                  log.info(f"[CLEANUP] 이전 추적 주문 {old_count - len(state.pending_orders)}건 제거")  
-  
-      # KIS 클라이언트
-      if mode == "evening":
-          _run_evening(None, params, state, today)
-      else:
-          try:
-              client = KISClient()  # client 객체 정상적 생성
-          except Exception as e:
-              log.error(f"[AUTH] 실패: {e}")
-              send_telegram(f"❌ {TICKER_NAME} 봇 인증 실패: {e}")
-              return
-  
-          if mode == "morning":
-              _run_morning(client, params, state, today, ai)
-          elif mode == "closing":
-              _run_closing(client, params, state, today)
-  
-      state.last_run = datetime.now().isoformat()
-      save_bot_state(state)
-      log.info(f"[BOT] 완료. 포지션: {state.position_qty}주, 현금: {state.cash:,.0f}")
-    
-    except Exception as e:
-        error_msg = str(e)
-        raise
-    finally:
-        from run_logger import log_run
-        log_run(
-            state_dir=str(STATE_DIR),
-            mode=mode,
-            status="error" if error_msg else "ok",
-            duration_sec=time.time() - start_ts,
-            signal=getattr(state, "last_signal", None) if 'state' in locals() else None,
-            regime=getattr(state, "last_regime", None) if 'state' in locals() else None,
-            error=error_msg,
-        )
+    today = datetime.now().strftime("%Y-%m-%d")
+    params = load_params()
+    state = load_bot_state()
+
+    # AI 레이어 로드
+    ai = AILayer(str(STATE_DIR))
+    ai.load_models()
+
+    # 일일 PnL 리셋
+    if state.last_trade_date != today:
+        state.daily_pnl = 0.0
+        state.last_trade_date = today
+
+        # 이전 날짜의 추적 주문 정리
+        if state.pending_orders:
+            old_count = len(state.pending_orders)
+            state.pending_orders = [
+                p for p in state.pending_orders
+                if p.get("ordered_date", "") == today.replace("-", "")
+            ]
+            if old_count != len(state.pending_orders):
+                log.info(f"[CLEANUP] 이전 추적 주문 {old_count - len(state.pending_orders)}건 제거")
+
+    # KIS 클라이언트
+    if mode == "evening":
+        _run_evening(None, params, state, today)
+    else:
+        try:
+            client = KISClient()
+        except Exception as e:
+            log.error(f"[AUTH] 실패: {e}")
+            send_telegram(f"❌ {TICKER_NAME} 봇 인증 실패: {e}")
+            return
+
+        if mode == "morning":
+            _run_morning(client, params, state, today, ai)
+        elif mode == "closing":
+            _run_closing(client, params, state, today)
+
+    state.last_run = datetime.now().isoformat()
+    save_bot_state(state)
+    log.info(f"[BOT] 완료. 포지션: {state.position_qty}주, 현금: {state.cash:,.0f}")
+
 
 def _run_morning(client, params, state, today, ai):
-    """09:05 — 시그널 판단 + 주문."""
+    """09:02 — 시그널 판단 + 주문."""
     # 리스크 체크
     if check_risk_limits(state, params, today):
         log.warning(f"[RISK] 거래 중단: {state.halt_reason}")
@@ -750,7 +810,7 @@ def _run_morning(client, params, state, today, ai):
     risk = assess_risk(client, bot_state=state)
     save_risk_history(risk, str(STATE_DIR))
     send_telegram(format_risk_telegram(risk))
-    
+
     # 진입 차단 판단
     skip, skip_reason = should_skip_entry(risk)
     if skip:
@@ -769,21 +829,20 @@ def _run_morning(client, params, state, today, ai):
     latest = df_ind.iloc[-1]
     regime = classify_regime(latest, params)
 
-    # 수급 조회 먼저 실행 (inv 변수 선언)
+    # 수급 조회
     inv = get_investor_data(client)
     dual_buy = inv.get("dual_buy", False)
 
-    # AI 앙상블 및 수급 이상 감지 실행
+    # AI 앙상블 및 수급 이상 감지
     hmm_result = {"regime": "UNKNOWN", "confidence": 0}
     supply_anomaly = {"is_anomaly": False, "direction": "neutral"}
-    
+
     if ai and ai.models_loaded:
         hmm_result = ai.get_hmm_regime(df)
         ensemble = ensemble_regime(regime, hmm_result)
-        regime = ensemble["regime"]    # ← 앙상블 결과로 교체
+        regime = ensemble["regime"]
         log.info(f"[AI] 앙상블: {ensemble['detail']} → {regime} ({ensemble['confidence']:.0%})")
-        
-        # 위에서 선언된 inv 변수 정상적 사용
+
         supply_anomaly = ai.detect_supply_anomaly(
             {"foreign_net_qty": inv.get("latest_foreign", 0),
              "inst_net_qty": inv.get("latest_inst", 0),
@@ -799,11 +858,11 @@ def _run_morning(client, params, state, today, ai):
     state.last_regime = regime
     signal = "HOLD"
 
-    # ── 뉴스 센티먼트 게이트 ──
+    # 뉴스 센티먼트 게이트
     sent = get_sentiment_signal(str(STATE_DIR))
     log.info(f"[NEWS] score={sent['score']:+d}, multiplier=×{sent['multiplier']}, "
              f"block={sent['block_entry']}, n={sent['n_articles']}")
-  
+
     # ── 보유 중: 청산 판단 ──
     if state.position_qty > 0:
         pnl_pct = (today_open - state.entry_price) / state.entry_price
@@ -835,6 +894,64 @@ def _run_morning(client, params, state, today, ai):
                     sell_price = round_to_tick(current, "down")
                     _execute_sell(client, params, state, sell_price, state.position_qty, "TRAIL", regime, today)
 
+        # ── 피라미딩 매수 판단 (청산이 안 일어난 경우에만) ──
+        # 조건이 엄격함: 하나라도 실패하면 미실행
+        if (params.enable_pyramiding
+                and state.position_qty > 0
+                and signal not in ["SELL_SL", "SELL_TP1", "SELL_TRAIL"]
+                and state.tp1_done                                     # 1차 익절 완료 후에만
+                and state.pyramiding_count < params.max_pyramiding    # 횟수 미소진
+                and regime in ["TREND_UP", "HIGH_VOLATILITY"]):        # 유효 레짐
+
+            # 수익 상태 체크
+            cur_profit = (current - state.entry_price) / state.entry_price
+            if cur_profit >= params.pyramiding_min_profit:
+
+                # 강한 수급 시그널 필수 (dual_buy OR bullish anomaly)
+                strong_supply = (dual_buy or
+                                  (supply_anomaly.get("is_anomaly") and
+                                   supply_anomaly.get("direction") == "bullish"))
+
+                if strong_supply:
+                    # 누적 투자 한도 체크 (max_invest_ratio × initial_capital)
+                    current_position_value = state.position_qty * current
+                    max_position_value = state.initial_capital * params.max_invest_ratio
+                    available_budget = max_position_value - current_position_value
+
+                    if available_budget > 0:
+                        # 초기 매수의 pyramiding_size_ratio 만큼 추가
+                        initial_invest = state.initial_capital * params.invest_ratio
+                        add_invest = min(initial_invest * params.pyramiding_size_ratio,
+                                         available_budget,
+                                         state.cash * 0.95)   # 현금 여유 확보
+
+                        buy_price = round_to_tick(current, "up")
+                        add_qty = int(add_invest / buy_price) if buy_price > 0 else 0
+
+                        if add_qty > 0:
+                            trigger = "DUAL" if dual_buy else "ANOMALY"
+                            signal = f"BUY_PYRAMID_{trigger}"
+                            _execute_pyramiding_buy(
+                                client, params, state, buy_price, add_qty,
+                                regime, today, trigger
+                            )
+                            log.info(f"[PYRAMID] 트리거={trigger}, "
+                                     f"수익={cur_profit*100:.2f}%, "
+                                     f"추가={add_qty}주, "
+                                     f"count={state.pyramiding_count}/{params.max_pyramiding}")
+                        else:
+                            log.info(f"[PYRAMID] 수량 0 — add_invest={add_invest:,.0f}, "
+                                     f"price={buy_price:,}")
+                    else:
+                        log.info(f"[PYRAMID] 한도 소진 — "
+                                 f"current={current_position_value:,.0f}, "
+                                 f"max={max_position_value:,.0f}")
+                else:
+                    log.debug(f"[PYRAMID] 수급 시그널 약함 (dual_buy={dual_buy})")
+            else:
+                log.debug(f"[PYRAMID] 수익 부족: {cur_profit*100:.2f}% "
+                          f"< {params.pyramiding_min_profit*100:.1f}%")
+
     # ── 미보유: 진입 판단 ──
     elif state.position_qty == 0:
         # 뉴스 센티먼트로 진입 차단
@@ -842,7 +959,6 @@ def _run_morning(client, params, state, today, ai):
             log.warning("[NEWS] 부정 뉴스 과다, 진입 차단")
             signal = "BLOCKED_NEG_NEWS"
             state.last_signal = signal
-            # 텔레그램 메시지 뒤에서 이어 붙이므로 여기서는 send 생략
         elif regime == "TREND_DOWN" or regime == "UNKNOWN":
             signal = "NO_ENTRY"
 
@@ -853,7 +969,6 @@ def _run_morning(client, params, state, today, ai):
                 signal = "BUY_TREND_DUAL"
             else:
                 signal = "BUY_TREND"
-            # 센티먼트 multiplier 적용 (max_invest_ratio cap)
             effective_ratio = min(base_ratio * sent["multiplier"], params.max_invest_ratio)
             invest = state.cash * effective_ratio
             buy_price = round_to_tick(current, "up")
@@ -896,19 +1011,24 @@ def _run_morning(client, params, state, today, ai):
     equity = state.cash + state.position_qty * current
     pnl_total = (equity - state.initial_capital) / state.initial_capital * 100
 
+    # 포지션 표시 (피라미딩 횟수 반영)
+    if state.position_qty > 0:
+        pos_str = f"{state.position_qty}주 @ 평균 {state.entry_price:,.0f}"
+        if state.pyramiding_count > 0:
+            pos_str += f" [P{state.pyramiding_count}]"
+    else:
+        pos_str = "0주"
+
     lines = [
         f"📊 <b>{TICKER_NAME} Morning</b>",
         f"시그널: <b>{signal}</b>",
         f"레짐: {regime}",
-
-      # AI 정보 추가
-        
         f"HMM: {hmm_result.get('regime', 'N/A')} ({hmm_result.get('confidence', 0):.0%})",
         f"수급이상: {'🚨 ' + supply_anomaly['direction'] if supply_anomaly['is_anomaly'] else '정상'}",
         f"현재가: {current:,}원",
         f"RSI: {latest.get('rsi', 0):.1f} | ATR비율: {latest.get('atr_ratio', 0):.2f}",
         f"수급: 외{inv.get('latest_foreign',0):,} / 기{inv.get('latest_inst',0):,}",
-        f"포지션: {state.position_qty}주" + (f" @ {state.entry_price:,.0f}" if state.position_qty > 0 else ""),
+        f"포지션: {pos_str}",
         f"평가: {equity:,.0f}원 ({pnl_total:+.1f}%)",
         format_sentiment_telegram(sent),
     ]
@@ -925,12 +1045,12 @@ def _run_morning(client, params, state, today, ai):
         supply_direction=supply_anomaly.get("direction", "neutral"),
         price_at_prediction=current,
     )
-  
+
     send_telegram("\n".join(lines))
 
 
 def _run_closing(client, params, state, today):
-    """15:10 — 체결 확인 + 상태 갱신."""
+    """15:35 — 체결 확인 + 상태 갱신."""
     price = get_current_price(client)
     current = price["current"]
 
@@ -942,23 +1062,31 @@ def _run_closing(client, params, state, today):
 
     # 어제 예측 라벨링
     evaluate_pending_predictions(str(STATE_DIR))
-  
+
     # 일일 종합 리포트
-    daily_msg = format_daily_report(state, current, str(STATE_DIR))  
-  
+    daily_msg = format_daily_report(state, current, str(STATE_DIR))
+
     equity = state.cash + state.position_qty * current
     pnl_total = (equity - state.initial_capital) / state.initial_capital * 100
+
+    # 포지션 표시 (피라미딩 횟수 반영)
+    if state.position_qty > 0:
+        pos_str = f"{state.position_qty}주 @ 평균 {state.entry_price:,.0f}"
+        if state.pyramiding_count > 0:
+            pos_str += f" [P{state.pyramiding_count}]"
+    else:
+        pos_str = "0주"
 
     lines = [
         f"📊 <b>{TICKER_NAME} Closing</b>",
         f"종가: {current:,}원",
-        f"포지션: {state.position_qty}주",
+        f"포지션: {pos_str}",
         f"평가: {equity:,.0f}원 ({pnl_total:+.1f}%)",
         f"일일 PnL: {state.daily_pnl:+,.0f}원",
         f"레짐: {state.last_regime}",
     ]
 
-    # 미체결 처리 결과를 Telegram에 포함
+    # 미체결 처리 결과
     if unfilled_result["checked"] > 0:
         lines.append("")
         lines.append(f"📝 주문 확인: {unfilled_result['checked']}건")
@@ -970,7 +1098,7 @@ def _run_closing(client, params, state, today):
             lines.append(f"  ✏️ 정정: {unfilled_result['modified']}건")
         if unfilled_result["errors"]:
             lines.append(f"  ❌ 오류: {len(unfilled_result['errors'])}건")
-  
+
     send_telegram("\n".join(lines))
 
     # 금요일이면 주간 리포트 추가 발송
@@ -978,17 +1106,17 @@ def _run_closing(client, params, state, today):
         weekly_msg = format_weekly_report(state, str(STATE_DIR))
         send_telegram(weekly_msg)
         log.info("[REPORT] 주간 리포트 발송 완료")
- 
+
     # 월말이면 월간 리포트 추가 발송
     if should_send_monthly_report():
         monthly_msg = format_monthly_report(state, str(STATE_DIR))
         send_telegram(monthly_msg)
         log.info("[REPORT] 월간 리포트 발송 완료")
 
+
 def _run_evening(client, params, state, today):
     """18:30 — 확정 데이터 수집 (data_collector 호출)."""
     log.info("[EVENING] 데이터 수집은 별도 워크플로우에서 실행")
-    # data_collector.py의 run_daily_collection()을 별도 스텝에서 실행
 
 
 # ═══════════════════════════════════════════════════════════════════
