@@ -176,7 +176,7 @@ def simulate(df_ind: pd.DataFrame, params: StrategyParams,
                     invest_ratio = params.invest_ratio * 0.5
             elif regime == "HIGH_VOLATILITY":
                 rsi_v = row.get("rsi", 50)
-                if rsi_v < 25:
+                if rsi_v < params.hvol_rsi_entry:
                     buy = True
                     invest_ratio = params.invest_ratio * params.hvol_size_reduction
 
@@ -318,10 +318,8 @@ def make_objective(df: pd.DataFrame):
             sl_pct=trial.suggest_float("sl_pct", -0.07, -0.02),
             cooldown_days=trial.suggest_int("cooldown_days", 0, 3),
             rsi_entry=trial.suggest_float("rsi_entry", 20.0, 35.0),
+            hvol_rsi_entry=trial.suggest_float("hvol_rsi_entry", 20.0, 35.0),
             invest_ratio=trial.suggest_float("invest_ratio", 0.2, 0.5),
-            pyramiding_min_profit=trial.suggest_float("pyramiding_min_profit", 0.01, 0.05),
-            pyramiding_size_ratio=trial.suggest_float("pyramiding_size_ratio", 0.3, 0.8),
-            max_pyramiding=trial.suggest_int("max_pyramiding", 1, 3),
         )
         # ma_short < ma_long 강제
         if params.ma_short >= params.ma_long:
