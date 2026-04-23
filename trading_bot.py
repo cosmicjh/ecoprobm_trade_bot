@@ -189,28 +189,38 @@ def load_params(path: Optional[str] = None) -> StrategyParams:
         p = data.get("params", {})
         log.info(f"[PARAMS] 최적화 파라미터 로드: {path}")
         return StrategyParams(
+            # Layer 1: 레짐
             ma_short=p.get("ma_short", 10),
             ma_long=p.get("ma_long", 80),
             bb_squeeze_threshold=p.get("bb_squeeze_threshold", 0.8),
             atr_hvol_threshold=p.get("atr_hvol_threshold", 1.5),
+            # Layer 3A: TREND_UP
             tp1_pct=p.get("tp1_pct", 0.11),
             tp1_sell_ratio=p.get("tp1_sell_ratio", 0.6),
             trail_atr_mult=p.get("trail_atr_mult", 1.75),
             sl_pct=p.get("sl_pct", -0.04),
             cooldown_days=p.get("cooldown_days", 1),
+            # Layer 3B: RANGE_BOUND
             rsi_entry=p.get("rsi_entry", 25.0),
+            sl_band_buffer=p.get("sl_band_buffer", -0.02),
+            # Layer 3C: HIGH_VOL
+            hvol_size_reduction=p.get("hvol_size_reduction", 0.5),
+            # 공통 자금
             invest_ratio=p.get("invest_ratio", 0.30),
             max_invest_ratio=p.get("max_invest_ratio", 0.60),
-            hvol_size_reduction=p.get("hvol_size_reduction", 0.5),
+            # 수급
+            supply_lookback=p.get("supply_lookback", 5),
+            supply_threshold=p.get("supply_threshold", 2.0),
+            # 리스크
             daily_loss_limit=p.get("daily_loss_limit", -0.03),
             weekly_loss_limit=p.get("weekly_loss_limit", -0.07),
             monthly_loss_limit=p.get("monthly_loss_limit", -0.12),
-            # 피라미딩 파라미터
+            # Layer 4: 피라미딩
             enable_pyramiding=p.get("enable_pyramiding", True),
             max_pyramiding=p.get("max_pyramiding", 2),
             pyramiding_min_profit=p.get("pyramiding_min_profit", 0.02),
             pyramiding_size_ratio=p.get("pyramiding_size_ratio", 0.5),
-            # Isolation Forest 시그널 파라미터
+            # Layer 5: Isolation Forest 시그널
             anomaly_strong_threshold=p.get("anomaly_strong_threshold", -0.20),
             anomaly_moderate_threshold=p.get("anomaly_moderate_threshold", -0.10),
             anomaly_strong_bearish_multiplier=p.get("anomaly_strong_bearish_multiplier", 0.0),
@@ -579,6 +589,90 @@ def compute_anomaly_multiplier(supply_anomaly: dict, params: StrategyParams) -> 
         "level": "neutral",
         "detail": f"neutral (score={score:.3f})",
     }
+
+
+def diagnose_no_buy(state: "BotState", params: StrategyParams,
+                     regime: str, latest: dict, sent: dict,
+                     anomaly_info: dict, dual_buy: bool,
+                     current: float) -> str:
+    """
+    매수가 실행되지 않은 경우, 그 이유를 한 줄로 요약.
+
+    호출 시점: _run_morning() 말미, 진입 판단이 끝난 뒤.
+    반환값이 빈 문자열이면 매수 실행됨(또는 청산됨) — 진단 불필요.
+    """
+    # 이미 매수/매도가 실행됐거나 보유 중이면 진단 생략
+    signal = state.last_signal or ""
+
+    # 실행된 경우
+    if signal.startswith("BUY") or signal.startswith("SELL"):
+        return ""
+
+    # 차단 케이스
+    if signal == "BLOCKED_NEG_NEWS":
+        return f"🚫 부정 뉴스 과다 (합산 {sent.get('score', 0):+d})"
+    if signal == "BLOCKED_SUPPLY_ANOMALY":
+        return f"🚫 강한 부정 수급 (score={anomaly_info.get('detail', '?')})"
+    if signal.startswith("BLOCKED"):
+        return f"🚫 {signal}"
+
+    # 보유 중
+    if state.position_qty > 0:
+        # 피라미딩 미실행 사유 (보유 중일 때만 의미 있음)
+        if not params.enable_pyramiding:
+            return "보유중 (피라미딩 비활성)"
+        if not state.tp1_done:
+            return f"보유중 — 1차 익절 대기 (tp1_pct={params.tp1_pct*100:.1f}%)"
+        if state.pyramiding_count >= params.max_pyramiding:
+            return f"보유중 — 피라미딩 소진 ({state.pyramiding_count}/{params.max_pyramiding})"
+        if regime not in ["TREND_UP", "HIGH_VOLATILITY"]:
+            return f"보유중 — 피라미딩 불가 레짐 ({regime})"
+        if state.entry_price > 0:
+            cur_profit = (current - state.entry_price) / state.entry_price
+            if cur_profit < params.pyramiding_min_profit:
+                return (f"보유중 — 수익 부족 {cur_profit*100:+.2f}% "
+                        f"(≥{params.pyramiding_min_profit*100:.1f}% 필요)")
+        strong_supply = dual_buy or (
+            anomaly_info.get("level") in ["moderate_bullish", "strong_bullish"]
+        )
+        if not strong_supply:
+            return "보유중 — 피라미딩 수급 시그널 약함"
+        if anomaly_info.get("block_entry"):
+            return "보유중 — IF 강한 부정 (피라미딩 차단)"
+        return "보유중 — 피라미딩 조건 미충족"
+
+    # 미보유 + 매수 안 함
+    if regime == "TREND_DOWN":
+        return f"레짐 TREND_DOWN (하락 추세)"
+    if regime == "UNKNOWN":
+        ma_long_val = latest.get("ma_l")
+        if ma_long_val is None or pd.isna(ma_long_val):
+            return f"레짐 UNKNOWN (MA_long 계산 불가, 데이터 부족)"
+        return "레짐 UNKNOWN"
+    if regime == "NEUTRAL":
+        return ("레짐 NEUTRAL (방향성 애매) — "
+                "MA/BB/ATR 어느 조건도 충족 안 됨")
+    if regime == "RANGE_BOUND":
+        rsi_v = latest.get("rsi", 50)
+        bb_pctb = latest.get("bb_pctb", 0.5)
+        misses = []
+        if rsi_v >= params.rsi_entry:
+            misses.append(f"RSI {rsi_v:.1f}≥{params.rsi_entry:.1f}")
+        if bb_pctb >= 0.1:
+            misses.append(f"bb_pctb {bb_pctb:.2f}≥0.10")
+        if misses:
+            return f"RANGE_BOUND — 과매도 아님 ({', '.join(misses)})"
+        return "RANGE_BOUND — 진입 조건 충족했으나 미실행"
+    if regime == "HIGH_VOLATILITY":
+        rsi_v = latest.get("rsi", 50)
+        if rsi_v >= 25:
+            return f"HIGH_VOL — RSI {rsi_v:.1f}≥25 (과매도 아님)"
+        return "HIGH_VOL — 진입 조건 충족했으나 미실행"
+    if regime == "TREND_UP":
+        # 여기 오면 qty=0으로 매수 실패했을 가능성
+        return "TREND_UP — 매수 시도했으나 실행 안 됨 (현금/수량 부족 또는 주문 오류)"
+
+    return f"매수 미실행 (regime={regime}, signal={signal})"
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -1117,6 +1211,15 @@ def _run_morning(client, params, state, today, ai):
 
     state.last_signal = signal
 
+    # ── 매수 미실행 진단 ──
+    no_buy_reason = diagnose_no_buy(
+        state=state, params=params, regime=regime, latest=latest,
+        sent=sent, anomaly_info=anomaly_info, dual_buy=dual_buy,
+        current=current,
+    )
+    if no_buy_reason:
+        log.info(f"[DIAGNOSE] {no_buy_reason}")
+
     # ── Telegram 알림 ──
     equity = state.cash + state.position_qty * current
     pnl_total = (equity - state.initial_capital) / state.initial_capital * 100
@@ -1140,8 +1243,13 @@ def _run_morning(client, params, state, today, ai):
         f"수급: 외{inv.get('latest_foreign',0):,} / 기{inv.get('latest_inst',0):,}",
         f"포지션: {pos_str}",
         f"평가: {equity:,.0f}원 ({pnl_total:+.1f}%)",
-        format_sentiment_telegram(sent),
     ]
+
+    # 매수 미실행 사유 추가 (해당되는 경우만)
+    if no_buy_reason:
+        lines.append(f"ℹ️ {no_buy_reason}")
+
+    lines.append(format_sentiment_telegram(sent))
 
     # 예측 기록
     record_prediction(
