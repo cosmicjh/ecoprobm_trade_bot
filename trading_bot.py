@@ -120,11 +120,20 @@ class StrategyParams:
     weekly_loss_limit: float = -0.07   # 주간 -7%
     monthly_loss_limit: float = -0.12  # 월간 -12%
 
-    # Layer 4: 피라미딩 (추가 매수) — 신규
+    # Layer 4: 피라미딩 (추가 매수)
     enable_pyramiding: bool = True
     max_pyramiding: int = 2                      # 추가 매수 최대 횟수 (초기 매수 제외)
     pyramiding_min_profit: float = 0.02          # 현재가 - 평균진입가 이익률 최소치 (+2%)
-    pyramiding_size_ratio: float = 1.0           # 추가 매수 규모 (최초 invest의 50%)
+    pyramiding_size_ratio: float = 0.5           # 추가 매수 규모 (최초 invest의 50%)
+
+    # Layer 5: Isolation Forest 수급 이상 시그널 반영 — 신규
+    # anomaly_score 기준점 (decision_function 출력: 낮을수록 이상)
+    anomaly_strong_threshold: float = -0.20      # 이 값 이하면 강한 이상
+    anomaly_moderate_threshold: float = -0.10    # 이 값 이하면 중간 이상
+    anomaly_strong_bearish_multiplier: float = 0.0    # 0.0 = 진입 차단
+    anomaly_moderate_bearish_multiplier: float = 0.7  # 포지션 30% 축소
+    anomaly_moderate_bullish_multiplier: float = 1.15 # 포지션 15% 확대
+    anomaly_strong_bullish_multiplier: float = 1.25   # 포지션 25% 확대
 
 
 @dataclass
@@ -201,6 +210,13 @@ def load_params(path: Optional[str] = None) -> StrategyParams:
             max_pyramiding=p.get("max_pyramiding", 2),
             pyramiding_min_profit=p.get("pyramiding_min_profit", 0.02),
             pyramiding_size_ratio=p.get("pyramiding_size_ratio", 0.5),
+            # Isolation Forest 시그널 파라미터
+            anomaly_strong_threshold=p.get("anomaly_strong_threshold", -0.20),
+            anomaly_moderate_threshold=p.get("anomaly_moderate_threshold", -0.10),
+            anomaly_strong_bearish_multiplier=p.get("anomaly_strong_bearish_multiplier", 0.0),
+            anomaly_moderate_bearish_multiplier=p.get("anomaly_moderate_bearish_multiplier", 0.7),
+            anomaly_moderate_bullish_multiplier=p.get("anomaly_moderate_bullish_multiplier", 1.15),
+            anomaly_strong_bullish_multiplier=p.get("anomaly_strong_bullish_multiplier", 1.25),
         )
     else:
         log.warning(f"[PARAMS] 파일 없음, 기본 파라미터 사용")
@@ -484,6 +500,85 @@ def classify_regime(row, params: StrategyParams) -> str:
     if row.get("above_ma_s", 0) == 0 and row.get("ma_s_above_l", 0) == 0:
         return "TREND_DOWN"
     return "NEUTRAL"
+
+
+def compute_anomaly_multiplier(supply_anomaly: dict, params: StrategyParams) -> dict:
+    """
+    Isolation Forest 수급 이상 시그널을 포지션 multiplier로 변환.
+
+    Returns:
+        {
+            "multiplier": float,   # invest_ratio에 곱할 배수 (0.0 = 차단)
+            "block_entry": bool,   # True면 신규 진입 완전 차단
+            "level": str,          # "strong_bearish" | "moderate_bearish" | "neutral" |
+                                   #  "moderate_bullish" | "strong_bullish" | "no_anomaly"
+            "detail": str,         # 로그/텔레그램용 설명
+        }
+    """
+    if not supply_anomaly or not supply_anomaly.get("is_anomaly"):
+        return {
+            "multiplier": 1.0,
+            "block_entry": False,
+            "level": "no_anomaly",
+            "detail": "정상 수급",
+        }
+
+    direction = supply_anomaly.get("direction", "neutral")
+    score = supply_anomaly.get("anomaly_score", 0)
+
+    # score가 양수이거나 0이면 실질적 이상 아님
+    if score >= 0 or direction == "neutral":
+        return {
+            "multiplier": 1.0,
+            "block_entry": False,
+            "level": "no_anomaly",
+            "detail": f"{direction} (score={score:.3f})",
+        }
+
+    is_strong = score <= params.anomaly_strong_threshold
+
+    if direction == "bearish":
+        if is_strong:
+            mult = params.anomaly_strong_bearish_multiplier
+            return {
+                "multiplier": mult,
+                "block_entry": mult <= 0.0,
+                "level": "strong_bearish",
+                "detail": f"🚨 강한 부정 수급 (score={score:.3f}, ×{mult})",
+            }
+        else:
+            mult = params.anomaly_moderate_bearish_multiplier
+            return {
+                "multiplier": mult,
+                "block_entry": False,
+                "level": "moderate_bearish",
+                "detail": f"⚠️ 중간 부정 수급 (score={score:.3f}, ×{mult})",
+            }
+
+    if direction == "bullish":
+        if is_strong:
+            mult = params.anomaly_strong_bullish_multiplier
+            return {
+                "multiplier": mult,
+                "block_entry": False,
+                "level": "strong_bullish",
+                "detail": f"🟢 강한 긍정 수급 (score={score:.3f}, ×{mult})",
+            }
+        else:
+            mult = params.anomaly_moderate_bullish_multiplier
+            return {
+                "multiplier": mult,
+                "block_entry": False,
+                "level": "moderate_bullish",
+                "detail": f"🔵 중간 긍정 수급 (score={score:.3f}, ×{mult})",
+            }
+
+    return {
+        "multiplier": 1.0,
+        "block_entry": False,
+        "level": "neutral",
+        "detail": f"neutral (score={score:.3f})",
+    }
 
 
 # ═══════════════════════════════════════════════════════════════════
@@ -852,6 +947,11 @@ def _run_morning(client, params, state, today, ai):
         if supply_anomaly["is_anomaly"]:
             log.info(f"[AI] 수급 이상 감지: {supply_anomaly['direction']} (score={supply_anomaly['anomaly_score']:.3f})")
 
+    # ── Isolation Forest 시그널을 multiplier로 변환 ──
+    anomaly_info = compute_anomaly_multiplier(supply_anomaly, params)
+    if anomaly_info["level"] != "no_anomaly":
+        log.info(f"[IF_SIGNAL] {anomaly_info['detail']}")
+
     log.info(f"[REGIME] {regime} | RSI={latest.get('rsi', 0):.1f} | ATR비율={latest.get('atr_ratio', 0):.2f}")
     log.info(f"[SUPPLY] 외국인={inv.get('latest_foreign', 0):,} | 기관={inv.get('latest_inst', 0):,} | 동반매수={dual_buy}")
 
@@ -901,7 +1001,8 @@ def _run_morning(client, params, state, today, ai):
                 and signal not in ["SELL_SL", "SELL_TP1", "SELL_TRAIL"]
                 and state.tp1_done                                     # 1차 익절 완료 후에만
                 and state.pyramiding_count < params.max_pyramiding    # 횟수 미소진
-                and regime in ["TREND_UP", "HIGH_VOLATILITY"]):        # 유효 레짐
+                and regime in ["TREND_UP", "HIGH_VOLATILITY"]          # 유효 레짐
+                and not anomaly_info["block_entry"]):                   # 강한 부정 수급 시 차단
 
             # 수익 상태 체크
             cur_profit = (current - state.entry_price) / state.entry_price
@@ -959,6 +1060,11 @@ def _run_morning(client, params, state, today, ai):
             log.warning("[NEWS] 부정 뉴스 과다, 진입 차단")
             signal = "BLOCKED_NEG_NEWS"
             state.last_signal = signal
+        # Isolation Forest 강한 부정 시그널로 진입 차단
+        elif anomaly_info["block_entry"]:
+            log.warning(f"[IF_SIGNAL] 강한 부정 수급, 진입 차단")
+            signal = "BLOCKED_SUPPLY_ANOMALY"
+            state.last_signal = signal
         elif regime == "TREND_DOWN" or regime == "UNKNOWN":
             signal = "NO_ENTRY"
 
@@ -969,7 +1075,11 @@ def _run_morning(client, params, state, today, ai):
                 signal = "BUY_TREND_DUAL"
             else:
                 signal = "BUY_TREND"
-            effective_ratio = min(base_ratio * sent["multiplier"], params.max_invest_ratio)
+            # sentiment × IF anomaly multiplier 합산
+            effective_ratio = min(
+                base_ratio * sent["multiplier"] * anomaly_info["multiplier"],
+                params.max_invest_ratio,
+            )
             invest = state.cash * effective_ratio
             buy_price = round_to_tick(current, "up")
             qty = int(invest / buy_price) if buy_price > 0 else 0
@@ -982,7 +1092,7 @@ def _run_morning(client, params, state, today, ai):
             if rsi_val < params.rsi_entry and bb_pctb < 0.1:
                 signal = "BUY_RB"
                 effective_ratio = min(
-                    params.invest_ratio * 0.5 * sent["multiplier"],
+                    params.invest_ratio * 0.5 * sent["multiplier"] * anomaly_info["multiplier"],
                     params.max_invest_ratio,
                 )
                 invest = state.cash * effective_ratio
@@ -996,7 +1106,7 @@ def _run_morning(client, params, state, today, ai):
             if rsi_val < 25:
                 signal = "BUY_HV"
                 effective_ratio = min(
-                    params.invest_ratio * params.hvol_size_reduction * sent["multiplier"],
+                    params.invest_ratio * params.hvol_size_reduction * sent["multiplier"] * anomaly_info["multiplier"],
                     params.max_invest_ratio,
                 )
                 invest = state.cash * effective_ratio
@@ -1024,7 +1134,7 @@ def _run_morning(client, params, state, today, ai):
         f"시그널: <b>{signal}</b>",
         f"레짐: {regime}",
         f"HMM: {hmm_result.get('regime', 'N/A')} ({hmm_result.get('confidence', 0):.0%})",
-        f"수급이상: {'🚨 ' + supply_anomaly['direction'] if supply_anomaly['is_anomaly'] else '정상'}",
+        f"수급이상: {anomaly_info['detail']}",
         f"현재가: {current:,}원",
         f"RSI: {latest.get('rsi', 0):.1f} | ATR비율: {latest.get('atr_ratio', 0):.2f}",
         f"수급: 외{inv.get('latest_foreign',0):,} / 기{inv.get('latest_inst',0):,}",
