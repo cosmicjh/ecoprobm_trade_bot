@@ -16,3 +16,4 @@
 {"timestamp": "2026-04-22T06:35:45.866811", "date": "2026-04-22", "mode": "closing", "status": "ok", "duration_sec": 2.17, "signal": "HOLD", "regime": "TREND_UP"}
 {"timestamp": "2026-04-22T09:31:01.906561", "date": "2026-04-22", "mode": "evening", "status": "ok", "duration_sec": 0.01, "signal": "HOLD", "regime": "TREND_UP"}
 {"timestamp": "2026-04-23T00:03:08.600759", "date": "2026-04-23", "mode": "morning", "status": "ok", "duration_sec": 27.64, "signal": "HOLD", "regime": "RANGE_BOUND"}
+{"timestamp": "2026-04-23T06:35:45.104198", "date": "2026-04-23", "mode": "closing", "status": "ok", "duration_sec": 2.21, "signal": "HOLD", "regime": "RANGE_BOUND"}
