@@ -319,6 +319,9 @@ def make_objective(df: pd.DataFrame):
             cooldown_days=trial.suggest_int("cooldown_days", 0, 3),
             rsi_entry=trial.suggest_float("rsi_entry", 20.0, 35.0),
             invest_ratio=trial.suggest_float("invest_ratio", 0.2, 0.5),
+            pyramiding_min_profit=trial.suggest_float("pyramiding_min_profit", 0.01, 0.05),
+            pyramiding_size_ratio=trial.suggest_float("pyramiding_size_ratio", 0.3, 0.8),
+            max_pyramiding=trial.suggest_int("max_pyramiding", 1, 3),
         )
         # ma_short < ma_long 강제
         if params.ma_short >= params.ma_long:
