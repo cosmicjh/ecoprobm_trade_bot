@@ -106,6 +106,7 @@ class StrategyParams:
 
     # Layer 3C: HIGH_VOL
     hvol_size_reduction: float = 0.5
+    hvol_rsi_entry: float = 25.0                 # HIGH_VOLATILITY 진입용 RSI 임계값 (신규)
 
     # 공통
     invest_ratio: float = 0.30
@@ -205,6 +206,7 @@ def load_params(path: Optional[str] = None) -> StrategyParams:
             sl_band_buffer=p.get("sl_band_buffer", -0.02),
             # Layer 3C: HIGH_VOL
             hvol_size_reduction=p.get("hvol_size_reduction", 0.5),
+            hvol_rsi_entry=p.get("hvol_rsi_entry", 25.0),
             # 공통 자금
             invest_ratio=p.get("invest_ratio", 0.30),
             max_invest_ratio=p.get("max_invest_ratio", 0.60),
@@ -665,8 +667,8 @@ def diagnose_no_buy(state: "BotState", params: StrategyParams,
         return "RANGE_BOUND — 진입 조건 충족했으나 미실행"
     if regime == "HIGH_VOLATILITY":
         rsi_v = latest.get("rsi", 50)
-        if rsi_v >= 25:
-            return f"HIGH_VOL — RSI {rsi_v:.1f}≥25 (과매도 아님)"
+        if rsi_v >= params.hvol_rsi_entry:
+            return f"HIGH_VOL — RSI {rsi_v:.1f}≥{params.hvol_rsi_entry:.1f} (과매도 아님)"
         return "HIGH_VOL — 진입 조건 충족했으나 미실행"
     if regime == "TREND_UP":
         # 여기 오면 qty=0으로 매수 실패했을 가능성
@@ -1197,7 +1199,7 @@ def _run_morning(client, params, state, today, ai):
 
         elif regime == "HIGH_VOLATILITY":
             rsi_val = latest.get("rsi", 50)
-            if rsi_val < 25:
+            if rsi_val < params.hvol_rsi_entry:
                 signal = "BUY_HV"
                 effective_ratio = min(
                     params.invest_ratio * params.hvol_size_reduction * sent["multiplier"] * anomaly_info["multiplier"],
