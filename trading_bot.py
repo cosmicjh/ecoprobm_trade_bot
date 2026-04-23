@@ -124,7 +124,7 @@ class StrategyParams:
     enable_pyramiding: bool = True
     max_pyramiding: int = 2                      # 추가 매수 최대 횟수 (초기 매수 제외)
     pyramiding_min_profit: float = 0.02          # 현재가 - 평균진입가 이익률 최소치 (+2%)
-    pyramiding_size_ratio: float = 1.5           # 추가 매수 규모 (최초 invest의 50%)
+    pyramiding_size_ratio: float = 1.0           # 추가 매수 규모 (최초 invest의 50%)
 
 
 @dataclass
