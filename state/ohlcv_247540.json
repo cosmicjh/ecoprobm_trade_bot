@@ -1,16 +1,4 @@
 {
-  "2026-03-25": {
-    "Open": 193400,
-    "High": 204000,
-    "Low": 193200,
-    "Close": 203000,
-    "Volume": 505161,
-    "prev_Open": 186800,
-    "prev_High": 196900,
-    "prev_Low": 185700,
-    "prev_Close": 193000,
-    "prev_Volume": 615748
-  },
   "2026-03-26": {
     "Open": 202000,
     "High": 207000,
@@ -262,5 +250,17 @@
     "prev_Low": 212500,
     "prev_Close": 218000,
     "prev_Volume": 744134
+  },
+  "2026-04-24": {
+    "Open": 207500,
+    "High": 209500,
+    "Low": 204000,
+    "Close": 208000,
+    "Volume": 388962,
+    "prev_Open": 219000,
+    "prev_High": 219500,
+    "prev_Low": 203500,
+    "prev_Close": 205500,
+    "prev_Volume": 704169
   }
 }

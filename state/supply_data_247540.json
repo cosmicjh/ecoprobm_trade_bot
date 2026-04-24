@@ -1021,5 +1021,18 @@
     "short_ratio_vol": 20.31,
     "short_amount": 29725415000,
     "short_ratio_amt": 20.24
+  },
+  "2026-04-24": {
+    "foreign_net_qty": -32137,
+    "foreign_net_amt": -6611,
+    "inst_net_qty": -23625,
+    "inst_net_amt": -4850,
+    "individual_net_qty": 124282,
+    "individual_net_amt": 25598,
+    "short_volume": 52135,
+    "total_volume": 388962,
+    "short_ratio_vol": 13.4,
+    "short_amount": 10768234000,
+    "short_ratio_amt": 13.41
   }
 }
