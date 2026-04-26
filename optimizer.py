@@ -312,7 +312,7 @@ def make_objective(df: pd.DataFrame):
             ma_long=trial.suggest_int("ma_long", 40, 120),
             bb_squeeze_threshold=trial.suggest_float("bb_squeeze_threshold", 0.5, 1.0),
             atr_hvol_threshold=trial.suggest_float("atr_hvol_threshold", 1.2, 2.0),
-            tp1_pct=trial.suggest_float("tp1_pct", 0.05, 0.20),
+            tp1_pct=trial.suggest_float("tp1_pct", 0.10, 0.30),
             tp1_sell_ratio=trial.suggest_float("tp1_sell_ratio", 0.3, 0.8),
             trail_atr_mult=trial.suggest_float("trail_atr_mult", 1.0, 3.0),
             sl_pct=trial.suggest_float("sl_pct", -0.07, -0.02),
