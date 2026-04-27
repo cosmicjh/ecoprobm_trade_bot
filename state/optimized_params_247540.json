@@ -10,7 +10,7 @@
     "ma_long": 80,
     "bb_squeeze_threshold": 0.8,
     "atr_hvol_threshold": 1.5,
-    "tp1_pct": 0.25,
+    "tp1_pct": 0.11,
     "tp1_sell_ratio": 0.6000000000000001,
     "trail_atr_mult": 1.75,
     "sl_pct": -0.039999999999999994,
