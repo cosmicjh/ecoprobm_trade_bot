@@ -499,7 +499,47 @@
       "score": 0,
       "reason": "테슬라 실적 호재지만 에코프로비엠과의 직접 관계 불명확",
       "scored_at": "2026-04-27T00:02:57.797741"
+    },
+    "https://news.google.com/rss/articles/CBMib0FVX3lxTE9xam5WQ295bVhleFdvejVKTXJpMzlMY2FzbWhiejFJNkg4WnpaTkVGbFo5MENwdGkzZHBMRmg1UDVTeThnbkFXbU9iMmlCU3cxaV9KUEV6NXhkWlEtbmdMTF83MzBUZmktbktBNm1VZw?oc=5": {
+      "title": "코스닥, 개인과 기관 매수에 상승 마감...에이비엘바이오, 레인보우로보틱스 상승 VS 리노공업, 에코프로비엠 하락 - 이코노뉴스",
+      "summary": "코스닥, 개인과 기관 매수에 상승 마감...에이비엘바이오, 레인보우로보틱스 상승 VS 리노공업, 에코프로비엠 하락&nbsp;&nbsp;이코노뉴스",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9xam5WQ295bVhleFdvejVKTXJpMzlMY2FzbWhiejFJNkg4WnpaTkVGbFo5MENwdGkzZHBMRmg1UDVTeThnbkFXbU9iMmlCU3cxaV9KUEV6NXhkWlEtbmdMTF83MzBUZmktbktBNm1VZw?oc=5",
+      "published": "2026-04-27T12:30:00",
+      "query": "에코프로비엠",
+      "score": -1,
+      "reason": "코스닥 상승장에서 에코프로비엠 하락, 상대적 약세 신호",
+      "scored_at": "2026-04-28T00:02:56.872677"
+    },
+    "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9MMFpsaWRYQXN6NDdCN3R4S2ZGcEpTQ1VtX1hpY3JmNEVoNXE5SWdldlVZbm1Zc3NGa21nOHRCS3BCN1ZzRE55Z3loTHREUVkzc19ORnNYbmUxbGYxMkRyNXhNX1lQS0450gFsQVVfeXFMUHl1TXhlWFRWMVR5ZHRpdWV1NnRRUXJaRUVqX0pSRVhPWkNlMEs3MkFsOVBoeG5nb0Q5WUU0N0k2QmRhWlVWOHE5aWMtRmxzcTJIZm1YQ3U4Vzl6eUk3ZW1UQndKRTRKRjZMY21B?oc=5": {
+      "title": "[외부감사 진단] LG엔솔·삼성SDI·SK온, 부채만 가득한 텅빈 공장 - 블로터",
+      "summary": "[외부감사 진단] LG엔솔·삼성SDI·SK온, 부채만 가득한 텅빈 공장&nbsp;&nbsp;블로터",
+      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9MMFpsaWRYQXN6NDdCN3R4S2ZGcEpTQ1VtX1hpY3JmNEVoNXE5SWdldlVZbm1Zc3NGa21nOHRCS3BCN1ZzRE55Z3loTHREUVkzc19ORnNYbmUxbGYxMkRyNXhNX1lQS0450gFsQVVfeXFMUHl1TXhlWFRWMVR5ZHRpdWV1NnRRUXJaRUVqX0pSRVhPWkNlMEs3MkFsOVBoeG5nb0Q5WUU0N0k2QmRhWlVWOHE5aWMtRmxzcTJIZm1YQ3U4Vzl6eUk3ZW1UQndKRTRKRjZMY21B?oc=5",
+      "published": "2026-04-27T02:25:06",
+      "query": "SK온 배터리",
+      "score": 0,
+      "reason": "에코프로비엠과 직접 관계 없는 경쟁사 이슈",
+      "scored_at": "2026-04-28T00:02:57.861469"
+    },
+    "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1KZVFpQWRJc09UYkdIRTcwbEYtWmZseEpGMlRVcFlvNkNpX3I1UktQQlVOcHJ2cWtzdkdyZTA0SmFLYm0yYk1kZjhiWDJObTE2RjBV?oc=5": {
+      "title": "美서 날아오른 아이오닉…'배터리 탑재' SK온도 수혜 - 네이트",
+      "summary": "美서 날아오른 아이오닉…'배터리 탑재' SK온도 수혜&nbsp;&nbsp;네이트",
+      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1KZVFpQWRJc09UYkdIRTcwbEYtWmZseEpGMlRVcFlvNkNpX3I1UktQQlVOcHJ2cWtzdkdyZTA0SmFLYm0yYk1kZjhiWDJObTE2RjBV?oc=5",
+      "published": "2026-04-27T09:12:00",
+      "query": "SK온 배터리",
+      "score": 0,
+      "reason": "SK온 수혜 뉴스로 에코프로비엠과 직접 관련성 부족",
+      "scored_at": "2026-04-28T00:02:58.690012"
+    },
+    "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBIcUpCYy1XU1FGNXBoREJWY3JVc3VRWjlUVTQyUnhNYWFEQTJaektHT1ZZZUhtZHRmakhlSEltaUdhMFo3UlYxZGoySll3Rjc1OFJ5amYyOWfSAVhBVV95cUxQSHFKQmMtV1NRRjVwaERCVmNyVXN1UVo5VFU0MlJ4TWFhREEyWnpLR09WWWVIbWR0ZmpIZUhJbWlHYTBaN1JWMWRqMkpZd0Y3NThSeWpmMjln?oc=5": {
+      "title": "현대차·기아·테슬라 맞붙은 국내 전기차 시장…한국판 IRA가 승부 가를까 - 아주경제",
+      "summary": "현대차·기아·테슬라 맞붙은 국내 전기차 시장…한국판 IRA가 승부 가를까&nbsp;&nbsp;아주경제",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBIcUpCYy1XU1FGNXBoREJWY3JVc3VRWjlUVTQyUnhNYWFEQTJaektHT1ZZZUhtZHRmakhlSEltaUdhMFo3UlYxZGoySll3Rjc1OFJ5amYyOWfSAVhBVV95cUxQSHFKQmMtV1NRRjVwaERCVmNyVXN1UVo5VFU0MlJ4TWFhREEyWnpLR09WWWVIbWR0ZmpIZUhJbWlHYTBaN1JWMWRqMkpZd0Y3NThSeWpmMjln?oc=5",
+      "published": "2026-04-27T08:49:07",
+      "query": "IRA 전기차 보조금",
+      "score": 1,
+      "reason": "국내 전기차 시장 경쟁 심화로 수요 증가 예상, 양극재 수요 증가 긍정",
+      "scored_at": "2026-04-28T00:02:59.427754"
     }
   },
-  "last_run": "2026-04-27T00:02:57.797922"
+  "last_run": "2026-04-28T00:02:59.427946"
 }
