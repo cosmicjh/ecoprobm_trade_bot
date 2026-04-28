@@ -136,12 +136,12 @@
     "supply_anomaly": true,
     "supply_direction": "bearish",
     "price_at_prediction": 207000.0,
-    "evaluated": false,
-    "next_return_pct": null,
+    "evaluated": true,
+    "next_return_pct": -0.24,
     "regime_correct": null,
-    "hmm_correct": null,
+    "hmm_correct": false,
     "signal_correct": null,
-    "supply_correct": null
+    "supply_correct": true
   },
   {
     "date": "2026-04-27",
