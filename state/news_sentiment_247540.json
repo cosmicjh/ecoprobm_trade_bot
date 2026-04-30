@@ -1,165 +1,5 @@
 {
   "articles": {
-    "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5USFVuc1NHWnFkNnlJbHFXaUdMTF9vdFpFcEZ1akxBN2pqX0ZqRTgwQnlFckFjbEFCMXJsWTNFTHFLOWVkdW0ySW5UazVLRXM?oc=5": {
-      "title": "SK온, 日 도쿄에 지사 설립…닛산 협력·ESS 시장 정조준 - v.daum.net",
-      "summary": "SK온, 日 도쿄에 지사 설립…닛산 협력·ESS 시장 정조준&nbsp;&nbsp;v.daum.net",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5USFVuc1NHWnFkNnlJbHFXaUdMTF9vdFpFcEZ1akxBN2pqX0ZqRTgwQnlFckFjbEFCMXJsWTNFTHFLOWVkdW0ySW5UazVLRXM?oc=5",
-      "published": "2026-04-21T22:01:32",
-      "query": "SK온 배터리",
-      "score": 0,
-      "reason": "SK온의 일본 사업 확장으로 양극재 수요 증가 가능성 있으나 직접적 계약체결 아님",
-      "scored_at": "2026-04-22T00:03:06.227457"
-    },
-    "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBnaUg0YmVvUFlUakpTMXBJaFVROWoyWXliai1FS05taUM0a2g5QjJjNF9Bc2N5TTlsbmswaG9oUTNCVEh6RWtRajhTaUlUbnZXdTgxLW8xd0EwZE1zRlM2WUtOWFQ?oc=5": {
-      "title": "SK온, 日 도쿄 지사 설립…전기차 배터리·ESS 공략 시동 - 뉴스1",
-      "summary": "SK온, 日 도쿄 지사 설립…전기차 배터리·ESS 공략 시동&nbsp;&nbsp;뉴스1",
-      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBnaUg0YmVvUFlUakpTMXBJaFVROWoyWXliai1FS05taUM0a2g5QjJjNF9Bc2N5TTlsbmswaG9oUTNCVEh6RWtRajhTaUlUbnZXdTgxLW8xd0EwZE1zRlM2WUtOWFQ?oc=5",
-      "published": "2026-04-21T10:32:40",
-      "query": "SK온 배터리",
-      "score": -1,
-      "reason": "경쟁사 시장 진출로 양극재 수요 경쟁 심화 우려",
-      "scored_at": "2026-04-22T00:03:07.093398"
-    },
-    "https://news.google.com/rss/articles/CBMidEFVX3lxTE1tS3k1aHFRZlBRUW9IYnNOWXFnS0NIcmdsamxCWXhFQ1FVVEZhVE5IbVJSUjJjV3dnTndINFdsdGhtTGw1TmZ2T3doRGRlLTlVQkNnbTdiYUV1cG9LVGR2UmgwY1NGbG5Gd0RvZkVCV1g0SFJY?oc=5": {
-      "title": "에코프로비엠 주가하락 중 - 아시아뉴스통신",
-      "summary": "에코프로비엠 주가하락 중&nbsp;&nbsp;아시아뉴스통신",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1tS3k1aHFRZlBRUW9IYnNOWXFnS0NIcmdsamxCWXhFQ1FVVEZhVE5IbVJSUjJjV3dnTndINFdsdGhtTGw1TmZ2T3doRGRlLTlVQkNnbTdiYUV1cG9LVGR2UmgwY1NGbG5Gd0RvZkVCV1g0SFJY?oc=5",
-      "published": "2026-04-22T00:38:04",
-      "query": "에코프로비엠",
-      "score": 0,
-      "reason": "주가 움직임만 보도, 실질적 사유 불명",
-      "scored_at": "2026-04-23T00:02:55.061498"
-    },
-    "https://news.google.com/rss/articles/CBMigwFBVV95cUxNWnVwak9wX04xbG92dzVQb0JSZGpYWFkyc09faXkwM0JfUmpfM1BaMnhhbHVNMFgxOWhadTN4NjZqdUhqazBvM2JQLUdMdVJDeU9pbFV0d1ZPbDJPODVQMlJ4TWdha2ZTdWNXRXNkM0kzQTh3V3NXcDYtcjMxQ05RNDBDMNIBlwFBVV95cUxPYVdSNl9sdlhjU3d3cXpWRVdUVFZUOUpJandRZXFkbTdaUDh1cXhRQzdmWkRUTnpGUHZVakdpaEs5ejNCT2ZYUmp6LVdSQkh1YlVBQlpEOXljQW96Ymh2NFA1U2ZWWkR4S21xT0xoZUFMUXpzVDRlUEZ3NXdwLU1KMzdIQkZRZ0FONW1pM19RZkp2QVVLeHY4?oc=5": {
-      "title": "외국계 순매도 금액 상위 20선 - 코스닥 - 조선비즈 - Chosunbiz",
-      "summary": "외국계 순매도 금액 상위 20선 - 코스닥 - 조선비즈&nbsp;&nbsp;Chosunbiz",
-      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNWnVwak9wX04xbG92dzVQb0JSZGpYWFkyc09faXkwM0JfUmpfM1BaMnhhbHVNMFgxOWhadTN4NjZqdUhqazBvM2JQLUdMdVJDeU9pbFV0d1ZPbDJPODVQMlJ4TWdha2ZTdWNXRXNkM0kzQTh3V3NXcDYtcjMxQ05RNDBDMNIBlwFBVV95cUxPYVdSNl9sdlhjU3d3cXpWRVdUVFZUOUpJandRZXFkbTdaUDh1cXhRQzdmWkRUTnpGUHZVakdpaEs5ejNCT2ZYUmp6LVdSQkh1YlVBQlpEOXljQW96Ymh2NFA1U2ZWWkR4S21xT0xoZUFMUXpzVDRlUEZ3NXdwLU1KMzdIQkZRZ0FONW1pM19RZkp2QVVLeHY4?oc=5",
-      "published": "2026-04-22T06:07:00",
-      "query": "에코프로비엠",
-      "score": 0,
-      "reason": "외국계 매도 동향만 보도, 회사 펀더멘털 영향 없음",
-      "scored_at": "2026-04-23T00:02:56.149282"
-    },
-    "https://news.google.com/rss/articles/CBMigwFBVV95cUxNbTVGZkZYMFJvblVfbUgybjhuZEZoSTg3aVFSSFhLcGtnNFNGNzNKTzJMdjJROWNRYmtwM01rYzg4YWZ3YWEydkhXX1J0RWdTVTRTWjhOTjdKWkJHdGMyd2x0Z3BtLUJRMmhadUo0Q2dqWlFCdEdFdGstUlpBLTVidEdmSdIBlwFBVV95cUxQQlhSTFVQX3dhUUNuaUptdm9aczQwZndwVjE0QkMyeFh1azQ4RTVRQThKbGgtSXZHSl9NX2FJNzhuT0x3TFhRX2NtQnQ0TkoyQ3B6cXFOQnNzVGRGWWhLdTkwZTFNY3hUbGgwdUx1SjItQkM0eF9KeWtSclIzMEdtcUdaaDlXXy1DOVJNQkE4d29yQ1dhbzVV?oc=5": {
-      "title": "외국계 순매도 금액 상위 20선 - 코스닥 - 조선비즈 - Chosunbiz",
-      "summary": "외국계 순매도 금액 상위 20선 - 코스닥 - 조선비즈&nbsp;&nbsp;Chosunbiz",
-      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxNbTVGZkZYMFJvblVfbUgybjhuZEZoSTg3aVFSSFhLcGtnNFNGNzNKTzJMdjJROWNRYmtwM01rYzg4YWZ3YWEydkhXX1J0RWdTVTRTWjhOTjdKWkJHdGMyd2x0Z3BtLUJRMmhadUo0Q2dqWlFCdEdFdGstUlpBLTVidEdmSdIBlwFBVV95cUxQQlhSTFVQX3dhUUNuaUptdm9aczQwZndwVjE0QkMyeFh1azQ4RTVRQThKbGgtSXZHSl9NX2FJNzhuT0x3TFhRX2NtQnQ0TkoyQ3B6cXFOQnNzVGRGWWhLdTkwZTFNY3hUbGgwdUx1SjItQkM0eF9KeWtSclIzMEdtcUdaaDlXXy1DOVJNQkE4d29yQ1dhbzVV?oc=5",
-      "published": "2026-04-22T00:36:00",
-      "query": "에코프로비엠",
-      "score": 0,
-      "reason": "외국인 매매 동향 보도로 직접적 기업 뉴스 아님",
-      "scored_at": "2026-04-23T00:02:56.952812"
-    },
-    "https://news.google.com/rss/articles/CBMidEFVX3lxTE1aWDNQUjV4WUNHeFBLUk4zOE1kUmhJTERLQ1RpQndLU3dYQlNZY2dJUGd1bFZXeUlHc0VKUHAycl9CYVl2YW9nTFk1TmxhYmRKTHM0U3FoV3ZTN0s1a19EZTFBOHBhZkhsODRlVmliWjBDTUo1?oc=5": {
-      "title": "2차전지, 소재 종목부터 ESS-자동차 배터리株까지 '각개 약진' - 파이낸셜포스트",
-      "summary": "2차전지, 소재 종목부터 ESS-자동차 배터리株까지 '각개 약진'&nbsp;&nbsp;파이낸셜포스트",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1aWDNQUjV4WUNHeFBLUk4zOE1kUmhJTERLQ1RpQndLU3dYQlNZY2dJUGd1bFZXeUlHc0VKUHAycl9CYVl2YW9nTFk1TmxhYmRKTHM0U3FoV3ZTN0s1a19EZTFBOHBhZkhsODRlVmliWjBDTUo1?oc=5",
-      "published": "2026-04-22T08:38:42",
-      "query": "에코프로비엠",
-      "score": 0,
-      "reason": "업계 전반의 긍정적 분위기를 언급하나 에코프로비엠에 대한 구체적 호재 없음",
-      "scored_at": "2026-04-23T00:02:57.934908"
-    },
-    "https://news.google.com/rss/articles/CBMic0FVX3lxTE40ZHppaHRpWjVQRVQ4UEg1RDZIQm5QMW56TGRNbzJYMUtJeG9qeG1ISHg0SEFIN3ktSDZDR1ZqbHlEMENuSi0yelVFTWUxZ3ZkVmg2bFRSU3dyVlZDYjFDbldMX2ZOMjJXUnloX08tdHpuUjjSAXdBVV95cUxOUmhyNUVoeEowWUNrMFlqTnctY2RWUFpySHdTY0FVdDh6R2tvT0kzbUNzTXhGMUsxSzdjVUZlWGRvZnRzSzh0cFFVVHFDZkw1MENTMm5HMlZKN1oydXEzN0pfY2FyZjdON19wSmV3bEM1ZGJXYXc1RQ?oc=5": {
-      "title": "[코스닥 외국인] 주성엔지니어링·미래에셋벤처투자 러브콜...에코프로 에코프로비엠 매도 공세 - 핀포인트뉴스",
-      "summary": "[코스닥 외국인] 주성엔지니어링·미래에셋벤처투자 러브콜...에코프로 에코프로비엠 매도 공세&nbsp;&nbsp;핀포인트뉴스",
-      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE40ZHppaHRpWjVQRVQ4UEg1RDZIQm5QMW56TGRNbzJYMUtJeG9qeG1ISHg0SEFIN3ktSDZDR1ZqbHlEMENuSi0yelVFTWUxZ3ZkVmg2bFRSU3dyVlZDYjFDbldMX2ZOMjJXUnloX08tdHpuUjjSAXdBVV95cUxOUmhyNUVoeEowWUNrMFlqTnctY2RWUFpySHdTY0FVdDh6R2tvT0kzbUNzTXhGMUsxSzdjVUZlWGRvZnRzSzh0cFFVVHFDZkw1MENTMm5HMlZKN1oydXEzN0pfY2FyZjdON19wSmV3bEM1ZGJXYXc1RQ?oc=5",
-      "published": "2026-04-22T07:24:09",
-      "query": "에코프로비엠",
-      "score": -1,
-      "reason": "외국인 매도 공세로 단기 주가 하락압력",
-      "scored_at": "2026-04-23T00:02:58.672515"
-    },
-    "https://news.google.com/rss/articles/CBMigwFBVV95cUxPcVczc3hOeURNWGN6bGs5N3lIUW9xRURaTkFnX1pyYUplc01ROVNnUDNQQzZ4QXhfZXRicU5KWkxvTEY2ZmVKSXFRMTRRaUJHMVlmUGgxd0l2ekZWakZEemFOX29jQmprT2JPR1N1YnJTSTJ5R3EwT0FSa2tHcEhvTDNhQdIBlwFBVV95cUxNN1g0Y25NZzZiRWNMaHQtX1pHcWNnby03cUVvc0xFWEV1bjNEZ2pyZ1RLRjJyR3JjOU94OFJLSjZ1ZDUwN3d2RjFYQnk3aml5QjZ3YU1BMVJENDVBQ1A2SGVqQjVPNUNPbnZLQWRXdl9td21ETVR3aTIyUElpVVRjTzBIMGVpekhfZ19fUzczSXZrV0FPbGFz?oc=5": {
-      "title": "외국인 순매도 금액 상위 20선 - 코스닥 - 조선비즈 - Chosunbiz",
-      "summary": "외국인 순매도 금액 상위 20선 - 코스닥 - 조선비즈&nbsp;&nbsp;Chosunbiz",
-      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxPcVczc3hOeURNWGN6bGs5N3lIUW9xRURaTkFnX1pyYUplc01ROVNnUDNQQzZ4QXhfZXRicU5KWkxvTEY2ZmVKSXFRMTRRaUJHMVlmUGgxd0l2ekZWakZEemFOX29jQmprT2JPR1N1YnJTSTJ5R3EwT0FSa2tHcEhvTDNhQdIBlwFBVV95cUxNN1g0Y25NZzZiRWNMaHQtX1pHcWNnby03cUVvc0xFWEV1bjNEZ2pyZ1RLRjJyR3JjOU94OFJLSjZ1ZDUwN3d2RjFYQnk3aml5QjZ3YU1BMVJENDVBQ1A2SGVqQjVPNUNPbnZLQWRXdl9td21ETVR3aTIyUElpVVRjTzBIMGVpekhfZ19fUzczSXZrV0FPbGFz?oc=5",
-      "published": "2026-04-22T10:53:00",
-      "query": "에코프로비엠",
-      "score": 0,
-      "reason": "외국인 매도 현황 보도로 기술적 지표일 뿐 펀더멘탈 영향 없음",
-      "scored_at": "2026-04-23T00:02:59.691417"
-    },
-    "https://news.google.com/rss/articles/CBMiU0FVX3lxTFBYaks2cE44bmFzX0p1MlU1SzQwNlJVcmxSM2NTUm56QlZxaXFTdllfUGotcXhSaTZVcDhtSmw5czN1VzlFQ2JqUnZjWDB1TTNzNlFN?oc=5": {
-      "title": "22일, 기관 코스닥에서 알테오젠(-2.57%), 삼천당제약(-15.25%) 등 순매도 - 네이트",
-      "summary": "22일, 기관 코스닥에서 알테오젠(-2.57%), 삼천당제약(-15.25%) 등 순매도&nbsp;&nbsp;네이트",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFBYaks2cE44bmFzX0p1MlU1SzQwNlJVcmxSM2NTUm56QlZxaXFTdllfUGotcXhSaTZVcDhtSmw5czN1VzlFQ2JqUnZjWDB1TTNzNlFN?oc=5",
-      "published": "2026-04-22T09:36:00",
-      "query": "에코프로비엠",
-      "score": 0,
-      "reason": "에코프로비엠과 무관한 다른 종목의 기관 매도 뉴스",
-      "scored_at": "2026-04-23T00:03:00.477722"
-    },
-    "https://news.google.com/rss/articles/CBMickFVX3lxTFA5RVpRM0RkZnhlMDNSNEg0NDR0T0pPd2hBVkVZSERzeGdJN0NDT2pRRGJPaTQwdzNuN2d4R0FGQ2MycWFQRFlOaEktbndYRktYbmtDUGhyS3BlcFoyU0F5V3Y5aUpKSjgxOHZON3VBZ0lWdw?oc=5": {
-      "title": "에코프로비엠 주가, 4월 22일 장중 215,500원 2.26% 하락 - 톱스타뉴스",
-      "summary": "에코프로비엠 주가, 4월 22일 장중 215,500원 2.26% 하락&nbsp;&nbsp;톱스타뉴스",
-      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTFA5RVpRM0RkZnhlMDNSNEg0NDR0T0pPd2hBVkVZSERzeGdJN0NDT2pRRGJPaTQwdzNuN2d4R0FGQ2MycWFQRFlOaEktbndYRktYbmtDUGhyS3BlcFoyU0F5V3Y5aUpKSjgxOHZON3VBZ0lWdw?oc=5",
-      "published": "2026-04-22T01:13:57",
-      "query": "에코프로비엠",
-      "score": 0,
-      "reason": "주가 변동만 보도, 구체적 호재/악재 없음",
-      "scored_at": "2026-04-23T00:03:01.305980"
-    },
-    "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1HSjZkb09wdHhoMTBVZkl3eTI2MlluUkRMSWswYkVUdHlhcTVjMGMyak15X3huc0poVmZKdXpMUjdzeUdQdjlfXzZCMmhENmc?oc=5": {
-      "title": "[오늘장 탑픽] 2차전지 섹터, 현재 위치와 투자 기회는? - v.daum.net",
-      "summary": "[오늘장 탑픽] 2차전지 섹터, 현재 위치와 투자 기회는?&nbsp;&nbsp;v.daum.net",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1HSjZkb09wdHhoMTBVZkl3eTI2MlluUkRMSWswYkVUdHlhcTVjMGMyak15X3huc0poVmZKdXpMUjdzeUdQdjlfXzZCMmhENmc?oc=5",
-      "published": "2026-04-22T00:33:09",
-      "query": "양극재 2차전지",
-      "score": 0,
-      "reason": "섹터 분석 기사로 구체적 호재/악재 없음",
-      "scored_at": "2026-04-23T00:03:02.078052"
-    },
-    "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9WbHlqenduS2RPWjVteEJsOWJYOUJtSzVwYl91TjlTR0NQSEp3VjNoQmRxTXVfS2E4dkVYOHk1NzZKTkwyZ3FjNGkzd1JUbWVpb0Myb3g1WmFHSHVfT2otd2F4ZW5QZDlh?oc=5": {
-      "title": "[특징주] 2차전지, 실적 바닥 찍었나…미 국방물자법 수혜 기대 - 뉴스티앤티",
-      "summary": "[특징주] 2차전지, 실적 바닥 찍었나…미 국방물자법 수혜 기대&nbsp;&nbsp;뉴스티앤티",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9WbHlqenduS2RPWjVteEJsOWJYOUJtSzVwYl91TjlTR0NQSEp3VjNoQmRxTXVfS2E4dkVYOHk1NzZKTkwyZ3FjNGkzd1JUbWVpb0Myb3g1WmFHSHVfT2otd2F4ZW5QZDlh?oc=5",
-      "published": "2026-04-22T06:09:36",
-      "query": "양극재 2차전지",
-      "score": 1,
-      "reason": "미 국방물자법 수혜 가능성, 실적 회복 기대감",
-      "scored_at": "2026-04-23T00:03:03.110626"
-    },
-    "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBraHlkYlZOOEdicHE5M0s2OWYwd3k2WXdwdS0tajc2ZVdpNWVsS3NvVVBab0hLUEVUM0tIOG5xYzZZRlk5QjRlVmpyRmxTN3R0emp6Y0c5REFLM0xPNDhwVg?oc=5": {
-      "title": "서산시·SK온, 587억 투자해 ‘ESS용 배터리’ 생산 라인 구축 - 뉴스1",
-      "summary": "서산시·SK온, 587억 투자해 ‘ESS용 배터리’ 생산 라인 구축&nbsp;&nbsp;뉴스1서산시·SK온, 587억 투자 'ESS 배터리 생산시설 전환' 협약&nbsp;&nbsp;중도일보SK온 EV용 배터리 생산→ESS용 배터리로 일부 전환&nbsp;&nbsp;뉴시스",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBraHlkYlZOOEdicHE5M0s2OWYwd3k2WXdwdS0tajc2ZVdpNWVsS3NvVVBab0hLUEVUM0tIOG5xYzZZRlk5QjRlVmpyRmxTN3R0emp6Y0c5REFLM0xPNDhwVg?oc=5",
-      "published": "2026-04-22T08:34:50",
-      "query": "SK온 배터리",
-      "score": 0,
-      "reason": "SK온의 ESS 배터리 생산 전환은 에코프로비엠 양극재 수요에 직접적 영향 미미",
-      "scored_at": "2026-04-23T00:03:04.101558"
-    },
-    "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5fTG0yNVVuRnhiWUVnSWFKYkVpTFJRNGRjRzJUVWFKazRyb01SU3B2MVppMmpOU00tOWVkcGptX29icFV6TFVSQjJKQlBfLXFQQzl0Uko5Qjlkd1hvd21hRjRxQkxJSG9R?oc=5": {
-      "title": "서산시-SK온, 587억 규모 ESS 배터리 투자협약 - 뉴스티앤티",
-      "summary": "서산시-SK온, 587억 규모 ESS 배터리 투자협약&nbsp;&nbsp;뉴스티앤티",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5fTG0yNVVuRnhiWUVnSWFKYkVpTFJRNGRjRzJUVWFKazRyb01SU3B2MVppMmpOU00tOWVkcGptX29icFV6TFVSQjJKQlBfLXFQQzl0Uko5Qjlkd1hvd21hRjRxQkxJSG9R?oc=5",
-      "published": "2026-04-22T07:37:26",
-      "query": "SK온 배터리",
-      "score": 0,
-      "reason": "SK온의 ESS 배터리 투자는 에코프로비엠과 무관한 경쟁사 뉴스",
-      "scored_at": "2026-04-23T00:03:04.970437"
-    },
-    "https://news.google.com/rss/articles/CBMidEFVX3lxTE9DMzJHY2VsRWpVdWtHZ0pvV2wyd3VQMzB0b0xFRjgyNkxmTVlNQXVMVmN5N0dwUlJqeFFvR0VVdl9xbkRJTlZQdldScXVUMkdNTUZKN3ZLQ2FUMzgxc1AtRUs4RkVhWHh5bDRJYThrUU1zaHNw?oc=5": {
-      "title": "서산시·SK온, 587억 투자협약… EV공장, ESS배터리 생산거점으로 전환 - 아시아뉴스통신",
-      "summary": "서산시·SK온, 587억 투자협약… EV공장, ESS배터리 생산거점으로 전환&nbsp;&nbsp;아시아뉴스통신",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9DMzJHY2VsRWpVdWtHZ0pvV2wyd3VQMzB0b0xFRjgyNkxmTVlNQXVMVmN5N0dwUlJqeFFvR0VVdl9xbkRJTlZQdldScXVUMkdNTUZKN3ZLQ2FUMzgxc1AtRUs4RkVhWHh5bDRJYThrUU1zaHNw?oc=5",
-      "published": "2026-04-22T12:07:42",
-      "query": "SK온 배터리",
-      "score": 0,
-      "reason": "SK온의 ESS배터리 전환은 양극재 수요 중립적",
-      "scored_at": "2026-04-23T00:03:06.035341"
-    },
-    "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5HNHZ3dWNkeDZYMG5zUjNfZ282WkllQW5LTHk5blhhUHdmanNBZG90czBvUjJfVXJPaDlpbURWbUZVdEZaYzFEVHVzRkdjcDRqQ2hLeGNqSXl5UzRKMkdVa1A1clZ4ZHhY?oc=5": {
-      "title": "[위기의 배터리-SK온] ①5년 연속 적자 속 찾은 돌파구 ‘ESS’ - fetv.co.kr",
-      "summary": "[위기의 배터리-SK온] ①5년 연속 적자 속 찾은 돌파구 ‘ESS’&nbsp;&nbsp;fetv.co.kr",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5HNHZ3dWNkeDZYMG5zUjNfZ282WkllQW5LTHk5blhhUHdmanNBZG90czBvUjJfVXJPaDlpbURWbUZVdEZaYzFEVHVzRkdjcDRqQ2hLeGNqSXl5UzRKMkdVa1A1clZ4ZHhY?oc=5",
-      "published": "2026-04-22T22:10:00",
-      "query": "SK온 배터리",
-      "score": 0,
-      "reason": "SK온의 ESS 사업 현황 보도로 에코프로비엠에 직접 영향 미미",
-      "scored_at": "2026-04-23T00:03:07.033719"
-    },
     "https://news.google.com/rss/articles/CBMiY0FVX3lxTE5BV3pra2luREdEa0FhVW5ZLXY5NGZNUXRQMjBDNmpsUHl0VGFZcVBEVHcycW1BRHc1U0ZHOWp5blo2VGNjc1VqSDhQS1d4VWdvbGRyRUctYUJRUmN5dHVkbk1hOA?oc=5": {
       "title": "서산시·SK온㈜, ESS배터리 생산시설 투자협약 체결 - 중부시사신문",
       "summary": "서산시·SK온㈜, ESS배터리 생산시설 투자협약 체결&nbsp;&nbsp;중부시사신문",
@@ -449,7 +289,157 @@
       "score": -1,
       "reason": "배터리 3사 적자로 양극재 수요 약화 우려, ESS 반등은 미확실",
       "scored_at": "2026-04-29T00:03:06.164126"
+    },
+    "https://news.google.com/rss/articles/CBMiYEFVX3lxTE81QTBKc2Z5ZUpUVF9FN01tZndHbGhzX1lGZ0xqd2xzS0FKU0Y0VkhFdGFjem9JUEhRQ1dKU05yOHVNMm83VG1xQVdPYlpyWGF5a2pEZlI0TjBIOEFpZzFzcdIBeEFVX3lxTE0wT00ybzdVMjFJTk1ZUEN5Y09rOHZxY21JaGpDbm5ORUQ2dTNGWmN3TGNKb0hZUl9rczFtWXAwY1JwSG1BdzFfZHJuMFpaRThTc1IyMGhDNUpubXRxZGpzTlMya1hBZkVTNVJoM2JTM3FDNmZYdVZrRg?oc=5": {
+      "title": "에코프로비엠, 1Q 영업익 209억 전년比 823%↑…\"ESS 양극재 매출 급증\" - 뉴시스",
+      "summary": "에코프로비엠, 1Q 영업익 209억 전년比 823%↑…\"ESS 양극재 매출 급증\"&nbsp;&nbsp;뉴시스에코프로비엠, 1분기 영업이익 209억원…전년比 823%↑ - 조선비즈&nbsp;&nbsp;Chosunbiz신영증권, 에코프로비엠 목표가↑…투자의견도 '매수'로 올려&nbsp;&nbsp;연합뉴스에코프로비엠, 유럽은 증설·북미 LFP는 재검토…엇갈린 투자 셈법&nbsp;&nbsp;지디넷코리아에코프로비엠, 영업익 9배 늘었다…\"헝가리 증설 검토\"&nbsp;&nbsp;v.daum.netNH증권 \"에코프로비엠, 하반기 헝가리 2공장 ",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE81QTBKc2Z5ZUpUVF9FN01tZndHbGhzX1lGZ0xqd2xzS0FKU0Y0VkhFdGFjem9JUEhRQ1dKU05yOHVNMm83VG1xQVdPYlpyWGF5a2pEZlI0TjBIOEFpZzFzcdIBeEFVX3lxTE0wT00ybzdVMjFJTk1ZUEN5Y09rOHZxY21JaGpDbm5ORUQ2dTNGWmN3TGNKb0hZUl9rczFtWXAwY1JwSG1BdzFfZHJuMFpaRThTc1IyMGhDNUpubXRxZGpzTlMya1hBZkVTNVJoM2JTM3FDNmZYdVZrRg?oc=5",
+      "published": "2026-04-29T01:55:58",
+      "query": "에코프로비엠",
+      "score": 2,
+      "reason": "1Q 영업익 823% 증가, ESS 양극재 매출 급증, 목표가 상향",
+      "scored_at": "2026-04-30T00:02:55.245478"
+    },
+    "https://news.google.com/rss/articles/CBMiVEFVX3lxTFB2T3lROUlONlBvQUxmTUVYbThFRzN6Q2RfYUJmbHk5MVdjMjNZajJwSWJqeVp3cGQ1U2FDQXZKeHNwSEZOZ0x0aUdnOHFNQWVYNllVdw?oc=5": {
+      "title": "IBK투자證 “에코프로비엠, 수요 회복에 2분기 매출 성장 전망⋯목표가 22만원” - 이투데이",
+      "summary": "IBK투자證 “에코프로비엠, 수요 회복에 2분기 매출 성장 전망⋯목표가 22만원”&nbsp;&nbsp;이투데이",
+      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFB2T3lROUlONlBvQUxmTUVYbThFRzN6Q2RfYUJmbHk5MVdjMjNZajJwSWJqeVp3cGQ1U2FDQXZKeHNwSEZOZ0x0aUdnOHFNQWVYNllVdw?oc=5",
+      "published": "2026-04-29T22:58:00",
+      "query": "에코프로비엠",
+      "score": 1,
+      "reason": "2분기 매출 성장 전망 및 긍정적 투자의견",
+      "scored_at": "2026-04-30T00:02:55.882898"
+    },
+    "https://news.google.com/rss/articles/CBMiZkFVX3lxTE54QWV6bUdPSXJIaG5weFNjdlRMby15U3ZOSk5iS01Eal8zNjJZUExkeGhwdWpqN2N5X0xYMUhhcnF3bXpqRlAtb09sS1NLS3hXNzJERWZZclFZal8tNlFRS2wzNDFLQQ?oc=5": {
+      "title": "에코프로비엠, 1분기 영업이익 209억원...5분기 연속 흑자 - 디일렉",
+      "summary": "에코프로비엠, 1분기 영업이익 209억원...5분기 연속 흑자&nbsp;&nbsp;디일렉",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE54QWV6bUdPSXJIaG5weFNjdlRMby15U3ZOSk5iS01Eal8zNjJZUExkeGhwdWpqN2N5X0xYMUhhcnF3bXpqRlAtb09sS1NLS3hXNzJERWZZclFZal8tNlFRS2wzNDFLQQ?oc=5",
+      "published": "2026-04-29T01:53:11",
+      "query": "에코프로비엠",
+      "score": 1,
+      "reason": "5분기 연속 흑자로 실적 안정성 입증",
+      "scored_at": "2026-04-30T00:02:56.487821"
+    },
+    "https://news.google.com/rss/articles/CBMiT0FVX3lxTE8zMmltQm1JRWh0Q2xxSU1yeWZqaV9MdjNWQXBoaDNYZFVzZGRjR0pNTTRFc09zZGU2eUZRRVZTU0hMZmg4TVE1SlBJazI3bzg?oc=5": {
+      "title": "'헝가리 공장 본격 가동' 에코프로비엠…유럽 EV 신차 수요 대응 - v.daum.net",
+      "summary": "'헝가리 공장 본격 가동' 에코프로비엠…유럽 EV 신차 수요 대응&nbsp;&nbsp;v.daum.net",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE8zMmltQm1JRWh0Q2xxSU1yeWZqaV9MdjNWQXBoaDNYZFVzZGRjR0pNTTRFc09zZGU2eUZRRVZTU0hMZmg4TVE1SlBJazI3bzg?oc=5",
+      "published": "2026-04-29T06:31:03",
+      "query": "에코프로비엠",
+      "score": 1,
+      "reason": "유럽 생산능력 확대로 지역 수요 대응 가능, 매출 증대 기대",
+      "scored_at": "2026-04-30T00:02:57.523299"
+    },
+    "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9VVUhKd3hhVjZQU09aUmdHWkNBMlJ0UXJJNkxQMVlnOFVFbXFrNWxJN2o1ZWt2S0g5dlQyS0dCc3lfVTA0cGUwRVVCckJJNnM?oc=5": {
+      "title": "'ESS 순항' 에코프로비엠, 1분기 영업익 209억 - 딜사이트",
+      "summary": "'ESS 순항' 에코프로비엠, 1분기 영업익 209억&nbsp;&nbsp;딜사이트",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9VVUhKd3hhVjZQU09aUmdHWkNBMlJ0UXJJNkxQMVlnOFVFbXFrNWxJN2o1ZWt2S0g5dlQyS0dCc3lfVTA0cGUwRVVCckJJNnM?oc=5",
+      "published": "2026-04-29T02:20:54",
+      "query": "에코프로비엠",
+      "score": 1,
+      "reason": "1분기 영업익 209억 기록으로 ESS 사업 호조 시현",
+      "scored_at": "2026-04-30T00:02:58.484203"
+    },
+    "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9aYU9oUld2YlYxN094dTQtUEMzN29HaTZNSllpNDFybUVDV3p4N1c0LUY4dkxxVGJCVzRsTGltNHpleWo5Qkp6eWJ1cWFRekZLZDNVTFZTblRTZllWU0dQYtIBYEFVX3lxTE9aYU9oUld2YlYxN094dTQtUEMzN29HaTZNSllpNDFybUVDV3p4N1c0LUY4dkxxVGJCVzRsTGltNHpleWo5Qkp6eWJ1cWFRekZLZDNVTFZTblRTZllWU0dQYg?oc=5": {
+      "title": "에코프로비엠 1분기 영업익 209억…ESS 매출 140% 증가(종합) - 연합뉴스",
+      "summary": "에코프로비엠 1분기 영업익 209억…ESS 매출 140% 증가(종합)&nbsp;&nbsp;연합뉴스",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9aYU9oUld2YlYxN094dTQtUEMzN29HaTZNSllpNDFybUVDV3p4N1c0LUY4dkxxVGJCVzRsTGltNHpleWo5Qkp6eWJ1cWFRekZLZDNVTFZTblRTZllWU0dQYtIBYEFVX3lxTE9aYU9oUld2YlYxN094dTQtUEMzN29HaTZNSllpNDFybUVDV3p4N1c0LUY4dkxxVGJCVzRsTGltNHpleWo5Qkp6eWJ1cWFRekZLZDNVTFZTblRTZllWU0dQYg?oc=5",
+      "published": "2026-04-29T01:40:46",
+      "query": "에코프로비엠",
+      "score": 2,
+      "reason": "1분기 영업익 209억, ESS 매출 140% 증가로 실적 호조",
+      "scored_at": "2026-04-30T00:02:59.350085"
+    },
+    "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5VSG80SGJNU19IdUhQdGJvVmdhcXV1WlFDOVByRERHSG9QVnVWSDBSRjZTR1ZiZVJZOGpTTGxTaE0wRDNpTkxjSGQybGx0UQ?oc=5": {
+      "title": "에코프로비엠, 1분기 매출 6054억·영업이익 209억 '유럽 EV 회복세' - 전자신문",
+      "summary": "에코프로비엠, 1분기 매출 6054억·영업이익 209억 '유럽 EV 회복세'&nbsp;&nbsp;전자신문",
+      "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5VSG80SGJNU19IdUhQdGJvVmdhcXV1WlFDOVByRERHSG9QVnVWSDBSRjZTR1ZiZVJZOGpTTGxTaE0wRDNpTkxjSGQybGx0UQ?oc=5",
+      "published": "2026-04-29T05:37:58",
+      "query": "에코프로비엠",
+      "score": 1,
+      "reason": "1분기 실적 양호, 유럽 EV 회복 긍정 신호",
+      "scored_at": "2026-04-30T00:03:00.156818"
+    },
+    "https://news.google.com/rss/articles/CBMigwFBVV95cUxOUWdMX3l6MDl2UXdxTTJzZ3NmbDZPeGg2QzZaRVJoN2I2alFOWktPVEpWQlFHeWNGZ1ZMSkhfcUF5d0ZYekFsLWg3Ujc5YlZWZjJ5SVBSWG1fU3ljbGc5dmVQUkJrSVhScndyR2oydnJaNVRnVnJ6cTJTNWhUeENvX3l2UdIBlwFBVV95cUxNX1ZFcG42S01oNnlBWGgxZW9NZzVvSFRNeWN4bHAwc0s4YWRjQkUzMnBCbThYci1FN2xveWpNLWd5WE85UjVjbzNBZ0pzYzdPOU1pYXliNWY2bU84elhmN3V0bVFDU3ROSkpDSkVzWDNveVItOXZ2ZlpVeXFSTHpXNkFxdFhpS3dULTNTa0JteXVjbWdnOFQ4?oc=5": {
+      "title": "29일 코스닥 시장 공매도 금액 상위 종목. 에코프로, 에코프로비엠 등 - 조선비즈 - Chosunbiz",
+      "summary": "29일 코스닥 시장 공매도 금액 상위 종목. 에코프로, 에코프로비엠 등 - 조선비즈&nbsp;&nbsp;Chosunbiz",
+      "url": "https://news.google.com/rss/articles/CBMigwFBVV95cUxOUWdMX3l6MDl2UXdxTTJzZ3NmbDZPeGg2QzZaRVJoN2I2alFOWktPVEpWQlFHeWNGZ1ZMSkhfcUF5d0ZYekFsLWg3Ujc5YlZWZjJ5SVBSWG1fU3ljbGc5dmVQUkJrSVhScndyR2oydnJaNVRnVnJ6cTJTNWhUeENvX3l2UdIBlwFBVV95cUxNX1ZFcG42S01oNnlBWGgxZW9NZzVvSFRNeWN4bHAwc0s4YWRjQkUzMnBCbThYci1FN2xveWpNLWd5WE85UjVjbzNBZ0pzYzdPOU1pYXliNWY2bU84elhmN3V0bVFDU3ROSkpDSkVzWDNveVItOXZ2ZlpVeXFSTHpXNkFxdFhpS3dULTNTa0JteXVjbWdnOFQ4?oc=5",
+      "published": "2026-04-29T23:12:37",
+      "query": "에코프로비엠",
+      "score": -1,
+      "reason": "공매도 증가는 약세 신호, 단기 매도 압력",
+      "scored_at": "2026-04-30T00:03:01.115251"
+    },
+    "https://news.google.com/rss/articles/CBMiTEFVX3lxTE9oaFcxNFd0UmxvYzVkZWV4M09uZ3ZhUXBsbkpFMXdlbld6N28yVTVGclNoMWJZWERuQnBZaW00OEtORFFaeVhJcFZ0Vkw?oc=5": {
+      "title": "에코프로비엠, 1분기 영업익 209억…전년비 823% 늘어 - 아이뉴스24",
+      "summary": "에코프로비엠, 1분기 영업익 209억…전년비 823% 늘어&nbsp;&nbsp;아이뉴스24",
+      "url": "https://news.google.com/rss/articles/CBMiTEFVX3lxTE9oaFcxNFd0UmxvYzVkZWV4M09uZ3ZhUXBsbkpFMXdlbld6N28yVTVGclNoMWJZWERuQnBZaW00OEtORFFaeVhJcFZ0Vkw?oc=5",
+      "published": "2026-04-29T06:58:21",
+      "query": "에코프로비엠",
+      "score": 2,
+      "reason": "1분기 영업익 823% 증가로 실적 대폭 개선",
+      "scored_at": "2026-04-30T00:03:02.048065"
+    },
+    "https://news.google.com/rss/articles/CBMiZEFVX3lxTE8wdkpLWC1xWVNhd1NERHlqeXdfMXFuNEx1cGp6cC0yNm9hWGswQ0lSYnd1RW9yNVlJMXBCeGk0Q053cTlWTHBWOFpvMHdlZVVMZGN3MlRkY3JOTHh2UENaa1JfUDU?oc=5": {
+      "title": "[종합] AI 인프라 업은 에코프로비엠 `흑자 수성`…헝가리 앞세워 유럽 공략 나선다 - 디지털데일리",
+      "summary": "[종합] AI 인프라 업은 에코프로비엠 `흑자 수성`…헝가리 앞세워 유럽 공략 나선다&nbsp;&nbsp;디지털데일리",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE8wdkpLWC1xWVNhd1NERHlqeXdfMXFuNEx1cGp6cC0yNm9hWGswQ0lSYnd1RW9yNVlJMXBCeGk0Q053cTlWTHBWOFpvMHdlZVVMZGN3MlRkY3JOTHh2UENaa1JfUDU?oc=5",
+      "published": "2026-04-29T02:27:58",
+      "query": "에코프로비엠",
+      "score": 1,
+      "reason": "AI 인프라 수요 증가로 흑자 지속, 유럽 시장 확대 긍정",
+      "scored_at": "2026-04-30T00:03:02.996250"
+    },
+    "https://news.google.com/rss/articles/CBMigAFBVV95cUxOd1BuZ2N1RTR0RGxlcjNDWTc1eFVfbWsxbFpEYlRDTGtmTnpyU0FSV3dWcTBmbGtHcXluaWVtX3FDbDVXT2hieDd0LXZWWllJSjBVVnMtMEpncjNGeUU5NUZBR0NEZDgzTGxsRXRSS0M3TmVQLUZkR21QZEtmRktqRQ?oc=5": {
+      "title": "에코프로비엠, 삼성SDI향 수요 회복 수혜…목표가↑-NH - 이데일리",
+      "summary": "에코프로비엠, 삼성SDI향 수요 회복 수혜…목표가↑-NH&nbsp;&nbsp;이데일리",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxOd1BuZ2N1RTR0RGxlcjNDWTc1eFVfbWsxbFpEYlRDTGtmTnpyU0FSV3dWcTBmbGtHcXluaWVtX3FDbDVXT2hieDd0LXZWWllJSjBVVnMtMEpncjNGeUU5NUZBR0NEZDgzTGxsRXRSS0M3TmVQLUZkR21QZEtmRktqRQ?oc=5",
+      "published": "2026-04-29T22:41:03",
+      "query": "에코프로비엠",
+      "score": 1,
+      "reason": "삼성SDI 수요 회복으로 주요 고객사 판매량 증가 전망",
+      "scored_at": "2026-04-30T00:03:03.962204"
+    },
+    "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1YcFh6VlBJcEs5MmlUSWdKakVCVjFSLWNwX29IY3ZJanV5SlZpWlpfRmQwbU1MVWNfVThzMmZ3Q2NCWW15ZWlVdlhTdWh3RGlUSEZF?oc=5": {
+      "title": "에코프로비엠, 유럽·미국 시장 접근성 가장 뛰어난 글로벌 양극재 업체 '도약' - 네이트",
+      "summary": "에코프로비엠, 유럽·미국 시장 접근성 가장 뛰어난 글로벌 양극재 업체 '도약'&nbsp;&nbsp;네이트",
+      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1YcFh6VlBJcEs5MmlUSWdKakVCVjFSLWNwX29IY3ZJanV5SlZpWlpfRmQwbU1MVWNfVThzMmZ3Q2NCWW15ZWlVdlhTdWh3RGlUSEZF?oc=5",
+      "published": "2026-04-29T22:18:00",
+      "query": "에코프로비엠",
+      "score": 1,
+      "reason": "유럽·미국 시장 접근성 강화로 매출 확대 가능성",
+      "scored_at": "2026-04-30T00:03:04.872574"
+    },
+    "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBJTEE1MEJrRTVHS0NpQ3lfaml6YUtBbUQ0aW9lWU5YRGs0Rm1jcEhfZkJ6M0FXMzdSQWdsOURvcGhwV1BsT243VkJQN2RITzJKdkpPZFVDS3ltellJZ09IcGtaVTRLaFgz?oc=5": {
+      "title": "에코프로비엠, 1Q 영업익 209억…전년비 822%↑ - fetv.co.kr",
+      "summary": "에코프로비엠, 1Q 영업익 209억…전년비 822%↑&nbsp;&nbsp;fetv.co.kr",
+      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBJTEE1MEJrRTVHS0NpQ3lfaml6YUtBbUQ0aW9lWU5YRGs0Rm1jcEhfZkJ6M0FXMzdSQWdsOURvcGhwV1BsT243VkJQN2RITzJKdkpPZFVDS3ltellJZ09IcGtaVTRLaFgz?oc=5",
+      "published": "2026-04-29T03:25:51",
+      "query": "에코프로비엠",
+      "score": 2,
+      "reason": "1Q 영업익 822% 증가로 실적 대폭 개선",
+      "scored_at": "2026-04-30T00:03:05.680776"
+    },
+    "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9laUZZdnV1VTdXN25zUU5MQnBkX2pybFRMbkpIbksxSGxrMUczVjYyTDVCVVp2N0dkVFhOal9BbGxDR1MxX1dWdVdIcEpDNXJhR3JKckhqNUdKd9IBWEFVX3lxTE5vd2xlZEcwa1Ffb0VQQ1J6aFUyWGFSdUdicFgwOVdSNDhpRXNKd3UxQ2djb1BpVktlOGNJX1BPc0RpZXpVcTJxSVpiTEVjSnEyVWgxcmw2dm4?oc=5": {
+      "title": "NH증권 에코프로비엠, 하반기 헝가리 2공장 증설 기대…목표가↑ - 아주경제",
+      "summary": "NH증권 에코프로비엠, 하반기 헝가리 2공장 증설 기대…목표가↑&nbsp;&nbsp;아주경제",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9laUZZdnV1VTdXN25zUU5MQnBkX2pybFRMbkpIbksxSGxrMUczVjYyTDVCVVp2N0dkVFhOal9BbGxDR1MxX1dWdVdIcEpDNXJhR3JKckhqNUdKd9IBWEFVX3lxTE5vd2xlZEcwa1Ffb0VQQ1J6aFUyWGFSdUdicFgwOVdSNDhpRXNKd3UxQ2djb1BpVktlOGNJX1BPc0RpZXpVcTJxSVpiTEVjSnEyVWgxcmw2dm4?oc=5",
+      "published": "2026-04-29T23:27:27",
+      "query": "에코프로비엠",
+      "score": 1,
+      "reason": "헝가리 2공장 증설로 생산능력 확대 기대, 목표가 상향",
+      "scored_at": "2026-04-30T00:03:06.392742"
+    },
+    "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9Fd3FmZmFTZUhGLVNkeWc2ajlQOVFLN1p2OXN4LVE5dHdncnVmVkl0SzJTTmozd2pnajViN3FocnAzMWFka1FZY0NGRmo4WmlLdkdOUTJBVkpyQQ?oc=5": {
+      "title": "에코프로비엠, 1분기 매출 6054억·영업익 209억 - 경북매일",
+      "summary": "에코프로비엠, 1분기 매출 6054억·영업익 209억&nbsp;&nbsp;경북매일",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9Fd3FmZmFTZUhGLVNkeWc2ajlQOVFLN1p2OXN4LVE5dHdncnVmVkl0SzJTTmozd2pnajViN3FocnAzMWFka1FZY0NGRmo4WmlLdkdOUTJBVkpyQQ?oc=5",
+      "published": "2026-04-29T01:31:00",
+      "query": "에코프로비엠",
+      "score": 0,
+      "reason": "1분기 실적 발표는 공시 정보로 이미 반영됨",
+      "scored_at": "2026-04-30T00:03:07.519700"
     }
   },
-  "last_run": "2026-04-29T00:03:06.164334"
+  "last_run": "2026-04-30T00:03:07.519893"
 }
