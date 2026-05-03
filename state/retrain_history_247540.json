@@ -34,5 +34,14 @@
     "hmm_log_likelihood": -4321.250707563728,
     "hmm_current_regime": "RANGE_BOUND",
     "hmm_current_confidence": 0.688
+  },
+  {
+    "timestamp": "2026-05-03T13:01:12.708825",
+    "success": true,
+    "error": "",
+    "hmm_n_states": 5,
+    "hmm_log_likelihood": -4321.250707563728,
+    "hmm_current_regime": "RANGE_BOUND",
+    "hmm_current_confidence": 0.688
   }
 ]
