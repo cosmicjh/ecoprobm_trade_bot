@@ -14,7 +14,7 @@
     "hvol_size_reduction": 0.5,
     "hvol_rsi_entry": 25.0,
     "invest_ratio": 0.30,
-    "max_invest_ratio": 0.60,
+    "max_invest_ratio": 0.30,
     "supply_lookback": 5,
     "supply_threshold": 2.0,
     "daily_loss_limit": -0.03,
@@ -32,14 +32,16 @@
     "anomaly_strong_bullish_multiplier": 1.25
   },
   "meta": {
-    "optimized_at": "2026-04-22 manual",
+    "optimized_at": "2026-05-02 manual",
     "score": null,
     "n_windows": null,
-    "source": "manual_after_backtest",
-    "backtest_evidence": "backtest_regime_threshold.ipynb 결과: TP1=0.30이 Calmar 5.35로 최적 균형. CAGR 7.47%, MDD -6.03%, WF 47.6%.",
+    "source": "manual_after_real_supply_backtest",
+    "backtest_evidence": "backtest_real_supply.ipynb 결과: max_invest_ratio 0.60 적용 시 CAGR 7.07%, 0.30 적용 시 CAGR 7.47%로 0.30이 우수. 4년 백테스트에서 실제 dual_buy 진입 단 1건으로 통계적 의미 부족. backtest_strategy_1_6에서도 ⑥번(All Dual) 효과 없음 재확인됨. dual_buy 포지션 확대 로직 비활성화.",
     "changes_from_default": [
-      "tp1_pct: 0.11 -> 0.30 (백테스트 기반)",
-      "pyramiding_size_ratio: 0.5 -> 1.0 (이전 대화 적용 반영)"
-    ]
+      "tp1_pct: 0.11 -> 0.30 (TP1 백테스트 근거)",
+      "max_invest_ratio: 0.60 -> 0.30 (dual_buy 포지션 확대 비활성화)",
+      "pyramiding_size_ratio: 0.5 -> 1.0 (이전 적용)"
+    ],
+    "future_review": "3~6개월 실전 운영 후 실제 dual_buy 시그널의 alpha를 재평가. 활용 방식을 포지션 확대가 아닌 다른 방식(진입 필터, 손절 완화, 트레일링 확장 등)으로 재설계 검토."
   }
 }
