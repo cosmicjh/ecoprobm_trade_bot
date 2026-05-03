@@ -167,7 +167,12 @@ def simulate(df_ind: pd.DataFrame, params: StrategyParams,
             invest_ratio = params.invest_ratio
 
             if regime == "TREND_UP":
-                buy = True
+                # 거래량 필터: tu_vol_ratio_min 이상이어야 진입
+                vol_r = row.get("vol_ratio", 1.0)
+                if params.tu_vol_ratio_min > 0 and vol_r < params.tu_vol_ratio_min:
+                    pass  # 거래량 부족 → 진입 거부
+                else:
+                    buy = True
             elif regime == "RANGE_BOUND":
                 rsi_v = row.get("rsi", 50)
                 bb_pctb = row.get("bb_pctb", 0.5)
@@ -313,6 +318,7 @@ def make_objective(df: pd.DataFrame):
             bb_squeeze_threshold=trial.suggest_float("bb_squeeze_threshold", 0.5, 1.0),
             atr_hvol_threshold=trial.suggest_float("atr_hvol_threshold", 1.2, 2.0),
             tp1_pct=trial.suggest_float("tp1_pct", 0.20, 0.40),
+            tu_vol_ratio_min=trial.suggest_float("tu_vol_ratio_min", 0.8, 1.5),
             tp1_sell_ratio=trial.suggest_float("tp1_sell_ratio", 0.3, 0.8),
             trail_atr_mult=trial.suggest_float("trail_atr_mult", 1.0, 3.0),
             sl_pct=trial.suggest_float("sl_pct", -0.07, -0.02),
