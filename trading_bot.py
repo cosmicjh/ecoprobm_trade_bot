@@ -108,6 +108,10 @@ class StrategyParams:
     hvol_size_reduction: float = 0.5
     hvol_rsi_entry: float = 25.0                 # HIGH_VOLATILITY 진입용 RSI 임계값 (신규)
 
+    # TREND_UP 진입 추가 필터 (백테스트 검증)
+    # 전일 거래량이 20일 평균 대비 N배 이상이어야 진입 (0 = 비활성)
+    tu_vol_ratio_min: float = 1.2                # backtest_trend_up_filters 결과 1위
+
     # 공통
     invest_ratio: float = 0.30
     max_invest_ratio: float = 0.60
@@ -207,6 +211,8 @@ def load_params(path: Optional[str] = None) -> StrategyParams:
             # Layer 3C: HIGH_VOL
             hvol_size_reduction=p.get("hvol_size_reduction", 0.5),
             hvol_rsi_entry=p.get("hvol_rsi_entry", 25.0),
+            # TREND_UP 진입 필터
+            tu_vol_ratio_min=p.get("tu_vol_ratio_min", 1.2),
             # 공통 자금
             invest_ratio=p.get("invest_ratio", 0.30),
             max_invest_ratio=p.get("max_invest_ratio", 0.60),
@@ -606,7 +612,11 @@ def diagnose_no_buy(state: "BotState", params: StrategyParams,
     # 이미 매수/매도가 실행됐거나 보유 중이면 진단 생략
     signal = state.last_signal or ""
 
-    # 실행된 경우
+    # 실행된 경우 (BUY_TREND_LOW_VOL은 거래량 부족으로 실제 미체결 → 진단 필요)
+    if signal == "BUY_TREND_LOW_VOL":
+        vol_r = latest.get("vol_ratio", 1.0)
+        return (f"🚫 TREND_UP 거래량 부족 vol_ratio {vol_r:.2f}"
+                f"<{params.tu_vol_ratio_min:.2f}")
     if signal.startswith("BUY") or signal.startswith("SELL"):
         return ""
 
@@ -671,6 +681,11 @@ def diagnose_no_buy(state: "BotState", params: StrategyParams,
             return f"HIGH_VOL — RSI {rsi_v:.1f}≥{params.hvol_rsi_entry:.1f} (과매도 아님)"
         return "HIGH_VOL — 진입 조건 충족했으나 미실행"
     if regime == "TREND_UP":
+        # 거래량 필터로 거부됐는지 우선 체크
+        vol_r = latest.get("vol_ratio", 1.0)
+        if params.tu_vol_ratio_min > 0 and vol_r < params.tu_vol_ratio_min:
+            return (f"TREND_UP — 거래량 부족 vol_ratio {vol_r:.2f}"
+                    f"<{params.tu_vol_ratio_min:.2f}")
         # 여기 오면 qty=0으로 매수 실패했을 가능성
         return "TREND_UP — 매수 시도했으나 실행 안 됨 (현금/수량 부족 또는 주문 오류)"
 
@@ -1165,22 +1180,30 @@ def _run_morning(client, params, state, today, ai):
             signal = "NO_ENTRY"
 
         elif regime == "TREND_UP":
-            base_ratio = params.invest_ratio
-            if dual_buy:
-                base_ratio = params.max_invest_ratio
-                signal = "BUY_TREND_DUAL"
+            # 거래량 필터: 전일 거래량이 20일 평균 대비 임계값 이상이어야 진입
+            # backtest_trend_up_filters 결과: vol≥1.2일 때 Calmar 8.80, MDD -4.25%, win 42.9%
+            vol_r = latest.get("vol_ratio", 1.0)
+            if params.tu_vol_ratio_min > 0 and vol_r < params.tu_vol_ratio_min:
+                signal = "BUY_TREND_LOW_VOL"   # 진입 거부 (거래량 부족)
+                log.info(f"[FILTER] TREND_UP 거래량 부족: "
+                         f"vol_ratio={vol_r:.2f} < {params.tu_vol_ratio_min:.2f}")
             else:
-                signal = "BUY_TREND"
-            # sentiment × IF anomaly multiplier 합산
-            effective_ratio = min(
-                base_ratio * sent["multiplier"] * anomaly_info["multiplier"],
-                params.max_invest_ratio,
-            )
-            invest = state.cash * effective_ratio
-            buy_price = round_to_tick(current, "up")
-            qty = int(invest / buy_price) if buy_price > 0 else 0
-            if qty > 0:
-                _execute_buy(client, state, buy_price, qty, regime, today)
+                base_ratio = params.invest_ratio
+                if dual_buy:
+                    base_ratio = params.max_invest_ratio
+                    signal = "BUY_TREND_DUAL"
+                else:
+                    signal = "BUY_TREND"
+                # sentiment × IF anomaly multiplier 합산
+                effective_ratio = min(
+                    base_ratio * sent["multiplier"] * anomaly_info["multiplier"],
+                    params.max_invest_ratio,
+                )
+                invest = state.cash * effective_ratio
+                buy_price = round_to_tick(current, "up")
+                qty = int(invest / buy_price) if buy_price > 0 else 0
+                if qty > 0:
+                    _execute_buy(client, state, buy_price, qty, regime, today)
 
         elif regime == "RANGE_BOUND":
             rsi_val = latest.get("rsi", 50)
