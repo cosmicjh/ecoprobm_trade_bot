@@ -1,40 +1,4 @@
 {
-  "2026-04-02": {
-    "Open": 202500,
-    "High": 211000,
-    "Low": 193700,
-    "Close": 196900,
-    "Volume": 728719,
-    "prev_Open": 202000,
-    "prev_High": 204000,
-    "prev_Low": 197500,
-    "prev_Close": 202000,
-    "prev_Volume": 410700
-  },
-  "2026-04-03": {
-    "Open": 199500,
-    "High": 200500,
-    "Low": 190000,
-    "Close": 192600,
-    "Volume": 470485,
-    "prev_Open": 202500,
-    "prev_High": 211000,
-    "prev_Low": 193700,
-    "prev_Close": 196900,
-    "prev_Volume": 728719
-  },
-  "2026-04-06": {
-    "Open": 192600,
-    "High": 204000,
-    "Low": 192600,
-    "Close": 199900,
-    "Volume": 579226,
-    "prev_Open": 199500,
-    "prev_High": 200500,
-    "prev_Low": 190000,
-    "prev_Close": 192600,
-    "prev_Volume": 470485
-  },
   "2026-04-07": {
     "Open": 199700,
     "High": 211000,
@@ -250,5 +214,17 @@
     "prev_Low": 207500,
     "prev_Close": 212500,
     "prev_Volume": 589037
+  },
+  "2026-05-04": {
+    "Open": 211500,
+    "High": 218000,
+    "Low": 210000,
+    "Close": 215500,
+    "Volume": 597043,
+    "prev_Open": 214000,
+    "prev_High": 214000,
+    "prev_Low": 206000,
+    "prev_Close": 206000,
+    "prev_Volume": 496622
   }
 }
