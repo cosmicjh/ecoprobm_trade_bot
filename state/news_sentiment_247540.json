@@ -1,45 +1,5 @@
 {
   "articles": {
-    "https://news.google.com/rss/articles/CBMib0FVX3lxTE9xam5WQ295bVhleFdvejVKTXJpMzlMY2FzbWhiejFJNkg4WnpaTkVGbFo5MENwdGkzZHBMRmg1UDVTeThnbkFXbU9iMmlCU3cxaV9KUEV6NXhkWlEtbmdMTF83MzBUZmktbktBNm1VZw?oc=5": {
-      "title": "코스닥, 개인과 기관 매수에 상승 마감...에이비엘바이오, 레인보우로보틱스 상승 VS 리노공업, 에코프로비엠 하락 - 이코노뉴스",
-      "summary": "코스닥, 개인과 기관 매수에 상승 마감...에이비엘바이오, 레인보우로보틱스 상승 VS 리노공업, 에코프로비엠 하락&nbsp;&nbsp;이코노뉴스",
-      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE9xam5WQ295bVhleFdvejVKTXJpMzlMY2FzbWhiejFJNkg4WnpaTkVGbFo5MENwdGkzZHBMRmg1UDVTeThnbkFXbU9iMmlCU3cxaV9KUEV6NXhkWlEtbmdMTF83MzBUZmktbktBNm1VZw?oc=5",
-      "published": "2026-04-27T12:30:00",
-      "query": "에코프로비엠",
-      "score": -1,
-      "reason": "코스닥 상승장에서 에코프로비엠 하락, 상대적 약세 신호",
-      "scored_at": "2026-04-28T00:02:56.872677"
-    },
-    "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9MMFpsaWRYQXN6NDdCN3R4S2ZGcEpTQ1VtX1hpY3JmNEVoNXE5SWdldlVZbm1Zc3NGa21nOHRCS3BCN1ZzRE55Z3loTHREUVkzc19ORnNYbmUxbGYxMkRyNXhNX1lQS0450gFsQVVfeXFMUHl1TXhlWFRWMVR5ZHRpdWV1NnRRUXJaRUVqX0pSRVhPWkNlMEs3MkFsOVBoeG5nb0Q5WUU0N0k2QmRhWlVWOHE5aWMtRmxzcTJIZm1YQ3U4Vzl6eUk3ZW1UQndKRTRKRjZMY21B?oc=5": {
-      "title": "[외부감사 진단] LG엔솔·삼성SDI·SK온, 부채만 가득한 텅빈 공장 - 블로터",
-      "summary": "[외부감사 진단] LG엔솔·삼성SDI·SK온, 부채만 가득한 텅빈 공장&nbsp;&nbsp;블로터",
-      "url": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9MMFpsaWRYQXN6NDdCN3R4S2ZGcEpTQ1VtX1hpY3JmNEVoNXE5SWdldlVZbm1Zc3NGa21nOHRCS3BCN1ZzRE55Z3loTHREUVkzc19ORnNYbmUxbGYxMkRyNXhNX1lQS0450gFsQVVfeXFMUHl1TXhlWFRWMVR5ZHRpdWV1NnRRUXJaRUVqX0pSRVhPWkNlMEs3MkFsOVBoeG5nb0Q5WUU0N0k2QmRhWlVWOHE5aWMtRmxzcTJIZm1YQ3U4Vzl6eUk3ZW1UQndKRTRKRjZMY21B?oc=5",
-      "published": "2026-04-27T02:25:06",
-      "query": "SK온 배터리",
-      "score": 0,
-      "reason": "에코프로비엠과 직접 관계 없는 경쟁사 이슈",
-      "scored_at": "2026-04-28T00:02:57.861469"
-    },
-    "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1KZVFpQWRJc09UYkdIRTcwbEYtWmZseEpGMlRVcFlvNkNpX3I1UktQQlVOcHJ2cWtzdkdyZTA0SmFLYm0yYk1kZjhiWDJObTE2RjBV?oc=5": {
-      "title": "美서 날아오른 아이오닉…'배터리 탑재' SK온도 수혜 - 네이트",
-      "summary": "美서 날아오른 아이오닉…'배터리 탑재' SK온도 수혜&nbsp;&nbsp;네이트",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1KZVFpQWRJc09UYkdIRTcwbEYtWmZseEpGMlRVcFlvNkNpX3I1UktQQlVOcHJ2cWtzdkdyZTA0SmFLYm0yYk1kZjhiWDJObTE2RjBV?oc=5",
-      "published": "2026-04-27T09:12:00",
-      "query": "SK온 배터리",
-      "score": 0,
-      "reason": "SK온 수혜 뉴스로 에코프로비엠과 직접 관련성 부족",
-      "scored_at": "2026-04-28T00:02:58.690012"
-    },
-    "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBIcUpCYy1XU1FGNXBoREJWY3JVc3VRWjlUVTQyUnhNYWFEQTJaektHT1ZZZUhtZHRmakhlSEltaUdhMFo3UlYxZGoySll3Rjc1OFJ5amYyOWfSAVhBVV95cUxQSHFKQmMtV1NRRjVwaERCVmNyVXN1UVo5VFU0MlJ4TWFhREEyWnpLR09WWWVIbWR0ZmpIZUhJbWlHYTBaN1JWMWRqMkpZd0Y3NThSeWpmMjln?oc=5": {
-      "title": "현대차·기아·테슬라 맞붙은 국내 전기차 시장…한국판 IRA가 승부 가를까 - 아주경제",
-      "summary": "현대차·기아·테슬라 맞붙은 국내 전기차 시장…한국판 IRA가 승부 가를까&nbsp;&nbsp;아주경제",
-      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTFBIcUpCYy1XU1FGNXBoREJWY3JVc3VRWjlUVTQyUnhNYWFEQTJaektHT1ZZZUhtZHRmakhlSEltaUdhMFo3UlYxZGoySll3Rjc1OFJ5amYyOWfSAVhBVV95cUxQSHFKQmMtV1NRRjVwaERCVmNyVXN1UVo5VFU0MlJ4TWFhREEyWnpLR09WWWVIbWR0ZmpIZUhJbWlHYTBaN1JWMWRqMkpZd0Y3NThSeWpmMjln?oc=5",
-      "published": "2026-04-27T08:49:07",
-      "query": "IRA 전기차 보조금",
-      "score": 1,
-      "reason": "국내 전기차 시장 경쟁 심화로 수요 증가 예상, 양극재 수요 증가 긍정",
-      "scored_at": "2026-04-28T00:02:59.427754"
-    },
     "https://news.google.com/rss/articles/CBMiVEFVX3lxTE5TQWMwUEVlcVQ3eE9odmZsSUZRTURHdHE2ZHJzcm1kWl96SmVfWkJTaFNaRUxobTh2UXMzRVJoR2pzX0pMNjQxNDd4YTRSYzJXQVV4LQ?oc=5": {
       "title": "[오늘의 IR] 두산ㆍ한화솔루션ㆍ에코프로비엠 등 - 이투데이",
       "summary": "[오늘의 IR] 두산ㆍ한화솔루션ㆍ에코프로비엠 등&nbsp;&nbsp;이투데이",
@@ -379,7 +339,107 @@
       "score": 1,
       "reason": "K배터리 업계 대형 수주 증가로 양극재 수요 전망 개선",
       "scored_at": "2026-05-04T00:03:02.364706"
+    },
+    "https://news.google.com/rss/articles/CBMic0FVX3lxTFBJS196NVVOTENKYzlNcGMyZ21NLWdWdlpDUzFBZkM4QUttSmhYMkNMdEtKRkpINVV1MXhrZXhzOG5qTjl2MXRTLXJFSm85RElkTEhIMEY5anNub0pWb0xmd3NSekR3ekx6a2hRdE1ZdDZxanPSAXdBVV95cUxQSWpPM3RpVGl2Y1pRaDFpeU5Oa0RaX0NhY0J2TU5VRENlSWhFYS1Vd1NXMC1YQ0xZQTJhVHAwOTZKbXFvRFN1Q2JQZ3FLc1REdWVOTFBTeWJLbWRGbC1TMzZzTG0wQ0ZQUlE0cXJ0bEZxUmZMX2FCaw?oc=5": {
+      "title": "[코스닥 외국인] 대한광통신 에코프로비엠 쏠리드 파두 줍줍...수급의 결정적 변화 '촉각' - 핀포인트뉴스",
+      "summary": "[코스닥 외국인] 대한광통신 에코프로비엠 쏠리드 파두 줍줍...수급의 결정적 변화 '촉각'&nbsp;&nbsp;핀포인트뉴스",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBJS196NVVOTENKYzlNcGMyZ21NLWdWdlpDUzFBZkM4QUttSmhYMkNMdEtKRkpINVV1MXhrZXhzOG5qTjl2MXRTLXJFSm85RElkTEhIMEY5anNub0pWb0xmd3NSekR3ekx6a2hRdE1ZdDZxanPSAXdBVV95cUxQSWpPM3RpVGl2Y1pRaDFpeU5Oa0RaX0NhY0J2TU5VRENlSWhFYS1Vd1NXMC1YQ0xZQTJhVHAwOTZKbXFvRFN1Q2JQZ3FLc1REdWVOTFBTeWJLbWRGbC1TMzZzTG0wQ0ZQUlE0cXJ0bEZxUmZMX2FCaw?oc=5",
+      "published": "2026-05-04T07:12:28",
+      "query": "에코프로비엠",
+      "score": 0,
+      "reason": "외국인 수급 흐름 관찰 기사로 실질적 호재/악재 부재",
+      "scored_at": "2026-05-05T00:02:59.410758"
+    },
+    "https://news.google.com/rss/articles/CBMib0FVX3lxTE5FRkpXTm4zellBVng0aVdlU3RnUWRUTnB1LWZKZk90RlgzR1dlNV9sNVBkQm9TcFRHczhyTHRTY0lsN05SU1RKUkdhNFJjUUQ1ZGZFZ0Q3Z0UtM0RlTkNaX0VTOGkxb2RSLXA3ZGpCVQ?oc=5": {
+      "title": "코스닥, 외인 매수에 상승 마감...에이비엘바이오, 삼천당제약 상승 VS 에코프로비엠, 레인보우로보틱스 하락 - 이코노뉴스",
+      "summary": "코스닥, 외인 매수에 상승 마감...에이비엘바이오, 삼천당제약 상승 VS 에코프로비엠, 레인보우로보틱스 하락&nbsp;&nbsp;이코노뉴스",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5FRkpXTm4zellBVng0aVdlU3RnUWRUTnB1LWZKZk90RlgzR1dlNV9sNVBkQm9TcFRHczhyTHRTY0lsN05SU1RKUkdhNFJjUUQ1ZGZFZ0Q3Z0UtM0RlTkNaX0VTOGkxb2RSLXA3ZGpCVQ?oc=5",
+      "published": "2026-05-04T12:30:00",
+      "query": "에코프로비엠",
+      "score": -1,
+      "reason": "코스닥 상승장에서 역행 하락, 시장 약세 신호",
+      "scored_at": "2026-05-05T00:03:00.581213"
+    },
+    "https://news.google.com/rss/articles/CBMickFVX3lxTE5FVkVGckVpWWpkOHR5Wnc3cDF3UXVIRzJMTnZaOXppNVNKR2FSeXp4RHlqdDVOdG5XYnJFaS1WTVhIZmg1SHIzY0xpYXBqbXUtYXkwU045TUlIWDFGT3BpRzdSVVdiZG0wSVRkWEloRG5Cdw?oc=5": {
+      "title": "에코프로비엠 주가, 5월 4일 장중 215,500원 4.61% 상승 - 중앙이코노미뉴스",
+      "summary": "에코프로비엠 주가, 5월 4일 장중 215,500원 4.61% 상승&nbsp;&nbsp;중앙이코노미뉴스",
+      "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE5FVkVGckVpWWpkOHR5Wnc3cDF3UXVIRzJMTnZaOXppNVNKR2FSeXp4RHlqdDVOdG5XYnJFaS1WTVhIZmg1SHIzY0xpYXBqbXUtYXkwU045TUlIWDFGT3BpRzdSVVdiZG0wSVRkWEloRG5Cdw?oc=5",
+      "published": "2026-05-04T05:49:11",
+      "query": "에코프로비엠",
+      "score": 0,
+      "reason": "주가 움직임 자체로 호재/악재 판단 불가",
+      "scored_at": "2026-05-05T00:03:01.403918"
+    },
+    "https://news.google.com/rss/articles/CBMibkFVX3lxTFBZUDRLLWwxV1dVMGtRZTlFN2d3TkVlSkZJdF9jMl9pNE1vWVV6c0RiWVhwaE1IMkJTRTBTNVVHeTB6LXMwOEtuZ3ZsemdpYzRSX05SYVFrVUJ5NDhVbDFIWERQckJreldoQ2pXcUxR?oc=5": {
+      "title": "에코프로ㆍ에코프로비엠, 상승…특히 에코프로비엠 4%대 상승에 21만원선 - 이코노뉴스",
+      "summary": "에코프로ㆍ에코프로비엠, 상승…특히 에코프로비엠 4%대 상승에 21만원선&nbsp;&nbsp;이코노뉴스",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTFBZUDRLLWwxV1dVMGtRZTlFN2d3TkVlSkZJdF9jMl9pNE1vWVV6c0RiWVhwaE1IMkJTRTBTNVVHeTB6LXMwOEtuZ3ZsemdpYzRSX05SYVFrVUJ5NDhVbDFIWERQckJreldoQ2pXcUxR?oc=5",
+      "published": "2026-05-04T01:00:59",
+      "query": "에코프로비엠",
+      "score": 0,
+      "reason": "주가 상승 결과만 기술, 구체적 호재 없음",
+      "scored_at": "2026-05-05T00:03:02.217638"
+    },
+    "https://news.google.com/rss/articles/CBMic0FVX3lxTE1JbFk5ZDNDT0J2cEV4bnZ4bXdqSjdRaVZBNUljNzZ5WnJoQXFvY19NMHlFMXJCc3N6RmM3STdCR2NZWTh0N0I2QS02c3N5WUg1YkhWME1PQzVYMGpGNGVELXV4S2p3dGxoWW9KSFZncmJOZE3SAXdBVV95cUxOTGdScFB0c1RpVFJrTlpsVDc2V09NTEU2QVZCRG1acnZUcnFUaHV4OUt0LUpiNXZZYmE4eTNWOXpIMWI0cmVoWlNfa0Mzc2NsUDY0V1dtcnE5bDY2VjQzSDJva2RSOFNEWWVXTTl4dDRZaVVhR1hzQQ?oc=5": {
+      "title": "프리미엄부터 보급형까지... 엘앤에프, NCM·LFP 투트랙 전략으로 시장 판도 바꾼다 - 핀포인트뉴스",
+      "summary": "프리미엄부터 보급형까지... 엘앤에프, NCM·LFP 투트랙 전략으로 시장 판도 바꾼다&nbsp;&nbsp;핀포인트뉴스",
+      "url": "https://news.google.com/rss/articles/CBMic0FVX3lxTE1JbFk5ZDNDT0J2cEV4bnZ4bXdqSjdRaVZBNUljNzZ5WnJoQXFvY19NMHlFMXJCc3N6RmM3STdCR2NZWTh0N0I2QS02c3N5WUg1YkhWME1PQzVYMGpGNGVELXV4S2p3dGxoWW9KSFZncmJOZE3SAXdBVV95cUxOTGdScFB0c1RpVFJrTlpsVDc2V09NTEU2QVZCRG1acnZUcnFUaHV4OUt0LUpiNXZZYmE4eTNWOXpIMWI0cmVoWlNfa0Mzc2NsUDY0V1dtcnE5bDY2VjQzSDJva2RSOFNEWWVXTTl4dDRZaVVhR1hzQQ?oc=5",
+      "published": "2026-05-04T06:12:53",
+      "query": "양극재 2차전지",
+      "score": -1,
+      "reason": "경쟁사 LNF의 NCM·LFP 투트랙 전략 강화로 시장 경쟁 심화",
+      "scored_at": "2026-05-05T00:03:03.410124"
+    },
+    "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9MSjlYelZlNWdickNBSlNkS2dfSmh0U2NmaTR0bTRjNkx2NmFNWFVBeDcxMWhOZ0hnZC03Wm1PMmRNM0ZISnBQR0Z0bVhHYmkxaS1ESHVOdVh5d9IBVEFVX3lxTE1adWVUcWYyTHhkSnlpU0dzWXltS0twTl9EZG9JTVcwMVZNQkRxZ3hra1NwR2hsRzFDbGFmQUtsMlZaTmgzYVRybUFXQU9NWGtxODgxeA?oc=5": {
+      "title": "SK온·닛산, 15조 배터리 계약 전면 재검토 - 한국경제",
+      "summary": "SK온·닛산, 15조 배터리 계약 전면 재검토&nbsp;&nbsp;한국경제",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9MSjlYelZlNWdickNBSlNkS2dfSmh0U2NmaTR0bTRjNkx2NmFNWFVBeDcxMWhOZ0hnZC03Wm1PMmRNM0ZISnBQR0Z0bVhHYmkxaS1ESHVOdVh5d9IBVEFVX3lxTE1adWVUcWYyTHhkSnlpU0dzWXltS0twTl9EZG9JTVcwMVZNQkRxZ3hra1NwR2hsRzFDbGFmQUtsMlZaTmgzYVRybUFXQU9NWGtxODgxeA?oc=5",
+      "published": "2026-05-04T08:31:04",
+      "query": "SK온 배터리",
+      "score": -1,
+      "reason": "주요 고객사의 대규모 계약 재검토로 수요 불확실성 증가",
+      "scored_at": "2026-05-05T00:03:04.333778"
+    },
+    "https://news.google.com/rss/articles/CBMiWkFVX3lxTE82YVBaRlM1NW5Bb0NjLVRTZXgzRHpnN1p4cTdQbXpNZnM1WnFXbEhnNlY1VW1JaUdTVVV5UGFQeTZOdkxLbHBfcF9ublc2T0cyRkFDY2p0VDlKUQ?oc=5": {
+      "title": "[아주사설 | 기본·원칙·상식] SK온·닛산, 15조 배터리 계약 전면 재검토 - 아주경제",
+      "summary": "[아주사설 | 기본·원칙·상식] SK온·닛산, 15조 배터리 계약 전면 재검토&nbsp;&nbsp;아주경제",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE82YVBaRlM1NW5Bb0NjLVRTZXgzRHpnN1p4cTdQbXpNZnM1WnFXbEhnNlY1VW1JaUdTVVV5UGFQeTZOdkxLbHBfcF9ublc2T0cyRkFDY2p0VDlKUQ?oc=5",
+      "published": "2026-05-04T23:31:14",
+      "query": "SK온 배터리",
+      "score": -1,
+      "reason": "글로벌 배터리 수요 감소 신호, 경쟁사 대형 계약 차질",
+      "scored_at": "2026-05-05T00:03:05.210728"
+    },
+    "https://news.google.com/rss/articles/CBMiT0FVX3lxTE93N0hCdllZUDBFX3ZQaFhYTFpWanB0dDZJZDJHNlRSZ1hqTFA0WG5sUWsxT201bDhVRjRROV9wRmJrQXhBTGFUODVmQXlSVE0?oc=5": {
+      "title": "포드 이어 닛산까지…완성차 전동화 후퇴에 SK온 긴장 - v.daum.net",
+      "summary": "포드 이어 닛산까지…완성차 전동화 후퇴에 SK온 긴장&nbsp;&nbsp;v.daum.net",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE93N0hCdllZUDBFX3ZQaFhYTFpWanB0dDZJZDJHNlRSZ1hqTFA0WG5sUWsxT201bDhVRjRROV9wRmJrQXhBTGFUODVmQXlSVE0?oc=5",
+      "published": "2026-05-04T09:16:09",
+      "query": "SK온 배터리",
+      "score": -1,
+      "reason": "완성차 전동화 둔화로 배터리 수요 감소 우려",
+      "scored_at": "2026-05-05T00:03:06.022328"
+    },
+    "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5tWEw1RXdndkV6ay1LdlltYy0wcUdkT21MTi1TdklNa1V3TDdTTmNQOWNhTFoxeENwWk5nZUZCN0xDX2ZrSWhDeDI0UGhEY2ltOGtLS3kxVy1fV2RFa2p2atIBmwJBVV95cUxOa1BaTWtiV3JqN2hNZ25MVk83VGJ2eWtrbnVfaHJ2Y3FCTjliLXBBZnVyd0hEa0ZXYmtUSGYzYVlDS2N4VUVjS1NJNUc1NUxWWlhFNHdjV2h0VnBvQWh5QmFVOUJfNVNTa2RPb1ZMU09DeEtHMXdPSGRTSGp0TjBMVWhzYkVMVDRtZk01dWFhNmFJcWxRNzZBV2E1TktFbTVwTHY3Xy1LcEhDV0ZfTkEyNWwwSVg4a1dYcWR4b0V2X1c2bjdqWkFWbzM2RUlCRlhPWWF0YWhCWUt6QnE2cl9lV1JnYjVmOEJQWUlZTjR6RTVNZDJ5LWtSVG9kQ3hDV3NlTTFCc2lhczlPMWIzd1VySVEwZ2VJVDh4enFJ?oc=5": {
+      "title": "적자 늪 못 벗었는데…배터리주, 반등 기대는 여전 - 데일리안",
+      "summary": "적자 늪 못 벗었는데…배터리주, 반등 기대는 여전&nbsp;&nbsp;데일리안",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE5tWEw1RXdndkV6ay1LdlltYy0wcUdkT21MTi1TdklNa1V3TDdTTmNQOWNhTFoxeENwWk5nZUZCN0xDX2ZrSWhDeDI0UGhEY2ltOGtLS3kxVy1fV2RFa2p2atIBmwJBVV95cUxOa1BaTWtiV3JqN2hNZ25MVk83VGJ2eWtrbnVfaHJ2Y3FCTjliLXBBZnVyd0hEa0ZXYmtUSGYzYVlDS2N4VUVjS1NJNUc1NUxWWlhFNHdjV2h0VnBvQWh5QmFVOUJfNVNTa2RPb1ZMU09DeEtHMXdPSGRTSGp0TjBMVWhzYkVMVDRtZk01dWFhNmFJcWxRNzZBV2E1TktFbTVwTHY3Xy1LcEhDV0ZfTkEyNWwwSVg4a1dYcWR4b0V2X1c2bjdqWkFWbzM2RUlCRlhPWWF0YWhCWUt6QnE2cl9lV1JnYjVmOEJQWUlZTjR6RTVNZDJ5LWtSVG9kQ3hDV3NlTTFCc2lhczlPMWIzd1VySVEwZ2VJVDh4enFJ?oc=5",
+      "published": "2026-05-04T22:03:00",
+      "query": "SK온 배터리",
+      "score": -1,
+      "reason": "적자 상황 지속으로 부정적, 반등 기대는 미래 전망",
+      "scored_at": "2026-05-05T00:03:07.029620"
+    },
+    "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9WdmRFWGRqaXJXQTVSVGVMQnk2LXVHdW9zaEFEZWN2S3gzVG0tWTZhbm5pWXZOc3R5MkJ5a19qOXIxZU1BRGhod191NmpQcVU?oc=5": {
+      "title": "15조 규모 닛산 계약 재조정 가능성…SK온 “변동 사항 없어” - v.daum.net",
+      "summary": "15조 규모 닛산 계약 재조정 가능성…SK온 “변동 사항 없어”&nbsp;&nbsp;v.daum.net",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9WdmRFWGRqaXJXQTVSVGVMQnk2LXVHdW9zaEFEZWN2S3gzVG0tWTZhbm5pWXZOc3R5MkJ5a19qOXIxZU1BRGhod191NmpQcVU?oc=5",
+      "published": "2026-05-04T09:51:03",
+      "query": "SK온 배터리",
+      "score": -1,
+      "reason": "닛산 계약 재조정 가능성으로 인한 공급망 불확실성 증가",
+      "scored_at": "2026-05-05T00:03:07.735584"
     }
   },
-  "last_run": "2026-05-04T00:03:02.364869"
+  "last_run": "2026-05-05T00:03:07.735779"
 }
